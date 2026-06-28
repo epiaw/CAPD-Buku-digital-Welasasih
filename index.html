@@ -320,8 +320,37 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
 </head>
 <body>
 
+<!-- CONFIG (setup URL Apps Script — hanya tampil sekali per device) -->
+<div id="configScreen" style="display:none;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 50%,#0F4C6B 100%);padding:20px">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 18a8 8 0 110-16 8 8 0 010 16zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+      </div>
+      <div class="login-inst">Renal Unit · RSUD Welas Asih Prov. Jawa Barat</div>
+      <div class="login-title">Buku Catatan Harian CAPD</div>
+      <div style="font-size:11px;color:var(--gray-400);margin-top:3px">Pengaturan Server (sekali saja)</div>
+    </div>
+    <div style="font-size:13px;color:var(--gray-500);margin-bottom:16px;line-height:1.6">
+      Tempelkan <b>URL Web App Google Apps Script</b> yang sudah Bapak deploy untuk aplikasi ini. URL ini akan disimpan di perangkat ini saja.
+    </div>
+    <div class="form-field"><label>URL Web App (.../exec)</label>
+      <input id="cfgUrl" type="text" placeholder="https://script.google.com/macros/s/XXXX/exec" autocomplete="off">
+    </div>
+    <button class="btn-login" onclick="saveServerConfig()">Simpan & Lanjutkan</button>
+    <div class="login-error" id="cfgError">Gagal terhubung ke server. Periksa kembali URL.</div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div id="loadingScreen" style="display:none;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 50%,#0F4C6B 100%);padding:20px;flex-direction:column;color:#fff">
+  <div style="width:42px;height:42px;border:4px solid rgba(255,255,255,0.25);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite"></div>
+  <div style="margin-top:16px;font-size:13px;letter-spacing:0.3px" id="loadingText">Memuat data dari server...</div>
+  <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+</div>
+
 <!-- LOGIN -->
-<div id="loginScreen">
+<div id="loginScreen" style="display:none">
   <div class="login-box">
     <div class="login-logo">
       <div class="login-logo-icon">
@@ -342,14 +371,8 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
     </div>
     <button class="btn-login" onclick="doLogin()">Masuk</button>
     <div class="login-error" id="loginError">Username atau password salah.</div>
-    <div class="demo-box">
-      <div class="demo-label">Demo Akun</div>
-      <div class="demo-text">
-        Admin: <b>admin</b> / <b>admin123</b><br>
-        Perawat: <b>perawat1</b> / <b>capd2024</b><br>
-        Pasien: <b>pasien001</b> / <b>capd001</b> (RM-001)<br>
-        Pasien: <b>pasien002</b> / <b>capd002</b> (RM-002)
-      </div>
+    <div style="text-align:center;margin-top:16px">
+      <a href="#" onclick="event.preventDefault();showConfigScreen(true)" style="font-size:11px;color:var(--gray-400);text-decoration:underline">Ubah pengaturan server</a>
     </div>
   </div>
 </div>
@@ -367,6 +390,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
       <div class="topbar-user-name" id="topbarName">-</div>
       <div class="topbar-role-badge" id="topbarRoleBadge">-</div>
     </div>
+    <button class="btn-logout" style="background:rgba(255,255,255,0.1);margin-right:6px" onclick="refreshFromServer()" id="btnRefresh" title="Tarik data terbaru dari server">⟳ Refresh</button>
     <button class="btn-logout" onclick="doLogout()">✕ Keluar</button>
   </div>
 
@@ -726,69 +750,108 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
 
 <script>
 // ============================================================
-//  DATABASE
+//  KONEKSI SERVER (Google Apps Script Web App + Google Sheets)
 // ============================================================
-const DB_KEY = 'capd_db_v2';
+const GAS_URL_KEY = 'capd_gas_url';
+let SERVER_URL = localStorage.getItem(GAS_URL_KEY) || '';
+let DB = null; // cache database di memori, dimuat dari server saat login screen dibuka
 
-function getDB(){
-  const raw = localStorage.getItem(DB_KEY);
-  if(raw){
-    try{
-      const db = JSON.parse(raw);
-      // Migrasi data lama: pastikan field baru selalu ada
-      if(!db.medHistory) db.medHistory={};
-      if(!db.medPlans) db.medPlans={};
-      db.patients.forEach(p=>{
-        if(!db.medHistory[p.id]) db.medHistory[p.id]=[];
-        if(!db.medPlans[p.id]) db.medPlans[p.id]=[];
-      });
-      return db;
-    }catch(e){}
-  }
-  return initDB();
+function getDB(){ return DB; }
+
+// Semua request pakai text/plain agar tidak memicu CORS preflight (request "simple"),
+// sehingga kompatibel dengan Google Apps Script Web App tanpa konfigurasi tambahan.
+async function apiGet(action, params){
+  params = params || {};
+  const qs = new URLSearchParams(Object.assign({action:action}, params)).toString();
+  const res = await fetch(SERVER_URL + '?' + qs, {method:'GET'});
+  const data = await res.json();
+  if(!data.ok) throw new Error(data.error || 'Permintaan server gagal');
+  return data;
 }
-function saveDB(db){ localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+async function apiPost(action, payload){
+  payload = payload || {};
+  const res = await fetch(SERVER_URL, {
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify(Object.assign({action:action}, payload))
+  });
+  const data = await res.json();
+  if(!data.ok) throw new Error(data.error || 'Permintaan server gagal');
+  return data;
+}
 
-function initDB(){
-  const db = {
-    users:[
-      {id:'u1',username:'admin',password:'admin123',role:'admin',roles:['admin'],nama:'Administrator',active:true},
-      {id:'u2',username:'perawat1',password:'capd2024',role:'perawat',roles:['perawat','admin'],nama:'Ns. Sari Dewi, S.Kep',active:true},
-      {id:'u3',username:'perawat2',password:'capd2024',role:'perawat',roles:['perawat'],nama:'Ns. Rudi Hartono, S.Kep',active:true},
-      {id:'u4',username:'pasien001',password:'capd001',role:'pasien',roles:['pasien'],nama:'Bpk. Ahmad Suparno',patientId:'p1',active:true},
-      {id:'u5',username:'pasien002',password:'capd002',role:'pasien',roles:['pasien'],nama:'Ibu Siti Rahayu',patientId:'p2',active:true},
-    ],
-    patients:[
-      {id:'p1',rm:'RM-001',nama:'Ahmad Suparno',jk:'Laki-laki',ttl:'1965-05-12',pend:'SMA/SMK',kerja:'Pensiunan',kawin:'Menikah',pendamping:'Ibu Sumiyati',alamat:'Jl. Mawar No. 12, Tasikmalaya',telp:'0812-1234-5678',tglTenk:'2023-03-15',tglCAPD:'2023-04-01',jenisTenk:'Standard straight',exitSite:'Kanan bawah',akses:'Hemodialisis (HD)',program:'4x/hari, 2000 mL per siklus, dwell 4 jam, 1.5% glukosa'},
-      {id:'p2',rm:'RM-002',nama:'Siti Rahayu',jk:'Perempuan',ttl:'1970-08-22',pend:'SD',kerja:'Ibu Rumah Tangga',kawin:'Menikah',pendamping:'Bpk. Wahyu',alamat:'Jl. Melati No. 5, Welas Asih',telp:'0813-9876-5432',tglTenk:'2023-06-10',tglCAPD:'2023-07-01',jenisTenk:'Swan neck',exitSite:'Kiri bawah',akses:'Belum pernah dialisis',program:'4x/hari, 2000 mL per siklus'},
-    ],
-    riwayat:{
-      'p1':{etiologi:['Diabetes Mellitus'],komorbid:['DM Tipe 2','Anemia'],etiologiNote:'',tglTraining:'2023-03-20',hariTraining:14,dialSblm:'Hemodialisis (HD)',peritonitis:1,exitInfeksi:0,tunnelInfeksi:0,obat:'1. Calcium Carbonate 500mg — 3x1\n2. Erythropoietin 4000 IU — 3x seminggu (SC)\n3. Amlodipine 5mg — 1x1 malam\n4. Furosemide 40mg — 1x1 pagi'},
-      'p2':{etiologi:['Hipertensi'],komorbid:['Hipertensi','Anemia'],etiologiNote:'',tglTraining:'2023-06-15',hariTraining:10,dialSblm:'Belum pernah dialisis',peritonitis:0,exitInfeksi:1,tunnelInfeksi:0,obat:'1. Amlodipine 10mg — 1x1\n2. Erythropoietin 3000 IU — 2x seminggu'},
-    },
-    notes:{
-      'p1':[{id:'n1',author:'Ns. Sari Dewi, S.Kep',role:'Perawat CAPD',date:'2024-06-25',text:'Exit site tampak bersih, tidak ada tanda infeksi. Cairan effluen jernih kekuningan. Pasien mengeluhkan rasa nyeri ringan saat drain — dipantau kunjungan berikutnya.'}],
-      'p2':[{id:'n3',author:'Ns. Rudi Hartono, S.Kep',role:'Perawat CAPD',date:'2024-06-24',text:'Exit site sedikit kemerahan. Perawatan luka dan edukasi teknik steril ulang. Kontrol 3 hari lagi.'}],
-    },
-    medHistory:{
-      'p1':[{id:'mh1',jenis:'pemeriksaan',tanggal:'2024-06-10',judul:'Rontgen Toraks',detail:'Hasil: tidak ada efusi pleura, jantung dalam batas normal.',author:'Ns. Sari Dewi, S.Kep',role:'Perawat CAPD'}],
-      'p2':[],
-    },
-    medPlans:{
-      'p1':[{id:'mp1',jenis:'resep-cairan',tanggalTarget:new Date(Date.now()+7*86400000).toISOString().slice(0,10),judul:'Evaluasi & resep cairan siklus berikutnya',detail:'Pertimbangkan naik ke 2.5% jika UF tidak adekuat.',status:'belum',author:'Ns. Sari Dewi, S.Kep',role:'Perawat CAPD'}],
-      'p2':[],
-    },
-    dailyData:{},
-    contacts:[
-      {role:'Perawat CAPD (Shift Pagi)',name:'Ns. Sari Dewi, S.Kep',phone:'0812-1111-2222'},
-      {role:'Perawat CAPD (Shift Sore)',name:'Ns. Rudi Hartono, S.Kep',phone:'0813-3333-4444'},
-      {role:'Koordinator Tim CAPD',name:'Ns. Yuli Astuti, S.Kep,Ns.',phone:'0811-5555-6666'},
-      {role:'Renal Unit / IGD RSUD',name:'RSUD Welas Asih',phone:'(0265) 123-456'},
-    ],
-    settings:{nextPatientId:3,nextUserId:6}
-  };
-  saveDB(db);
-  return db;
+async function loadDBFromServer(){
+  const data = await apiGet('getAll');
+  DB = data.db;
+}
+
+function showConfigScreen(show){
+  document.getElementById('configScreen').style.display = show ? 'flex' : 'none';
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('loadingScreen').style.display='none';
+  if(show) document.getElementById('cfgUrl').value = SERVER_URL;
+}
+function showLoadingScreen(show, text){
+  document.getElementById('loadingScreen').style.display = show ? 'flex' : 'none';
+  if(text) document.getElementById('loadingText').textContent = text;
+}
+
+async function saveServerConfig(){
+  const url = document.getElementById('cfgUrl').value.trim();
+  document.getElementById('cfgError').style.display='none';
+  if(!url){ document.getElementById('cfgError').textContent='URL belum diisi.'; document.getElementById('cfgError').style.display='block'; return; }
+  showConfigScreen(false);
+  showLoadingScreen(true, 'Menghubungkan ke server...');
+  const prevUrl = SERVER_URL;
+  SERVER_URL = url;
+  try{
+    await loadDBFromServer();
+    localStorage.setItem(GAS_URL_KEY, url);
+    showLoadingScreen(false);
+    populateLoginUserList();
+    updateLoginRoleOptions();
+    document.getElementById('loginScreen').style.display='flex';
+  }catch(err){
+    SERVER_URL = prevUrl;
+    showLoadingScreen(false);
+    document.getElementById('cfgError').textContent = 'Gagal terhubung: ' + err.message;
+    document.getElementById('cfgError').style.display='block';
+    showConfigScreen(true);
+  }
+}
+
+async function refreshFromServer(){
+  const btn=document.getElementById('btnRefresh');
+  if(btn){btn.disabled=true;btn.textContent='⟳ Memuat...';}
+  try{
+    await loadDBFromServer();
+    buildPatientSelector();
+    renderContactGrid();
+    initRekapSelectors();
+    if(currentPageId) showPage(currentPageId);
+    showToast('Data terbaru berhasil dimuat ✓');
+  }catch(e){
+    showToast('Gagal memuat data: '+e.message);
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='⟳ Refresh';}
+  }
+}
+
+async function boot(){
+  if(!SERVER_URL){ showConfigScreen(true); return; }
+  showLoadingScreen(true, 'Memuat data dari server...');
+  try{
+    await loadDBFromServer();
+    showLoadingScreen(false);
+    populateLoginUserList();
+    updateLoginRoleOptions();
+    document.getElementById('loginScreen').style.display='flex';
+  }catch(err){
+    showLoadingScreen(false);
+    document.getElementById('cfgError').textContent = 'Gagal terhubung: ' + err.message;
+    document.getElementById('cfgError').style.display='block';
+    showConfigScreen(true);
+  }
 }
 
 // ============================================================
@@ -843,10 +906,20 @@ function updateLoginRoleOptions(){
   sel.innerHTML=roles.map(r=>`<option value="${r}">${ROLE_LABELS[r]||r}</option>`).join('');
 }
 
-function doLogin(){
+async function doLogin(){
   const user = document.getElementById('loginUser').value.trim();
   const pass = document.getElementById('loginPass').value;
   const role = document.getElementById('loginRole').value;
+  const loginBtn=document.querySelector('.btn-login');
+  if(loginBtn){loginBtn.disabled=true;loginBtn.textContent='Menghubungkan...';}
+  try{
+    await loadDBFromServer(); // muat data terbaru dari server sebelum validasi login
+  }catch(e){
+    if(loginBtn){loginBtn.disabled=false;loginBtn.textContent='Masuk';}
+    showToast('Gagal menghubungi server: '+e.message);
+    return;
+  }
+  if(loginBtn){loginBtn.disabled=false;loginBtn.textContent='Masuk';}
   const db = getDB();
   const found = db.users.find(u=>u.username===user&&u.password===pass&&u.active&&getUserRoles(u).includes(role));
   if(!found){ document.getElementById('loginError').style.display='block'; return; }
@@ -861,13 +934,13 @@ function doLogout(){
   document.getElementById('app').style.display='none';
   populateLoginUserList();
   updateLoginRoleOptions();
+  loadDBFromServer().catch(()=>{}); // sinkron ulang di latar belakang
 }
 document.getElementById('loginUser').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 document.getElementById('loginUser').addEventListener('input',updateLoginRoleOptions);
 document.getElementById('loginUser').addEventListener('change',updateLoginRoleOptions);
 document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
-populateLoginUserList();
-updateLoginRoleOptions();
+boot();
 
 // ============================================================
 //  APP START
@@ -939,7 +1012,9 @@ function buildNav(){
     <div class="mobile-tab-item" id="mnav-${it.id}" onclick="showPage('${it.id}')">${renderLabel(it)}</div>`).join('');
 }
 
+let currentPageId = null;
 function showPage(pageId){
+  currentPageId = pageId;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.querySelectorAll('.mobile-tab-item').forEach(n=>n.classList.remove('active'));
@@ -1013,8 +1088,8 @@ function openContactModal(){
     </div>`).join('');
   openModal('modalContact');
 }
-function updateContactField(i,field,val){const db=getDB();db.contacts[i][field]=val;saveDB(db);}
-function removeContact(i){const db=getDB();db.contacts.splice(i,1);saveDB(db);openContactModal();}
+function updateContactField(i,field,val){const db=getDB();db.contacts[i][field]=val;}
+function removeContact(i){const db=getDB();db.contacts.splice(i,1);openContactModal();}
 function addContact(){
   const role=document.getElementById('newCRole').value.trim();
   const name=document.getElementById('newCName').value.trim();
@@ -1022,11 +1097,19 @@ function addContact(){
   if(!name||!phone){showToast('Isi nama dan nomor HP');return;}
   const db=getDB();
   db.contacts.push({role,name,phone});
-  saveDB(db);
   ['newCRole','newCName','newCPhone'].forEach(id=>document.getElementById(id).value='');
   openContactModal();
 }
-function saveContacts(){closeModal('modalContact');renderContactGrid();showToast('Kontak berhasil disimpan');}
+async function saveContacts(){
+  closeModal('modalContact');
+  renderContactGrid();
+  try{
+    await apiPost('saveContacts',{contacts:getDB().contacts});
+    showToast('Kontak berhasil disimpan ✓');
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
+}
 
 // ============================================================
 //  DATA PASIEN
@@ -1050,15 +1133,19 @@ function loadDataPasien(){
     if(el.tagName==='SELECT') el.disabled=!editable;
   });
 }
-function saveDataPasien(){
+async function saveDataPasien(){
   if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
   const db=getDB();
   const idx=db.patients.findIndex(x=>x.id===currentPatientId);
   if(idx<0)return;
   const map={nama:'pNama',rm:'pRM',jk:'pJK',ttl:'pTTL',pend:'pPend',kerja:'pKerja',kawin:'pKawin',pendamping:'pPendamping',alamat:'pAlamat',telp:'pTelp',tglTenk:'pTglTenk',tglCAPD:'pTglCAPD',jenisTenk:'pJenisTenk',exitSite:'pExitSite',akses:'pAkses',program:'pProgram'};
   Object.entries(map).forEach(([pk,eid])=>{const el=document.getElementById(eid);if(el)db.patients[idx][pk]=el.value;});
-  saveDB(db);
-  showToast('Data pasien berhasil disimpan ✓');
+  try{
+    await apiPost('updatePatient',{patient:db.patients[idx]});
+    showToast('Data pasien berhasil disimpan ✓');
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
 }
 
 // ============================================================
@@ -1092,10 +1179,10 @@ function loadRiwayat(){
   document.getElementById('rExitInfeksi').textContent=r.exitInfeksi||0;
   document.getElementById('rTunnelInfeksi').textContent=r.tunnelInfeksi||0;
 }
-function saveRiwayat(){
+async function saveRiwayat(){
   if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
   const db=getDB();
-  db.riwayat[currentPatientId]={
+  const r={
     etiologi:getSelectedTags('tagEtiologi'),
     komorbid:getSelectedTags('tagKomorbid'),
     etiologiNote:document.getElementById('rEtiologiNote').value,
@@ -1107,8 +1194,13 @@ function saveRiwayat(){
     tunnelInfeksi:parseInt(document.getElementById('rTunnelInfeksi').textContent)||0,
     obat:document.getElementById('rObat').value,
   };
-  saveDB(db);
-  showToast('Riwayat berhasil disimpan ✓');
+  db.riwayat[currentPatientId]=r;
+  try{
+    await apiPost('saveRiwayat',{patientId:currentPatientId, riwayat:r});
+    showToast('Riwayat berhasil disimpan ✓');
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
 }
 function changeCounter(id,delta){
   const el=document.getElementById(id);
@@ -1142,17 +1234,22 @@ function toggleNoteForm(show){
   document.getElementById('noteAddForm').style.display=show?'block':'none';
   if(!show) document.getElementById('noteInput').value='';
 }
-function saveNote(){
+async function saveNote(){
   const text=document.getElementById('noteInput').value.trim();
   if(!text){showToast('Tulis isi catatan terlebih dahulu');return;}
   if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
   const db=getDB();
   if(!db.notes[currentPatientId]) db.notes[currentPatientId]=[];
-  db.notes[currentPatientId].push({id:'n'+Date.now(),author:currentUser.nama,role:{admin:'Administrator',perawat:'Perawat CAPD',pasien:'Pasien'}[currentUser.role],date:new Date().toISOString().slice(0,10),text});
-  saveDB(db);
+  const note={id:'n'+Date.now(),author:currentUser.nama,role:{admin:'Administrator',perawat:'Perawat CAPD',pasien:'Pasien'}[currentUser.role],date:new Date().toISOString().slice(0,10),text};
+  db.notes[currentPatientId].push(note);
   toggleNoteForm(false);
   loadNotes();
-  showToast('Catatan berhasil disimpan ✓');
+  try{
+    await apiPost('addNote',{patientId:currentPatientId, note});
+    showToast('Catatan berhasil disimpan ✓');
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
 }
 
 // ============================================================
@@ -1179,7 +1276,7 @@ function toggleMpForm(show){
   if(!show){ ['mpTanggal','mpJudul','mpDetail'].forEach(id=>document.getElementById(id).value=''); }
 }
 
-function saveMedHistory(){
+async function saveMedHistory(){
   if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
   const jenis=document.getElementById('mhJenis').value;
   const tanggal=document.getElementById('mhTanggal').value;
@@ -1188,14 +1285,19 @@ function saveMedHistory(){
   if(!tanggal||!judul){showToast('Tanggal dan judul wajib diisi');return;}
   const db=getDB();
   if(!db.medHistory[currentPatientId]) db.medHistory[currentPatientId]=[];
-  db.medHistory[currentPatientId].push({id:'mh'+Date.now(),jenis,tanggal,judul,detail,author:currentUser.nama,role:ROLE_LABEL_FULL[currentUser.role]});
-  saveDB(db);
+  const item={id:'mh'+Date.now(),jenis,tanggal,judul,detail,author:currentUser.nama,role:ROLE_LABEL_FULL[currentUser.role]};
+  db.medHistory[currentPatientId].push(item);
   toggleMhForm(false);
   loadMedPlan();
-  showToast('Riwayat medis berhasil disimpan ✓');
+  try{
+    await apiPost('addMedHistory',{patientId:currentPatientId, item});
+    showToast('Riwayat medis berhasil disimpan ✓');
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
 }
 
-function saveMedPlan(){
+async function saveMedPlan(){
   if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
   const jenis=document.getElementById('mpJenis').value;
   const tanggalTarget=document.getElementById('mpTanggal').value;
@@ -1204,37 +1306,54 @@ function saveMedPlan(){
   if(!tanggalTarget||!judul){showToast('Tanggal target dan judul wajib diisi');return;}
   const db=getDB();
   if(!db.medPlans[currentPatientId]) db.medPlans[currentPatientId]=[];
-  db.medPlans[currentPatientId].push({id:'mp'+Date.now(),jenis,tanggalTarget,judul,detail,status:'belum',author:currentUser.nama,role:ROLE_LABEL_FULL[currentUser.role]});
-  saveDB(db);
+  const item={id:'mp'+Date.now(),jenis,tanggalTarget,judul,detail,status:'belum',author:currentUser.nama,role:ROLE_LABEL_FULL[currentUser.role]};
+  db.medPlans[currentPatientId].push(item);
   toggleMpForm(false);
   loadMedPlan();
-  showToast('Rencana berhasil disimpan ✓');
+  try{
+    await apiPost('addMedPlan',{patientId:currentPatientId, item});
+    showToast('Rencana berhasil disimpan ✓');
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
 }
 
-function deleteMh(id){
+async function deleteMh(id){
   if(!currentPatientId)return;
   const db=getDB();
   db.medHistory[currentPatientId]=(db.medHistory[currentPatientId]||[]).filter(x=>x.id!==id);
-  saveDB(db);
   loadMedPlan();
-  showToast('Riwayat dihapus');
+  try{
+    await apiPost('deleteMedHistory',{patientId:currentPatientId, id});
+    showToast('Riwayat dihapus');
+  }catch(e){
+    showToast('Gagal menghapus di server: '+e.message);
+  }
 }
-function deleteMp(id){
+async function deleteMp(id){
   if(!currentPatientId)return;
   const db=getDB();
   db.medPlans[currentPatientId]=(db.medPlans[currentPatientId]||[]).filter(x=>x.id!==id);
-  saveDB(db);
   loadMedPlan();
-  showToast('Rencana dihapus');
+  try{
+    await apiPost('deleteMedPlan',{patientId:currentPatientId, id});
+    showToast('Rencana dihapus');
+  }catch(e){
+    showToast('Gagal menghapus di server: '+e.message);
+  }
 }
-function setMpStatus(id,status){
+async function setMpStatus(id,status){
   if(!currentPatientId)return;
   const db=getDB();
   const item=(db.medPlans[currentPatientId]||[]).find(x=>x.id===id);
   if(item) item.status=status;
-  saveDB(db);
   loadMedPlan();
-  showToast(status==='selesai'?'Rencana ditandai selesai ✓':'Status diperbarui');
+  try{
+    await apiPost('updateMedPlanStatus',{patientId:currentPatientId, id, status});
+    showToast(status==='selesai'?'Rencana ditandai selesai ✓':'Status diperbarui');
+  }catch(e){
+    showToast('Gagal update ke server: '+e.message);
+  }
 }
 
 function loadMedPlan(){
@@ -1711,7 +1830,7 @@ function collectAllFromDOM(){
   });
 }
 
-function saveDailyData(){
+async function saveDailyData(){
   if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
   collectAllFromDOM();
   const wk=getWeekKey(currentWeekOffset);
@@ -1734,9 +1853,13 @@ function saveDailyData(){
   });
   merged['__note__']=document.getElementById('weeklyNote').value;
   db.dailyData[currentPatientId][wk]=merged;
-  saveDB(db);
   pendingData={};
-  showToast('Catatan harian berhasil disimpan ✓');
+  try{
+    await apiPost('saveDailyData',{patientId:currentPatientId, weekKey:wk, data:merged});
+    showToast('Catatan harian berhasil disimpan ✓');
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
 }
 
 function changeWeek(delta){
@@ -1756,7 +1879,9 @@ function changeWeek(delta){
       });
       merged['__note__']=document.getElementById('weeklyNote').value;
       db.dailyData[currentPatientId][wk]=merged;
-      saveDB(db);
+      // Auto-save ke server di latar belakang (tidak menahan perpindahan minggu)
+      apiPost('saveDailyData',{patientId:currentPatientId, weekKey:wk, data:merged})
+        .catch(e=>showToast('Auto-save gagal: '+e.message));
     }
   }
   pendingData={};
@@ -1932,7 +2057,7 @@ function loadAdminPatients(){
   }).join('');
 }
 function openAddPatientModal(){openModal('modalAddPatient');}
-function saveNewPatient(){
+async function saveNewPatient(){
   const nama=document.getElementById('newPNama').value.trim();
   const rm=document.getElementById('newPRM').value.trim();
   const jk=document.getElementById('newPJK').value;
@@ -1943,20 +2068,23 @@ function saveNewPatient(){
   const db=getDB();
   if(db.patients.find(p=>p.rm===rm)){showToast('No. Rekam Medis sudah terdaftar!');return;}
   if(db.users.find(u=>u.username===uname)){showToast('Username sudah digunakan!');return;}
-  const pid='p'+db.settings.nextPatientId++;
-  db.patients.push({id:pid,rm,nama,jk,ttl:'',pend:'',kerja:'',kawin:'',pendamping:'',alamat:'',telp:'',tglTenk:'',tglCAPD,jenisTenk:'',exitSite:'',akses:'',program:''});
-  db.users.push({id:'u'+db.settings.nextUserId++,username:uname,password:pass,role:'pasien',roles:['pasien'],nama,patientId:pid,active:true});
-  db.riwayat[pid]={etiologi:[],komorbid:[],peritonitis:0,exitInfeksi:0,tunnelInfeksi:0};
-  db.notes[pid]=[];
-  db.medHistory[pid]=[];
-  db.medPlans[pid]=[];
-  saveDB(db);
-  closeModal('modalAddPatient');
-  buildPatientSelector();
-  loadAdminPatients();
-  showToast(`Pasien ${nama} berhasil didaftarkan ✓`);
-  ['newPNama','newPRM','newPUser','newPPass','newPTglCAPD'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('newPJK').value='';
+  try{
+    const res=await apiPost('addPatient',{
+      patient:{rm,nama,jk,ttl:'',pend:'',kerja:'',kawin:'',pendamping:'',alamat:'',telp:'',tglTenk:'',tglCAPD,jenisTenk:'',exitSite:'',akses:'',program:''},
+      user:{username:uname,password:pass,role:'pasien',roles:['pasien'],nama,active:true}
+    });
+    db.patients.push(res.patient);
+    db.users.push(res.user);
+    closeModal('modalAddPatient');
+    buildPatientSelector();
+    loadAdminPatients();
+    populateLoginUserList();
+    showToast(`Pasien ${nama} berhasil didaftarkan ✓`);
+    ['newPNama','newPRM','newPUser','newPPass','newPTglCAPD'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('newPJK').value='';
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
 }
 function loadAdminUsers(){
   const db=getDB();
@@ -1977,14 +2105,35 @@ function loadAdminUsers(){
       </td>
     </tr>`;}).join('');
 }
-function toggleUserActive(uid){const db=getDB();const u=db.users.find(x=>x.id===uid);if(u)u.active=!u.active;saveDB(db);loadAdminUsers();}
-function resetPassword(uid){const np=prompt('Password baru:');if(!np)return;const db=getDB();const u=db.users.find(x=>x.id===uid);if(u){u.password=np;saveDB(db);showToast('Password berhasil direset ✓');}}
+async function toggleUserActive(uid){
+  const db=getDB();const u=db.users.find(x=>x.id===uid);if(!u)return;
+  u.active=!u.active; loadAdminUsers();
+  try{
+    await apiPost('updateUser',{id:uid, fields:{active:u.active}});
+  }catch(e){
+    u.active=!u.active; loadAdminUsers();
+    showToast('Gagal update ke server: '+e.message);
+  }
+}
+async function resetPassword(uid){
+  const np=prompt('Password baru:');if(!np)return;
+  const db=getDB();const u=db.users.find(x=>x.id===uid);if(!u)return;
+  const old=u.password;
+  u.password=np;
+  try{
+    await apiPost('updateUser',{id:uid, fields:{password:np}});
+    showToast('Password berhasil direset ✓');
+  }catch(e){
+    u.password=old;
+    showToast('Gagal update ke server: '+e.message);
+  }
+}
 function openAddUserModal(){
   document.getElementById('newURolePerawat').checked=false;
   document.getElementById('newURoleAdmin').checked=false;
   openModal('modalAddUser');
 }
-function saveNewUser(){
+async function saveNewUser(){
   const nama=document.getElementById('newUNama').value.trim();
   const uname=document.getElementById('newUUser').value.trim();
   const pass=document.getElementById('newUPass').value;
@@ -1995,15 +2144,19 @@ function saveNewUser(){
   if(!roles.length){showToast('Pilih minimal satu peran');return;}
   const db=getDB();
   if(db.users.find(u=>u.username===uname)){showToast('Username sudah digunakan!');return;}
-  db.users.push({id:'u'+db.settings.nextUserId++,username:uname,password:pass,role:roles[0],roles,nama,active:true});
-  saveDB(db);
-  closeModal('modalAddUser');
-  loadAdminUsers();
-  populateLoginUserList();
-  showToast(`Pengguna ${nama} berhasil ditambahkan ✓`);
-  ['newUNama','newUUser','newUPass'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('newURolePerawat').checked=false;
-  document.getElementById('newURoleAdmin').checked=false;
+  try{
+    const res=await apiPost('addUser',{user:{username:uname,password:pass,role:roles[0],roles,nama,active:true}});
+    db.users.push(res.user);
+    closeModal('modalAddUser');
+    loadAdminUsers();
+    populateLoginUserList();
+    showToast(`Pengguna ${nama} berhasil ditambahkan ✓`);
+    ['newUNama','newUUser','newUPass'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('newURolePerawat').checked=false;
+    document.getElementById('newURoleAdmin').checked=false;
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
 }
 
 // ============================================================
