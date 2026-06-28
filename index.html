@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catatan Harian CAPD — Renal Unit RSUD Welas Asih</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0F2D4A;--navy2:#1A3D5C;--teal:#0891B2;--teal2:#0E7490;--teal-light:#E0F4FA;
+  --red:#DC2626;--red-light:#FEF2F2;--green:#16A34A;--green-light:#F0FDF4;
+  --amber:#D97706;--amber-light:#FFFBEB;
+  --gray-50:#F8FAFC;--gray-100:#F1F5F9;--gray-200:#E2E8F0;--gray-300:#CBD5E1;
+  --gray-400:#94A3B8;--gray-500:#64748B;--gray-600:#475569;--gray-700:#334155;
+  --gray-800:#1E293B;--gray-900:#0F172A;--white:#FFFFFF;
+  --radius:8px;--shadow:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.10),0 2px 4px rgba(0,0,0,0.06);
+}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F7;min-height:100vh;color:var(--gray-800);font-size:14px;line-height:1.5}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--gray-100)}
+::-webkit-scrollbar-thumb{background:var(--gray-300);border-radius:10px}
+
+/* ===== LOGIN ===== */
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 50%,#0F4C6B 100%);padding:20px}
+.login-box{background:white;border-radius:20px;padding:40px;width:100%;max-width:420px;box-shadow:var(--shadow-md)}
+.login-logo{text-align:center;margin-bottom:28px}
+.login-logo-icon{width:72px;height:72px;background:linear-gradient(135deg,var(--teal),var(--teal2));border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 4px 14px rgba(8,145,178,0.35)}
+.login-logo-icon svg{width:38px;height:38px;fill:white}
+.login-inst{font-size:11px;color:var(--gray-400);font-weight:500;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:4px}
+.login-title{font-size:20px;font-weight:700;color:var(--gray-900);line-height:1.2}
+.login-sub{font-size:13px;color:var(--gray-500);margin-top:4px}
+.login-form-title{font-size:14px;font-weight:600;color:var(--gray-700);margin-bottom:16px;margin-top:4px}
+.form-field{margin-bottom:14px}
+.form-field label{display:block;font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:5px;letter-spacing:0.3px}
+.form-field input,.form-field select{width:100%;border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:10px 14px;font-size:14px;color:var(--gray-800);background:var(--gray-50);transition:border-color 0.15s,box-shadow 0.15s;outline:none;font-family:inherit}
+.form-field input:focus,.form-field select:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(8,145,178,0.12);background:white}
+.btn-login{width:100%;background:linear-gradient(135deg,var(--teal),var(--teal2));color:white;border:none;border-radius:var(--radius);padding:12px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;transition:opacity 0.15s}
+.btn-login:hover{opacity:0.92}
+.login-error{background:var(--red-light);border:1px solid #FECACA;border-radius:var(--radius);padding:10px 14px;font-size:13px;color:var(--red);margin-top:10px;display:none}
+
+/* ===== APP SHELL ===== */
+#app{display:none;min-height:100vh;flex-direction:column}
+.app-topbar{background:var(--navy);padding:0 20px;height:56px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
+.topbar-logo{width:36px;height:36px;background:rgba(255,255,255,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.topbar-logo svg{width:20px;height:20px;fill:white}
+.topbar-text{flex:1;min-width:0}
+.topbar-inst{font-size:10px;color:rgba(255,255,255,0.55);font-weight:500;letter-spacing:0.5px;text-transform:uppercase}
+.topbar-title{font-size:14px;font-weight:600;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar-user{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:5px 12px 5px 5px;cursor:pointer}
+.topbar-avatar{width:26px;height:26px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;flex-shrink:0}
+.topbar-user-name{font-size:12px;color:rgba(255,255,255,0.9);font-weight:500;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topbar-role-badge{font-size:10px;background:rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);border-radius:4px;padding:2px 6px;font-weight:600}
+.btn-logout{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:5px 10px;color:rgba(255,255,255,0.8);font-size:12px;cursor:pointer;white-space:nowrap}
+.btn-logout:hover{background:rgba(255,255,255,0.18)}
+
+/* ===== ALERT BANNER ===== */
+.alert-banner{background:#FEF2F2;border-bottom:2px solid var(--red);padding:9px 20px;display:flex;align-items:center;gap:10px}
+.alert-banner-icon{color:var(--red);font-size:16px;flex-shrink:0}
+.alert-banner-text{font-size:12px;font-weight:600;color:#991B1B}
+.alert-banner a{color:var(--red);text-decoration:underline;cursor:pointer}
+
+/* ===== MAIN LAYOUT ===== */
+.main-layout{display:flex;flex:1;min-height:calc(100vh - 56px)}
+.sidebar{width:220px;background:white;border-right:1px solid var(--gray-200);flex-shrink:0;display:flex;flex-direction:column;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
+.sidebar-section{padding:16px 12px 4px;font-size:10px;font-weight:700;color:var(--gray-400);letter-spacing:0.8px;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;font-size:13px;color:var(--gray-600);cursor:pointer;border-radius:var(--radius);margin:1px 8px;transition:background 0.1s,color 0.1s}
+.nav-item:hover{background:var(--gray-50);color:var(--gray-800)}
+.nav-item.active{background:var(--teal-light);color:var(--teal2);font-weight:600}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:0.7}
+.nav-item.active svg{opacity:1}
+.sidebar-footer{margin-top:auto;padding:12px;border-top:1px solid var(--gray-100)}
+.patient-selector{padding:8px 12px}
+.patient-selector select{width:100%;border:1px solid var(--gray-200);border-radius:var(--radius);padding:7px 10px;font-size:12px;color:var(--gray-700);background:var(--gray-50);outline:none;cursor:pointer}
+
+/* ===== CONTENT AREA ===== */
+.content{flex:1;padding:24px;overflow-y:auto;max-width:900px}
+.page{display:none}
+.page.active{display:block}
+.page-header{margin-bottom:22px}
+.page-header h1{font-size:20px;font-weight:700;color:var(--gray-900);margin-bottom:4px}
+.page-header p{font-size:13px;color:var(--gray-500)}
+
+/* ===== CARDS ===== */
+.card{background:white;border-radius:12px;border:1px solid var(--gray-200);padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-title{font-size:14px;font-weight:700;color:var(--gray-800);display:flex;align-items:center;gap:8px}
+.card-title svg{width:16px;height:16px;color:var(--teal)}
+
+/* ===== FORM ===== */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:5px}
+.form-group input,.form-group select,.form-group textarea{width:100%;border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:9px 12px;font-size:13px;color:var(--gray-800);background:var(--gray-50);font-family:inherit;outline:none;transition:border-color 0.15s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--teal);background:white;box-shadow:0 0 0 3px rgba(8,145,178,0.10)}
+.form-group textarea{resize:vertical;min-height:70px}
+.form-group input[readonly]{background:var(--gray-100);color:var(--gray-500)}
+.section-divider{border:none;border-top:1px solid var(--gray-200);margin:20px 0}
+.section-label{font-size:11px;font-weight:700;color:var(--teal2);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--teal-light)}
+
+/* ===== BUTTONS ===== */
+.btn{border-radius:var(--radius);padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:opacity 0.15s,transform 0.1s;font-family:inherit}
+.btn:hover{opacity:0.88}
+.btn:active{transform:scale(0.98)}
+.btn-primary{background:var(--teal);color:white}
+.btn-success{background:var(--green);color:white}
+.btn-danger{background:var(--red);color:white}
+.btn-secondary{background:white;color:var(--gray-700);border:1.5px solid var(--gray-300)}
+.btn-ghost{background:transparent;color:var(--teal);border:1.5px solid var(--teal-light)}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px}
+
+/* ===== BADGES & TAGS ===== */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-teal{background:var(--teal-light);color:var(--teal2)}
+.badge-red{background:var(--red-light);color:var(--red)}
+.badge-green{background:var(--green-light);color:var(--green)}
+.badge-amber{background:var(--amber-light);color:var(--amber)}
+.badge-gray{background:var(--gray-100);color:var(--gray-500)}
+.tag-group{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.tag{background:var(--gray-100);border:1.5px solid var(--gray-200);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--gray-600);cursor:pointer;transition:all 0.1s;user-select:none}
+.tag:hover{border-color:var(--teal);color:var(--teal)}
+.tag.selected{background:var(--teal-light);border-color:var(--teal);color:var(--teal2);font-weight:600}
+
+/* ===== DAILY TABLE ===== */
+.week-nav{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.week-nav button{background:white;border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:6px 14px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--gray-700)}
+.week-nav button:hover{border-color:var(--teal);color:var(--teal)}
+.week-label{font-size:14px;font-weight:700;color:var(--gray-800);flex:1;text-align:center}
+.daily-table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--gray-200)}
+.daily-table{width:100%;border-collapse:collapse;min-width:700px;font-size:12px}
+.daily-table th{background:var(--navy);color:rgba(255,255,255,0.9);font-weight:600;padding:9px 10px;text-align:center;font-size:11px;letter-spacing:0.3px}
+.daily-table th:first-child{border-radius:10px 0 0 0}
+.daily-table th:last-child{border-radius:0 10px 0 0}
+.daily-table td{padding:6px 8px;border-bottom:1px solid var(--gray-100);border-right:1px solid var(--gray-100);vertical-align:middle;text-align:center}
+.daily-table tr:last-child td{border-bottom:none}
+.day-cell{background:var(--gray-50);font-weight:700;color:var(--gray-700);text-align:left;padding-left:12px;font-size:12px}
+.shift-cell{color:var(--gray-400);font-weight:600;font-size:11px}
+.daily-table input,.daily-table select{border:none;background:transparent;font-size:12px;text-align:center;color:var(--gray-800);outline:none;width:100%;font-family:inherit;padding:2px}
+.daily-table input:focus{background:var(--teal-light);border-radius:4px}
+.day-separator td{height:3px;background:var(--gray-100);border:none}
+.color-badge-j{display:inline-block;width:10px;height:10px;border-radius:50%;background:#FEF3C7;border:1px solid #D97706;margin-right:4px}
+.color-badge-k{display:inline-block;width:10px;height:10px;border-radius:50%;background:#BFDBFE;border:1px solid #3B82F6;margin-right:4px}
+
+/* ===== NOTES ===== */
+.note-card{background:white;border:1px solid var(--gray-200);border-radius:12px;padding:16px;margin-bottom:12px}
+.note-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.note-author{display:flex;align-items:center;gap:10px}
+.note-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0}
+.note-body-text{font-size:13px;color:var(--gray-700);line-height:1.7;background:var(--gray-50);border-radius:8px;padding:12px 14px;border-left:3px solid var(--teal)}
+.note-date{font-size:11px;color:var(--gray-400)}
+
+/* ===== ADMIN TABLES ===== */
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th{background:var(--gray-50);font-weight:700;color:var(--gray-600);padding:10px 14px;text-align:left;border-bottom:2px solid var(--gray-200);font-size:11px;text-transform:uppercase;letter-spacing:0.4px}
+.data-table td{padding:11px 14px;border-bottom:1px solid var(--gray-100);color:var(--gray-700);vertical-align:middle}
+.data-table tr:hover td{background:var(--gray-50)}
+.data-table .action-btn{color:var(--teal);background:none;border:none;font-size:12px;cursor:pointer;font-weight:600;padding:0;font-family:inherit}
+.data-table .action-btn:hover{text-decoration:underline}
+
+/* ===== STATS ===== */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:white;border-radius:12px;border:1px solid var(--gray-200);padding:16px;box-shadow:var(--shadow)}
+.stat-num{font-size:28px;font-weight:800;color:var(--gray-900);line-height:1}
+.stat-label{font-size:11px;color:var(--gray-500);margin-top:4px;font-weight:500}
+.stat-sub{font-size:11px;margin-top:6px}
+
+/* ===== PERITONITIS WARNING ===== */
+.perit-card{background:var(--red-light);border:1.5px solid #FECACA;border-radius:12px;padding:18px;margin-bottom:16px}
+.perit-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.perit-icon{width:40px;height:40px;background:var(--red);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.perit-title{font-size:15px;font-weight:700;color:#991B1B}
+.perit-sub{font-size:12px;color:#B91C1C;margin-top:2px}
+.symptom-item{display:flex;align-items:center;gap:10px;background:white;border:1px solid #FECACA;border-radius:8px;padding:9px 14px;margin-bottom:7px}
+.symptom-dot{width:8px;height:8px;background:var(--red);border-radius:50%;flex-shrink:0}
+.symptom-txt{font-size:13px;color:#7F1D1D;font-weight:500}
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:4px}
+.contact-card{background:white;border:1px solid var(--gray-200);border-radius:10px;padding:14px;box-shadow:var(--shadow)}
+.contact-role{font-size:10px;color:var(--gray-400);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px}
+.contact-name{font-size:14px;font-weight:600;color:var(--gray-900);margin-bottom:7px}
+.contact-phone{display:flex;align-items:center;gap:6px;color:var(--teal);font-size:13px;font-weight:600;cursor:pointer}
+
+/* ===== MODAL ===== */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;display:none}
+.modal-bg.open{display:flex}
+.modal{background:white;border-radius:16px;padding:28px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-size:16px;font-weight:700;color:var(--gray-900)}
+.modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--gray-400);line-height:1;padding:0}
+.modal-close:hover{color:var(--gray-700)}
+
+/* ===== COUNTER ===== */
+.counter-row{display:flex;align-items:center;gap:12px;background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:11px 16px;margin-bottom:8px}
+.counter-lbl{flex:1;font-size:13px;color:var(--gray-700);font-weight:500}
+.counter-ctrl{display:flex;align-items:center;gap:10px}
+.counter-btn{width:30px;height:30px;border:1.5px solid var(--gray-300);border-radius:6px;background:white;font-size:18px;line-height:1;cursor:pointer;color:var(--gray-600);display:flex;align-items:center;justify-content:center}
+.counter-val{font-size:16px;font-weight:700;min-width:28px;text-align:center;color:var(--gray-900)}
+
+/* ===== TOAST ===== */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--gray-900);color:white;border-radius:10px;padding:12px 22px;font-size:13px;font-weight:500;z-index:9999;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap}
+#toast.show{opacity:1}
+
+/* ===== PRINT ===== */
+.print-header{display:none}
+@media print{
+  .app-topbar,.sidebar,.alert-banner,.role-switcher,.btn-row,.week-nav,.btn,.save-bar,.modal-bg,#toast,.print-hide{display:none!important}
+  .main-layout{display:block}
+  .content{padding:0;max-width:100%}
+  .print-header{display:block;text-align:center;margin-bottom:20px}
+  .print-header h2{font-size:16px;font-weight:700}
+  .print-header p{font-size:12px;color:#555}
+  .daily-table input,.daily-table select{pointer-events:none}
+  body{background:white}
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .sidebar{display:none}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .form-row,.form-row-3{grid-template-columns:1fr}
+  .content{padding:16px}
+}
+.mobile-menu-btn{display:none}
+@media(max-width:768px){.mobile-menu-btn{display:flex}}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 18a8 8 0 110-16 8 8 0 010 16zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+      </div>
+      <div class="login-inst">Renal Unit · RSUD Welas Asih Prov. Jawa Barat</div>
+      <div class="login-title">Catatan Harian CAPD</div>
+      <div class="login-sub">Sistem Pemantauan Pasien CAPD Digital</div>
+    </div>
+    <div class="login-form-title">Masuk ke Akun</div>
+    <div class="form-field">
+      <label>Username</label>
+      <input id="loginUser" type="text" placeholder="Masukkan username...">
+    </div>
+    <div class="form-field">
+      <label>Password</label>
+      <input id="loginPass" type="password" placeholder="Masukkan password...">
+    </div>
+    <div class="form-field">
+      <label>Masuk Sebagai</label>
+      <select id="loginRole">
+        <option value="pasien">Pasien</option>
+        <option value="perawat">Perawat CAPD</option>
+        <option value="admin">Administrator</option>
+      </select>
+    </div>
+    <button class="btn-login" onclick="doLogin()">Masuk</button>
+    <div class="login-error" id="loginError">Username atau password salah. Silakan coba lagi.</div>
+    <div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--gray-200)">
+      <div style="font-size:11px;color:var(--gray-400);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Demo Akun</div>
+      <div style="font-size:12px;color:var(--gray-500);line-height:1.9">
+        Admin: <b>admin</b> / <b>admin123</b><br>
+        Perawat: <b>perawat1</b> / <b>capd2024</b><br>
+        Pasien: <b>pasien001</b> / <b>capd001</b> (RM-001)<br>
+        Pasien: <b>pasien002</b> / <b>capd002</b> (RM-002)
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app" style="display:none;flex-direction:column">
+
+  <!-- TOP BAR -->
+  <div class="app-topbar">
+    <div class="topbar-logo">
+      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 18a8 8 0 110-16 8 8 0 010 16zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+    </div>
+    <div class="topbar-text">
+      <div class="topbar-inst">Renal Unit · RSUD Welas Asih Provinsi Jawa Barat</div>
+      <div class="topbar-title">Catatan Harian CAPD</div>
+    </div>
+    <div id="topbarUser" class="topbar-user">
+      <div class="topbar-avatar" id="topbarAv">?</div>
+      <div class="topbar-user-name" id="topbarName">-</div>
+      <div class="topbar-role-badge" id="topbarRoleBadge">-</div>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">✕ Keluar</button>
+  </div>
+
+  <!-- ALERT BANNER -->
+  <div class="alert-banner">
+    <span class="alert-banner-icon">⚠</span>
+    <div class="alert-banner-text">Hubungi segera Tim CAPD jika: Cairan keruh · Nyeri perut · Demam · Mual/muntah — Tanda peritonitis!</div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main-layout">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+      <div id="patientSelectorWrap" style="display:none;padding:12px">
+        <div style="font-size:10px;font-weight:700;color:var(--gray-400);letter-spacing:0.6px;text-transform:uppercase;margin-bottom:6px">Pilih Pasien</div>
+        <select id="patientSelector" onchange="selectPatient(this.value)" style="width:100%;border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:7px 10px;font-size:12px;color:var(--gray-700);background:var(--gray-50);outline:none;cursor:pointer;font-family:inherit"></select>
+      </div>
+      <div class="sidebar-section">Menu</div>
+      <div id="navItems"></div>
+      <div class="sidebar-footer" style="font-size:11px;color:var(--gray-400);text-align:center">
+        v1.0 · CAPD Digital · 2024
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content" id="mainContent">
+
+      <!-- PAGE: PERINGATAN -->
+      <div class="page" id="page-peringatan">
+        <div class="page-header">
+          <h1>⚠ Peringatan Peritonitis</h1>
+          <p>Kenali gejala peritonitis dan hubungi tim CAPD segera</p>
+        </div>
+        <div class="perit-card">
+          <div class="perit-header">
+            <div class="perit-icon"><svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+            <div><div class="perit-title">Hubungi segera unit CAPD jika ditemukan:</div><div class="perit-sub">Tanda dan gejala peritonitis berikut ini berbahaya dan memerlukan penanganan segera</div></div>
+          </div>
+          <div class="symptom-item"><div class="symptom-dot"></div><div class="symptom-txt">Cairan dialisat keruh atau berawan (bukan jernih seperti biasa)</div></div>
+          <div class="symptom-item"><div class="symptom-dot"></div><div class="symptom-txt">Nyeri abdomen / perut (bisa ringan sampai berat)</div></div>
+          <div class="symptom-item"><div class="symptom-dot"></div><div class="symptom-txt">Demam (suhu tubuh ≥ 37,5°C atau terasa panas)</div></div>
+          <div class="symptom-item"><div class="symptom-dot"></div><div class="symptom-txt">Mual, muntah, dan atau diare</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">📞 Kontak Tim CAPD — Hubungi Segera</div>
+            <button class="btn btn-sm btn-ghost print-hide" onclick="openContactModal()">+ Edit Kontak</button>
+          </div>
+          <div class="contact-grid" id="contactGrid"></div>
+        </div>
+      </div>
+
+      <!-- PAGE: DATA PASIEN -->
+      <div class="page" id="page-datapasien">
+        <div class="page-header">
+          <h1>Data Pasien</h1>
+          <p>Identitas lengkap dan informasi CAPD pasien</p>
+        </div>
+        <div class="card">
+          <div class="section-label">Identitas Pasien</div>
+          <div class="form-row">
+            <div class="form-group"><label>Nama Lengkap *</label><input id="pNama" type="text" placeholder="Nama lengkap pasien"></div>
+            <div class="form-group"><label>No. Rekam Medis</label><input id="pRM" type="text" placeholder="RM-XXXXXX" readonly></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Jenis Kelamin</label><select id="pJK"><option value="">-- Pilih --</option><option>Laki-laki</option><option>Perempuan</option></select></div>
+            <div class="form-group"><label>Tanggal Lahir</label><input id="pTTL" type="date"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Pendidikan Terakhir</label><select id="pPend"><option value="">-- Pilih --</option><option>Tidak sekolah</option><option>SD</option><option>SMP</option><option>SMA/SMK</option><option>D3</option><option>S1/S2/S3</option></select></div>
+            <div class="form-group"><label>Pekerjaan</label><input id="pKerja" type="text" placeholder="Pekerjaan pasien"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Status Perkawinan</label><select id="pKawin"><option value="">-- Pilih --</option><option>Belum menikah</option><option>Menikah</option><option>Janda/Duda</option></select></div>
+            <div class="form-group"><label>Nama Pendamping / Keluarga</label><input id="pPendamping" type="text" placeholder="Nama pendamping"></div>
+          </div>
+          <div class="form-group"><label>Alamat Lengkap</label><textarea id="pAlamat" rows="2" placeholder="Alamat lengkap pasien..."></textarea></div>
+          <div class="form-group"><label>No. Telepon Pasien / Keluarga</label><input id="pTelp" type="text" placeholder="08xx-xxxx-xxxx"></div>
+        </div>
+        <div class="card">
+          <div class="section-label">Informasi Tenckhoff Catheter & CAPD</div>
+          <div class="form-row">
+            <div class="form-group"><label>Tanggal Pasang Tenckhoff Catheter</label><input id="pTglTenk" type="date"></div>
+            <div class="form-group"><label>Tanggal Mulai CAPD</label><input id="pTglCAPD" type="date"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Jenis Tenckhoff</label><select id="pJenisTenk"><option value="">-- Pilih --</option><option>Standard straight</option><option>Coiled</option><option>Swan neck</option></select></div>
+            <div class="form-group"><label>Letak Exit Site</label><select id="pExitSite"><option value="">-- Pilih --</option><option>Kanan bawah</option><option>Kiri bawah</option><option>Midline / Median</option></select></div>
+          </div>
+          <div class="form-group"><label>Akses Vaskular Sebelumnya</label><select id="pAkses"><option value="">-- Pilih --</option><option>AVF (Arteriovenous Fistula)</option><option>CVC (Cath. Vena Centralis)</option><option>Tidak ada</option></select></div>
+        </div>
+        <div class="btn-row print-hide">
+          <button class="btn btn-primary" onclick="saveDataPasien()">💾 Simpan Data</button>
+          <button class="btn btn-secondary" onclick="window.print()">🖨 Cetak</button>
+        </div>
+      </div>
+
+      <!-- PAGE: RIWAYAT -->
+      <div class="page" id="page-riwayat">
+        <div class="page-header">
+          <h1>Riwayat Penyakit</h1>
+          <p>Etiologi, penyakit penyerta, dan riwayat CAPD</p>
+        </div>
+        <div class="card">
+          <div class="section-label">Etiologi & Diagnosis</div>
+          <div class="form-group">
+            <label>Etiologi CAPD (penyebab gagal ginjal)</label>
+            <div class="tag-group" id="tagEtiologi"></div>
+          </div>
+          <div class="form-group">
+            <label>Penyakit Penyerta (Komorbid)</label>
+            <div class="tag-group" id="tagKomorbid"></div>
+          </div>
+          <div class="form-group"><label>Keterangan tambahan etiologi/komorbid</label><textarea id="rEtiologiNote" rows="2" placeholder="Catatan tambahan..."></textarea></div>
+        </div>
+        <div class="card">
+          <div class="section-label">Riwayat Training CAPD</div>
+          <div class="form-row">
+            <div class="form-group"><label>Tanggal Mulai Training</label><input id="rTglTraining" type="date"></div>
+            <div class="form-group"><label>Total Hari Training</label><input id="rHariTraining" type="number" min="0" placeholder="Jumlah hari"></div>
+          </div>
+          <div class="form-group"><label>Jenis Dialisis Sebelum PD</label><select id="rDialSblm"><option value="">-- Pilih --</option><option>Hemodialisis (HD)</option><option>Belum pernah dialisis</option><option>Lainnya</option></select></div>
+          <div class="form-group"><label>Program Pertukaran Cairan CAPD</label><input id="rProgram" type="text" placeholder="Contoh: 4x/hari, 2000 mL per siklus, dwell 4 jam"></div>
+        </div>
+        <div class="card">
+          <div class="section-label">Episode Komplikasi</div>
+          <div class="counter-row">
+            <div class="counter-lbl">🦠 Episode Peritonitis</div>
+            <div class="counter-ctrl">
+              <button class="counter-btn" onclick="changeCounter('rPeritonitis',-1)">−</button>
+              <div class="counter-val" id="rPeritonitis">0</div>
+              <button class="counter-btn" onclick="changeCounter('rPeritonitis',1)">+</button>
+            </div>
+          </div>
+          <div class="counter-row">
+            <div class="counter-lbl">🩹 Episode Infeksi Exit Site</div>
+            <div class="counter-ctrl">
+              <button class="counter-btn" onclick="changeCounter('rExitInfeksi',-1)">−</button>
+              <div class="counter-val" id="rExitInfeksi">0</div>
+              <button class="counter-btn" onclick="changeCounter('rExitInfeksi',1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-label">Obat-obatan Rutin</div>
+          <div class="form-group"><textarea id="rObat" rows="4" placeholder="Daftar obat rutin pasien:&#10;1. Nama obat — dosis — frekuensi&#10;2. ..."></textarea></div>
+        </div>
+        <div class="btn-row print-hide">
+          <button class="btn btn-primary" onclick="saveRiwayat()">💾 Simpan Riwayat</button>
+        </div>
+      </div>
+
+      <!-- PAGE: CATATAN PETUGAS -->
+      <div class="page" id="page-catatan">
+        <div class="page-header">
+          <h1>Catatan Petugas</h1>
+          <p>Catatan dari perawat dan dokter untuk pasien ini</p>
+        </div>
+        <div id="noteAddForm" style="display:none" class="card">
+          <div class="section-label">Tambah Catatan Baru</div>
+          <div class="form-group"><label>Isi Catatan</label><textarea id="noteInput" rows="4" placeholder="Tuliskan catatan klinis, observasi kondisi pasien, instruksi, atau informasi penting..."></textarea></div>
+          <div class="btn-row"><button class="btn btn-primary" onclick="saveNote()">Simpan Catatan</button><button class="btn btn-secondary" onclick="toggleNoteForm(false)">Batal</button></div>
+        </div>
+        <div class="btn-row print-hide" id="addNoteBtn">
+          <button class="btn btn-ghost" onclick="toggleNoteForm(true)">+ Tambah Catatan</button>
+        </div>
+        <div id="noteList" style="margin-top:12px"></div>
+      </div>
+
+      <!-- PAGE: CATATAN HARIAN -->
+      <div class="page" id="page-harian">
+        <div class="page-header">
+          <h1>Catatan Harian CAPD</h1>
+          <p>Diisi oleh pasien setiap hari — rekam semua siklus pertukaran</p>
+        </div>
+        <div class="card">
+          <div class="week-nav print-hide">
+            <button onclick="changeWeek(-1)">← Minggu Sebelumnya</button>
+            <div class="week-label" id="weekLabel">-</div>
+            <button onclick="changeWeek(1)">Minggu Berikutnya →</button>
+          </div>
+          <div class="daily-table-wrap">
+            <div class="print-header"><h2>Catatan Harian CAPD</h2><p id="printWeekLabel"></p></div>
+            <table class="daily-table" id="dailyTable">
+              <thead>
+                <tr>
+                  <th>Hari</th>
+                  <th>Siklus</th>
+                  <th>Waktu Drain</th>
+                  <th>Vol. Keluar (mL)</th>
+                  <th>Warna Cairan</th>
+                  <th>BB (kg)</th>
+                  <th>TD (mmHg)</th>
+                  <th>Suhu (°C)</th>
+                  <th>Keluhan</th>
+                </tr>
+              </thead>
+              <tbody id="dailyTbody"></tbody>
+            </table>
+          </div>
+          <div style="margin-top:16px">
+            <div style="font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:6px">Catatan Minggu Ini (opsional)</div>
+            <textarea id="weeklyNote" rows="3" style="width:100%;border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:10px 14px;font-size:13px;font-family:inherit;outline:none;resize:vertical" placeholder="Tuliskan catatan tambahan untuk minggu ini — misal kondisi umum, pertanyaan untuk perawat, gejala tidak biasa..."></textarea>
+          </div>
+          <div class="btn-row print-hide">
+            <button class="btn btn-primary" onclick="saveDailyData()">💾 Simpan Minggu Ini</button>
+            <button class="btn btn-secondary" onclick="window.print()">🖨 Cetak</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE: ADMIN - KELOLA PASIEN -->
+      <div class="page" id="page-admin-pasien">
+        <div class="page-header">
+          <h1>Kelola Pasien</h1>
+          <p>Daftar semua pasien CAPD yang terdaftar dalam sistem</p>
+        </div>
+        <div class="btn-row print-hide" style="margin-bottom:16px">
+          <button class="btn btn-primary" onclick="openAddPatientModal()">+ Daftarkan Pasien Baru</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table class="data-table" id="adminPatientTable">
+            <thead><tr><th>#</th><th>No. RM</th><th>Nama Pasien</th><th>Username</th><th>Tgl. Mulai CAPD</th><th>Status</th><th>Aksi</th></tr></thead>
+            <tbody id="adminPatientBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PAGE: ADMIN - KELOLA PENGGUNA -->
+      <div class="page" id="page-admin-pengguna">
+        <div class="page-header">
+          <h1>Kelola Pengguna</h1>
+          <p>Manajemen akun admin, perawat, dan pasien</p>
+        </div>
+        <div class="btn-row print-hide" style="margin-bottom:16px">
+          <button class="btn btn-primary" onclick="openAddUserModal()">+ Tambah Pengguna</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table class="data-table">
+            <thead><tr><th>#</th><th>Username</th><th>Nama</th><th>Role</th><th>Status</th><th>Aksi</th></tr></thead>
+            <tbody id="adminUserBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PAGE: PERAWAT - PANTAU SEMUA PASIEN -->
+      <div class="page" id="page-perawat-pantau">
+        <div class="page-header">
+          <h1>Pantau Semua Pasien</h1>
+          <p>Ringkasan kondisi dan aktivitas seluruh pasien CAPD</p>
+        </div>
+        <div class="stats-grid" id="nurseStats"></div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <div style="padding:16px 20px;border-bottom:1px solid var(--gray-200);font-size:14px;font-weight:700;color:var(--gray-800)">Daftar Pasien & Kondisi Terakhir</div>
+          <table class="data-table" id="nursePatientTable">
+            <thead><tr><th>No. RM</th><th>Nama Pasien</th><th>Terakhir Isi</th><th>Catatan Terakhir</th><th>Status</th><th>Aksi</th></tr></thead>
+            <tbody id="nursePatientBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main-layout -->
+</div><!-- /app -->
+
+<!-- MODAL: TAMBAH PASIEN -->
+<div class="modal-bg" id="modalAddPatient">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Daftarkan Pasien Baru</div>
+      <button class="modal-close" onclick="closeModal('modalAddPatient')">×</button>
+    </div>
+    <div class="form-group"><label>Nama Lengkap Pasien *</label><input id="newPNama" type="text" placeholder="Nama lengkap"></div>
+    <div class="form-row">
+      <div class="form-group"><label>No. Rekam Medis *</label><input id="newPRM" type="text" placeholder="RM-XXXXXX"></div>
+      <div class="form-group"><label>Jenis Kelamin</label><select id="newPJK"><option value="">-- Pilih --</option><option>Laki-laki</option><option>Perempuan</option></select></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Username Login *</label><input id="newPUser" type="text" placeholder="username pasien"></div>
+      <div class="form-group"><label>Password *</label><input id="newPPass" type="password" placeholder="password awal"></div>
+    </div>
+    <div class="form-group"><label>Tanggal Mulai CAPD</label><input id="newPTglCAPD" type="date"></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="saveNewPatient()">Daftarkan Pasien</button><button class="btn btn-secondary" onclick="closeModal('modalAddPatient')">Batal</button></div>
+  </div>
+</div>
+
+<!-- MODAL: TAMBAH USER -->
+<div class="modal-bg" id="modalAddUser">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Tambah Pengguna Baru</div>
+      <button class="modal-close" onclick="closeModal('modalAddUser')">×</button>
+    </div>
+    <div class="form-group"><label>Nama Lengkap *</label><input id="newUNama" type="text" placeholder="Nama lengkap"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Username *</label><input id="newUUser" type="text" placeholder="username"></div>
+      <div class="form-group"><label>Password *</label><input id="newUPass" type="password" placeholder="password"></div>
+    </div>
+    <div class="form-group"><label>Role</label><select id="newURole"><option value="perawat">Perawat CAPD</option><option value="admin">Administrator</option></select></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="saveNewUser()">Tambah Pengguna</button><button class="btn btn-secondary" onclick="closeModal('modalAddUser')">Batal</button></div>
+  </div>
+</div>
+
+<!-- MODAL: EDIT KONTAK -->
+<div class="modal-bg" id="modalContact">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Edit Kontak Tim CAPD</div>
+      <button class="modal-close" onclick="closeModal('modalContact')">×</button>
+    </div>
+    <div id="contactEditList"></div>
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--gray-200)">
+      <div style="font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:10px">Tambah Kontak Baru</div>
+      <div class="form-row">
+        <div class="form-group"><label>Role/Jabatan</label><input id="newCRole" placeholder="cth: Perawat CAPD"></div>
+        <div class="form-group"><label>Nama</label><input id="newCName" placeholder="Nama lengkap"></div>
+      </div>
+      <div class="form-group"><label>No. HP</label><input id="newCPhone" placeholder="0812-xxxx-xxxx"></div>
+      <button class="btn btn-ghost btn-sm" onclick="addContact()">+ Tambah</button>
+    </div>
+    <div class="btn-row" style="margin-top:16px"><button class="btn btn-primary" onclick="saveContacts()">Simpan Kontak</button></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ============================================================
+//  DATABASE (localStorage)
+// ============================================================
+const DB_KEY = 'capd_db';
+
+function getDB(){
+  const raw = localStorage.getItem(DB_KEY);
+  if(raw) return JSON.parse(raw);
+  return initDB();
+}
+
+function saveDB(db){
+  localStorage.setItem(DB_KEY, JSON.stringify(db));
+}
+
+function initDB(){
+  const db = {
+    users:[
+      {id:'u1',username:'admin',password:'admin123',role:'admin',nama:'Administrator',active:true},
+      {id:'u2',username:'perawat1',password:'capd2024',role:'perawat',nama:'Ns. Sari Dewi, S.Kep',active:true},
+      {id:'u3',username:'perawat2',password:'capd2024',role:'perawat',nama:'Ns. Rudi Hartono, S.Kep',active:true},
+      {id:'u4',username:'pasien001',password:'capd001',role:'pasien',nama:'Bpk. Ahmad Suparno',patientId:'p1',active:true},
+      {id:'u5',username:'pasien002',password:'capd002',role:'pasien',nama:'Ibu Siti Rahayu',patientId:'p2',active:true},
+    ],
+    patients:[
+      {id:'p1',rm:'RM-001',nama:'Ahmad Suparno',jk:'Laki-laki',ttl:'1965-05-12',pend:'SMA/SMK',kerja:'Pensiunan',kawin:'Menikah',pendamping:'Ibu Sumiyati',alamat:'Jl. Mawar No. 12, Tasikmalaya',telp:'0812-1234-5678',tglTenk:'2023-03-15',tglCAPD:'2023-04-01',jenisTenk:'Standard straight',exitSite:'Kanan bawah',akses:'Hemodialisis (HD)'},
+      {id:'p2',rm:'RM-002',nama:'Siti Rahayu',jk:'Perempuan',ttl:'1970-08-22',pend:'SD',kerja:'Ibu Rumah Tangga',kawin:'Menikah',pendamping:'Bpk. Wahyu',alamat:'Jl. Melati No. 5, Welas Asih',telp:'0813-9876-5432',tglTenk:'2023-06-10',tglCAPD:'2023-07-01',jenisTenk:'Swan neck',exitSite:'Kiri bawah',akses:'Belum pernah dialisis'},
+    ],
+    riwayat:{
+      'p1':{etiologi:['Diabetes Mellitus'],komorbid:['DM Tipe 2','Anemia'],etiologiNote:'',tglTraining:'2023-03-20',hariTraining:14,dialSblm:'Hemodialisis (HD)',program:'4x/hari, 2000 mL per siklus, dwell 4 jam',peritonitis:1,exitInfeksi:0,obat:'1. Calcium Carbonate 500mg — 3x1\n2. Erythropoietin 4000 IU — 3x seminggu (SC)\n3. Amlodipine 5mg — 1x1 malam\n4. Furosemide 40mg — 1x1 pagi'},
+      'p2':{etiologi:['Hipertensi'],komorbid:['Hipertensi','Anemia'],etiologiNote:'',tglTraining:'2023-06-15',hariTraining:10,dialSblm:'Belum pernah dialisis',program:'4x/hari, 2000 mL per siklus',peritonitis:0,exitInfeksi:1,obat:'1. Amlodipine 10mg — 1x1\n2. Erythropoietin 3000 IU — 2x seminggu'},
+    },
+    notes:{
+      'p1':[
+        {id:'n1',author:'Ns. Sari Dewi, S.Kep',role:'Perawat CAPD',date:'2024-06-25',text:'Exit site tampak bersih, tidak ada tanda infeksi. Cairan effluen jernih kekuningan. Pasien mengeluhkan rasa nyeri ringan saat drain — akan dipantau pada kunjungan berikutnya.'},
+        {id:'n2',author:'dr. Agus Santoso, Sp.PD',role:'Dokter Spesialis',date:'2024-06-20',text:'Hasil lab: Hb 9,2 g/dL, Albumin 3,1 g/dL, Kt/V 1,87. Dosis EPO dinaikkan. Kontrol berikutnya 2 minggu. Pertukaran tetap 4x sehari 1,5% glukosa.'},
+      ],
+      'p2':[
+        {id:'n3',author:'Ns. Rudi Hartono, S.Kep',role:'Perawat CAPD',date:'2024-06-24',text:'Pasien melaporkan exit site sedikit kemerahan. Diberikan perawatan luka dan edukasi teknik steril kembali. Diinstruksikan kontrol 3 hari lagi.'},
+      ],
+    },
+    dailyData:{},
+    contacts:[
+      {role:'Perawat CAPD (Shift Pagi)',name:'Ns. Sari Dewi, S.Kep',phone:'0812-1111-2222'},
+      {role:'Perawat CAPD (Shift Sore)',name:'Ns. Rudi Hartono, S.Kep',phone:'0813-3333-4444'},
+      {role:'Koordinator Tim CAPD',name:'Ns. Yuli Astuti, S.Kep,Ns.',phone:'0811-5555-6666'},
+      {role:'Renal Unit / IGD RSUD',name:'RSUD Welas Asih',phone:'(0265) 123-456'},
+    ],
+    settings:{nextPatientId:3,nextUserId:6}
+  };
+  saveDB(db);
+  return db;
+}
+
+// ============================================================
+//  STATE
+// ============================================================
+let currentUser = null;
+let currentPatientId = null;
+let currentWeekOffset = 0;
+
+const ETIOLOGI_LIST = ['Diabetes Mellitus','Hipertensi','GN Kronik (Glomerulonefritis)','Obstruksi Uropati','Lupus Eritematosus Sistemik','Penyakit Ginjal Polikistik','Lain-lain'];
+const KOMORBID_LIST = ['DM Tipe 2','Hipertensi','Anemia','Penyakit Jantung','Stroke','Hipotiroid','Dislipidemia','Obesitas','Lain-lain'];
+
+// ============================================================
+//  LOGIN / LOGOUT
+// ============================================================
+function doLogin(){
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  const role = document.getElementById('loginRole').value;
+  const db = getDB();
+  const found = db.users.find(u=>u.username===user && u.password===pass && u.role===role && u.active);
+  if(!found){
+    document.getElementById('loginError').style.display='block';
+    return;
+  }
+  document.getElementById('loginError').style.display='none';
+  currentUser = found;
+  if(found.role==='pasien') currentPatientId = found.patientId;
+  startApp();
+}
+
+function doLogout(){
+  currentUser = null; currentPatientId = null; currentWeekOffset = 0;
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('app').style.display='none';
+}
+
+document.getElementById('loginUser').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+
+// ============================================================
+//  APP START
+// ============================================================
+function startApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='flex';
+
+  // Topbar
+  const av = currentUser.nama.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('topbarAv').textContent=av;
+  document.getElementById('topbarName').textContent=currentUser.nama;
+  const roleLabel = {admin:'Admin',perawat:'Perawat',pasien:'Pasien'}[currentUser.role];
+  document.getElementById('topbarRoleBadge').textContent=roleLabel;
+
+  buildNav();
+  buildPatientSelector();
+  renderContactGrid();
+  
+  // Default page
+  if(currentUser.role==='admin') showPage('admin-pasien');
+  else if(currentUser.role==='perawat') showPage('perawat-pantau');
+  else showPage('peringatan');
+}
+
+// ============================================================
+//  NAV
+// ============================================================
+const navConfig = {
+  pasien:[
+    {id:'peringatan',icon:'⚠',label:'Peringatan & Kontak'},
+    {id:'datapasien',icon:'👤',label:'Data Diri Saya'},
+    {id:'riwayat',icon:'📋',label:'Riwayat Penyakit'},
+    {id:'catatan',icon:'📝',label:'Catatan Petugas'},
+    {id:'harian',icon:'📅',label:'Catatan Harian'},
+  ],
+  perawat:[
+    {id:'perawat-pantau',icon:'👁',label:'Pantau Semua Pasien'},
+    {id:'peringatan',icon:'⚠',label:'Peringatan & Kontak'},
+    {id:'datapasien',icon:'👤',label:'Data Pasien'},
+    {id:'riwayat',icon:'📋',label:'Riwayat Penyakit'},
+    {id:'catatan',icon:'📝',label:'Catatan Petugas'},
+    {id:'harian',icon:'📅',label:'Catatan Harian'},
+  ],
+  admin:[
+    {id:'admin-pasien',icon:'🏥',label:'Kelola Pasien'},
+    {id:'admin-pengguna',icon:'👥',label:'Kelola Pengguna'},
+    {id:'perawat-pantau',icon:'👁',label:'Pantau Pasien'},
+    {id:'peringatan',icon:'⚠',label:'Peringatan & Kontak'},
+  ],
+};
+
+function buildNav(){
+  const items = navConfig[currentUser.role]||[];
+  const nav = document.getElementById('navItems');
+  nav.innerHTML = items.map(it=>`<div class="nav-item" id="nav-${it.id}" onclick="showPage('${it.id}')">${it.icon} ${it.label}</div>`).join('');
+}
+
+function showPage(pageId){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const p = document.getElementById('page-'+pageId);
+  if(p) p.classList.add('active');
+  const n = document.getElementById('nav-'+pageId);
+  if(n) n.classList.add('active');
+
+  // Load data for page
+  if(pageId==='datapasien') loadDataPasien();
+  else if(pageId==='riwayat') loadRiwayat();
+  else if(pageId==='catatan') loadNotes();
+  else if(pageId==='harian') loadHarian();
+  else if(pageId==='perawat-pantau') loadNurseView();
+  else if(pageId==='admin-pasien') loadAdminPatients();
+  else if(pageId==='admin-pengguna') loadAdminUsers();
+  else if(pageId==='peringatan') renderContactGrid();
+}
+
+// ============================================================
+//  PATIENT SELECTOR (for perawat/admin)
+// ============================================================
+function buildPatientSelector(){
+  const wrap = document.getElementById('patientSelectorWrap');
+  if(currentUser.role==='pasien'){wrap.style.display='none';return;}
+  wrap.style.display='block';
+  const db = getDB();
+  const sel = document.getElementById('patientSelector');
+  sel.innerHTML = '<option value="">-- Pilih Pasien --</option>' +
+    db.patients.map(p=>`<option value="${p.id}">${p.rm} — ${p.nama}</option>`).join('');
+  if(currentPatientId) sel.value=currentPatientId;
+}
+
+function selectPatient(pid){
+  currentPatientId=pid;
+  // refresh active page
+  const active = document.querySelector('.page.active');
+  if(active) showPage(active.id.replace('page-',''));
+}
+
+// ============================================================
+//  PERINGATAN — CONTACTS
+// ============================================================
+function renderContactGrid(){
+  const db=getDB();
+  const grid=document.getElementById('contactGrid');
+  if(!grid)return;
+  const colors=['#0891B2','#16A34A','#7C3AED','#DC2626'];
+  grid.innerHTML=db.contacts.map((c,i)=>`
+    <div class="contact-card">
+      <div class="contact-role">${c.role}</div>
+      <div class="contact-name">${c.name}</div>
+      <div class="contact-phone" style="color:${colors[i%colors.length]}">📞 ${c.phone}</div>
+    </div>`).join('');
+}
+
+function openContactModal(){
+  const db=getDB();
+  const list=document.getElementById('contactEditList');
+  list.innerHTML=db.contacts.map((c,i)=>`
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--gray-100)">
+      <input value="${c.role}" onchange="updateContactField(${i},'role',this.value)" style="border:1px solid var(--gray-200);border-radius:6px;padding:6px 8px;font-size:12px;font-family:inherit">
+      <input value="${c.name}" onchange="updateContactField(${i},'name',this.value)" style="border:1px solid var(--gray-200);border-radius:6px;padding:6px 8px;font-size:12px;font-family:inherit">
+      <input value="${c.phone}" onchange="updateContactField(${i},'phone',this.value)" style="border:1px solid var(--gray-200);border-radius:6px;padding:6px 8px;font-size:12px;font-family:inherit">
+      <button onclick="removeContact(${i})" style="background:var(--red-light);border:none;border-radius:6px;padding:6px 10px;cursor:pointer;color:var(--red);font-size:12px">✕</button>
+    </div>`).join('');
+  openModal('modalContact');
+}
+
+let tempContacts = null;
+function updateContactField(i,field,val){const db=getDB();db.contacts[i][field]=val;saveDB(db);}
+function removeContact(i){const db=getDB();db.contacts.splice(i,1);saveDB(db);openContactModal();}
+function addContact(){
+  const role=document.getElementById('newCRole').value.trim();
+  const name=document.getElementById('newCName').value.trim();
+  const phone=document.getElementById('newCPhone').value.trim();
+  if(!name||!phone){showToast('Isi nama dan nomor HP');return;}
+  const db=getDB();
+  db.contacts.push({role,name,phone});
+  saveDB(db);
+  document.getElementById('newCRole').value='';
+  document.getElementById('newCName').value='';
+  document.getElementById('newCPhone').value='';
+  openContactModal();
+}
+function saveContacts(){closeModal('modalContact');renderContactGrid();showToast('Kontak berhasil disimpan');}
+
+// ============================================================
+//  DATA PASIEN
+// ============================================================
+function loadDataPasien(){
+  if(!currentPatientId) return;
+  const db=getDB();
+  const p=db.patients.find(x=>x.id===currentPatientId);
+  if(!p) return;
+  const fields=['Nama','RM','JK','TTL','Pend','Kerja','Kawin','Pendamping','Alamat','Telp','TglTenk','TglCAPD','JenisTenk','ExitSite','Akses'];
+  fields.forEach(f=>{
+    const el=document.getElementById('p'+f);
+    if(el) el.value=p[f.toLowerCase()]||p[f]||'';
+  });
+  // RM readonly for non-admin
+  document.getElementById('pRM').readOnly = true;
+  // pasien can't edit most fields — perawat/admin can
+  const editable = currentUser.role!=='pasien';
+  ['pNama','pJK','pTTL','pPend','pKerja','pKawin','pPendamping','pAlamat','pTelp','pTglTenk','pTglCAPD','pJenisTenk','pExitSite','pAkses'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.readOnly=!editable && el.tagName==='INPUT';el.disabled=!editable && el.tagName==='SELECT';}
+  });
+}
+
+function saveDataPasien(){
+  if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
+  const db=getDB();
+  const idx=db.patients.findIndex(x=>x.id===currentPatientId);
+  if(idx<0) return;
+  const map={nama:'pNama',rm:'pRM',jk:'pJK',ttl:'pTTL',pend:'pPend',kerja:'pKerja',kawin:'pKawin',pendamping:'pPendamping',alamat:'pAlamat',telp:'pTelp',tgltenk:'pTglTenk',tglcapd:'pTglCAPD',jenisTenk:'pJenisTenk',exitSite:'pExitSite',akses:'pAkses'};
+  Object.entries(map).forEach(([k,id])=>{
+    const el=document.getElementById(id);
+    if(el) db.patients[idx][k]=el.value;
+  });
+  saveDB(db);
+  showToast('Data pasien berhasil disimpan ✓');
+}
+
+// ============================================================
+//  RIWAYAT
+// ============================================================
+function buildTagGroup(containerId, list, selectedArr, storeKey){
+  const c=document.getElementById(containerId);
+  if(!c)return;
+  c.innerHTML=list.map(item=>`
+    <div class="tag${selectedArr.includes(item)?' selected':''}" onclick="toggleTag(this,'${storeKey}','${item}','${containerId}')">${item}</div>`
+  ).join('');
+}
+
+function toggleTag(el, storeKey, val, containerId){
+  el.classList.toggle('selected');
+  // stored via save
+}
+
+function getSelectedTags(containerId){
+  return Array.from(document.querySelectorAll(`#${containerId} .tag.selected`)).map(t=>t.textContent);
+}
+
+function loadRiwayat(){
+  if(!currentPatientId) return;
+  const db=getDB();
+  const r=db.riwayat[currentPatientId]||{etiologi:[],komorbid:[],etiologiNote:'',tglTraining:'',hariTraining:'',dialSblm:'',program:'',peritonitis:0,exitInfeksi:0,obat:''};
+  buildTagGroup('tagEtiologi',ETIOLOGI_LIST,r.etiologi||[]);
+  buildTagGroup('tagKomorbid',KOMORBID_LIST,r.komorbid||[]);
+  document.getElementById('rEtiologiNote').value=r.etiologiNote||'';
+  document.getElementById('rTglTraining').value=r.tglTraining||'';
+  document.getElementById('rHariTraining').value=r.hariTraining||'';
+  document.getElementById('rDialSblm').value=r.dialSblm||'';
+  document.getElementById('rProgram').value=r.program||'';
+  document.getElementById('rPeritonitis').textContent=r.peritonitis||0;
+  document.getElementById('rExitInfeksi').textContent=r.exitInfeksi||0;
+  document.getElementById('rObat').value=r.obat||'';
+}
+
+function saveRiwayat(){
+  if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
+  const db=getDB();
+  db.riwayat[currentPatientId]={
+    etiologi:getSelectedTags('tagEtiologi'),
+    komorbid:getSelectedTags('tagKomorbid'),
+    etiologiNote:document.getElementById('rEtiologiNote').value,
+    tglTraining:document.getElementById('rTglTraining').value,
+    hariTraining:document.getElementById('rHariTraining').value,
+    dialSblm:document.getElementById('rDialSblm').value,
+    program:document.getElementById('rProgram').value,
+    peritonitis:parseInt(document.getElementById('rPeritonitis').textContent)||0,
+    exitInfeksi:parseInt(document.getElementById('rExitInfeksi').textContent)||0,
+    obat:document.getElementById('rObat').value,
+  };
+  saveDB(db);
+  showToast('Riwayat berhasil disimpan ✓');
+}
+
+function changeCounter(id, delta){
+  const el=document.getElementById(id);
+  const v=Math.max(0,(parseInt(el.textContent)||0)+delta);
+  el.textContent=v;
+}
+
+// ============================================================
+//  CATATAN PETUGAS
+// ============================================================
+function loadNotes(){
+  if(!currentPatientId){document.getElementById('noteList').innerHTML='<p style="color:var(--gray-400);font-size:13px">Pilih pasien untuk melihat catatan.</p>';return;}
+  const db=getDB();
+  const notes=(db.notes[currentPatientId]||[]).slice().reverse();
+  const canAdd=currentUser.role==='perawat'||currentUser.role==='admin';
+  document.getElementById('addNoteBtn').style.display=canAdd?'flex':'none';
+  if(notes.length===0){
+    document.getElementById('noteList').innerHTML='<p style="color:var(--gray-400);font-size:13px;padding:8px 0">Belum ada catatan untuk pasien ini.</p>';
+    return;
+  }
+  const colors=['#0891B2','#16A34A','#7C3AED','#DC2626','#D97706'];
+  document.getElementById('noteList').innerHTML=notes.map((n,i)=>`
+    <div class="note-card">
+      <div class="note-meta">
+        <div class="note-author">
+          <div class="note-av" style="background:${colors[i%colors.length]}">${n.author.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--gray-900)">${n.author}</div>
+            <div style="font-size:11px;color:var(--gray-400)">${n.role}</div>
+          </div>
+        </div>
+        <div class="note-date">${formatDate(n.date)}</div>
+      </div>
+      <div class="note-body-text">${n.text}</div>
+    </div>`).join('');
+}
+
+function toggleNoteForm(show){
+  document.getElementById('noteAddForm').style.display=show?'block':'none';
+  if(!show) document.getElementById('noteInput').value='';
+}
+
+function saveNote(){
+  const text=document.getElementById('noteInput').value.trim();
+  if(!text){showToast('Tulis isi catatan terlebih dahulu');return;}
+  if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
+  const db=getDB();
+  if(!db.notes[currentPatientId]) db.notes[currentPatientId]=[];
+  db.notes[currentPatientId].push({
+    id:'n'+Date.now(),
+    author:currentUser.nama,
+    role:{admin:'Administrator',perawat:'Perawat CAPD',pasien:'Pasien'}[currentUser.role],
+    date:new Date().toISOString().slice(0,10),
+    text
+  });
+  saveDB(db);
+  toggleNoteForm(false);
+  loadNotes();
+  showToast('Catatan berhasil disimpan ✓');
+}
+
+// ============================================================
+//  CATATAN HARIAN
+// ============================================================
+const DAYS=['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'];
+const SHIFTS=4;
+
+function getWeekKey(offset=0){
+  const now=new Date();
+  const day=now.getDay();
+  const monday=new Date(now);
+  monday.setDate(now.getDate()-(day===0?6:day-1)+(offset*7));
+  return monday.toISOString().slice(0,10);
+}
+
+function getWeekDates(weekKey){
+  const monday=new Date(weekKey);
+  return DAYS.map((_,i)=>{
+    const d=new Date(monday);
+    d.setDate(monday.getDate()+i);
+    return d.toISOString().slice(0,10);
+  });
+}
+
+function loadHarian(){
+  if(!currentPatientId){document.getElementById('dailyTbody').innerHTML='<tr><td colspan="9" style="padding:20px;text-align:center;color:var(--gray-400)">Pilih pasien terlebih dahulu</td></tr>';return;}
+  const wk=getWeekKey(currentWeekOffset);
+  const dates=getWeekDates(wk);
+  const label=`Minggu: ${formatDateShort(dates[0])} — ${formatDateShort(dates[6])}`;
+  document.getElementById('weekLabel').textContent=label;
+  const pi=document.getElementById('printWeekLabel');
+  if(pi) pi.textContent=label;
+
+  const db=getDB();
+  const data=((db.dailyData[currentPatientId]||{})[wk])||{};
+  const rows=[];
+  DAYS.forEach((day,di)=>{
+    for(let s=0;s<SHIFTS;s++){
+      const key=`${di}_${s}`;
+      const cell=data[key]||{};
+      const isFirst=s===0;
+      const dayDate=dates[di];
+      const todayStr=new Date().toISOString().slice(0,10);
+      const isToday=dayDate===todayStr;
+      rows.push(`<tr>
+        ${isFirst?`<td class="day-cell" rowspan="${SHIFTS}" style="${isToday?'background:var(--teal-light);color:var(--teal2)':''}">${day}${isToday?' <span style="font-size:10px;background:var(--teal);color:white;border-radius:4px;padding:1px 5px">Hari ini</span>':''}</td>`:''}
+        <td class="shift-cell">Ke-${s+1}</td>
+        <td><input type="text" value="${cell.waktu||''}" placeholder="--:--" oninput="setDailyCell(${di},${s},'waktu',this.value)"></td>
+        <td><input type="text" value="${cell.vol||''}" placeholder="1800" oninput="setDailyCell(${di},${s},'vol',this.value)"></td>
+        <td>
+          <select onchange="setDailyCell(${di},${s},'warna',this.value)">
+            <option value="">--</option>
+            <option${cell.warna==='Jernih kuning muda'?' selected':''}>Jernih kuning muda</option>
+            <option${cell.warna==='Jernih bening'?' selected':''}>Jernih bening</option>
+            <option${cell.warna==='Keruh'?' selected':''}>Keruh</option>
+            <option${cell.warna==='Berdarah'?' selected':''}>Berdarah</option>
+            <option${cell.warna==='Kemerahan'?' selected':''}>Kemerahan</option>
+          </select>
+        </td>
+        ${isFirst?`<td rowspan="${SHIFTS}" style="vertical-align:middle"><input type="text" value="${data['bb_'+di]||''}" placeholder="kg" style="width:48px" oninput="setDailyExtra(${di},'bb',this.value)"></td>
+        <td rowspan="${SHIFTS}" style="vertical-align:middle"><input type="text" value="${data['td_'+di]||''}" placeholder="120/80" style="width:70px" oninput="setDailyExtra(${di},'td',this.value)"></td>
+        <td rowspan="${SHIFTS}" style="vertical-align:middle"><input type="text" value="${data['suhu_'+di]||''}" placeholder="36.5" style="width:48px" oninput="setDailyExtra(${di},'suhu',this.value)"></td>
+        <td rowspan="${SHIFTS}" style="vertical-align:middle"><input type="text" value="${data['keluhan_'+di]||''}" placeholder="Tidak ada" style="width:90px" oninput="setDailyExtra(${di},'keluhan',this.value)"></td>`:''}
+      </tr>`);
+    }
+    if(di<6) rows.push(`<tr class="day-separator"><td colspan="9"></td></tr>`);
+  });
+  document.getElementById('dailyTbody').innerHTML=rows.join('');
+  document.getElementById('weeklyNote').value=data['__note__']||'';
+}
+
+let pendingDailyData={};
+function setDailyCell(di,s,field,val){
+  const wk=getWeekKey(currentWeekOffset);
+  if(!pendingDailyData[wk]) pendingDailyData[wk]={};
+  const key=`${di}_${s}`;
+  if(!pendingDailyData[wk][key]) pendingDailyData[wk][key]={};
+  pendingDailyData[wk][key][field]=val;
+}
+function setDailyExtra(di,field,val){
+  const wk=getWeekKey(currentWeekOffset);
+  if(!pendingDailyData[wk]) pendingDailyData[wk]={};
+  pendingDailyData[wk][field+'_'+di]=val;
+}
+
+function saveDailyData(){
+  if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
+  const db=getDB();
+  if(!db.dailyData[currentPatientId]) db.dailyData[currentPatientId]={};
+  const wk=getWeekKey(currentWeekOffset);
+  const existing=(db.dailyData[currentPatientId][wk])||{};
+  const pending=pendingDailyData[wk]||{};
+  // merge
+  const merged={...existing,...pending};
+  merged['__note__']=document.getElementById('weeklyNote').value;
+  // also grab all current input values directly
+  db.dailyData[currentPatientId][wk]=merged;
+  saveDB(db);
+  pendingDailyData={};
+  showToast('Catatan harian berhasil disimpan ✓');
+}
+
+function changeWeek(delta){
+  // Save first
+  const wk=getWeekKey(currentWeekOffset);
+  const db=getDB();
+  if(currentPatientId){
+    if(!db.dailyData[currentPatientId]) db.dailyData[currentPatientId]={};
+    const merged={...((db.dailyData[currentPatientId][wk])||{}),...(pendingDailyData[wk]||{})};
+    if(Object.keys(merged).length) {merged['__note__']=document.getElementById('weeklyNote').value; db.dailyData[currentPatientId][wk]=merged; saveDB(db);}
+  }
+  pendingDailyData={};
+  currentWeekOffset+=delta;
+  loadHarian();
+}
+
+// ============================================================
+//  NURSE VIEW
+// ============================================================
+function loadNurseView(){
+  const db=getDB();
+  const patients=db.patients;
+  
+  // Stats
+  const statsEl=document.getElementById('nurseStats');
+  const totalNotes=Object.values(db.notes).reduce((a,v)=>a+v.length,0);
+  const wk=getWeekKey(0);
+  const filledThisWeek=patients.filter(p=>(db.dailyData[p.id]||{})[wk]).length;
+  statsEl.innerHTML=`
+    <div class="stat-card"><div class="stat-num">${patients.length}</div><div class="stat-label">Total Pasien CAPD</div></div>
+    <div class="stat-card"><div class="stat-num">${filledThisWeek}</div><div class="stat-label">Isi Catatan Minggu Ini</div></div>
+    <div class="stat-card"><div class="stat-num">${patients.length-filledThisWeek}</div><div class="stat-label" style="color:var(--amber)">Belum Isi Minggu Ini</div></div>
+    <div class="stat-card"><div class="stat-num">${totalNotes}</div><div class="stat-label">Total Catatan Petugas</div></div>`;
+
+  // Table
+  const tbody=document.getElementById('nursePatientBody');
+  tbody.innerHTML=patients.map(p=>{
+    const notes=db.notes[p.id]||[];
+    const lastNote=notes[notes.length-1];
+    const hasDailyThisWeek=!!(db.dailyData[p.id]||{})[wk];
+    const r=db.riwayat[p.id]||{};
+    return `<tr>
+      <td><span class="badge badge-gray">${p.rm}</span></td>
+      <td style="font-weight:600">${p.nama}</td>
+      <td>${lastNote?formatDate(lastNote.date):'<span style="color:var(--gray-400)">—</span>'}</td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;color:var(--gray-500)">${lastNote?lastNote.text.slice(0,60)+'…':'—'}</td>
+      <td>${hasDailyThisWeek?'<span class="badge badge-green">✓ Sudah isi</span>':'<span class="badge badge-amber">Belum isi</span>'}</td>
+      <td>
+        <button class="action-btn" onclick="viewPatientAsNurse('${p.id}')">Lihat Data →</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function viewPatientAsNurse(pid){
+  currentPatientId=pid;
+  document.getElementById('patientSelector').value=pid;
+  showPage('datapasien');
+}
+
+// ============================================================
+//  ADMIN — PATIENTS
+// ============================================================
+function loadAdminPatients(){
+  const db=getDB();
+  const tbody=document.getElementById('adminPatientBody');
+  tbody.innerHTML=db.patients.map((p,i)=>{
+    const user=db.users.find(u=>u.patientId===p.id);
+    return `<tr>
+      <td>${i+1}</td>
+      <td><span class="badge badge-teal">${p.rm}</span></td>
+      <td style="font-weight:600">${p.nama}</td>
+      <td style="font-size:12px;color:var(--gray-500)">${user?user.username:'—'}</td>
+      <td style="font-size:12px">${p.tglcapd?formatDate(p.tglcapd):'—'}</td>
+      <td><span class="badge badge-green">Aktif</span></td>
+      <td>
+        <button class="action-btn" onclick="viewPatientAsNurse('${p.id}')">Lihat →</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function openAddPatientModal(){openModal('modalAddPatient');}
+
+function saveNewPatient(){
+  const nama=document.getElementById('newPNama').value.trim();
+  const rm=document.getElementById('newPRM').value.trim();
+  const jk=document.getElementById('newPJK').value;
+  const uname=document.getElementById('newPUser').value.trim();
+  const pass=document.getElementById('newPPass').value;
+  const tglCAPD=document.getElementById('newPTglCAPD').value;
+  if(!nama||!rm||!uname||!pass){showToast('Lengkapi field wajib (*)');return;}
+  const db=getDB();
+  if(db.patients.find(p=>p.rm===rm)){showToast('No. Rekam Medis sudah terdaftar!');return;}
+  if(db.users.find(u=>u.username===uname)){showToast('Username sudah digunakan!');return;}
+  const pid='p'+db.settings.nextPatientId++;
+  const uid='u'+db.settings.nextUserId++;
+  db.patients.push({id:pid,rm,nama,jk,ttl:'',pend:'',kerja:'',kawin:'',pendamping:'',alamat:'',telp:'',tgltenk:'',tglcapd:tglCAPD,jenisTenk:'',exitSite:'',akses:''});
+  db.users.push({id:uid,username:uname,password:pass,role:'pasien',nama,patientId:pid,active:true});
+  db.riwayat[pid]={etiologi:[],komorbid:[],peritonitis:0,exitInfeksi:0};
+  db.notes[pid]=[];
+  saveDB(db);
+  closeModal('modalAddPatient');
+  buildPatientSelector();
+  loadAdminPatients();
+  showToast(`Pasien ${nama} berhasil didaftarkan ✓`);
+  // Clear form
+  ['newPNama','newPRM','newPUser','newPPass','newPTglCAPD'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('newPJK').value='';
+}
+
+// ============================================================
+//  ADMIN — USERS
+// ============================================================
+function loadAdminUsers(){
+  const db=getDB();
+  const tbody=document.getElementById('adminUserBody');
+  const roleLabel={admin:'Admin',perawat:'Perawat',pasien:'Pasien'};
+  const roleBadge={admin:'badge-red',perawat:'badge-teal',pasien:'badge-gray'};
+  tbody.innerHTML=db.users.map((u,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td style="font-weight:600;font-family:monospace">${u.username}</td>
+      <td>${u.nama}</td>
+      <td><span class="badge ${roleBadge[u.role]}">${roleLabel[u.role]}</span></td>
+      <td><span class="badge ${u.active?'badge-green':'badge-gray'}">${u.active?'Aktif':'Nonaktif'}</span></td>
+      <td>
+        <button class="action-btn" onclick="toggleUserActive('${u.id}')">${u.active?'Nonaktifkan':'Aktifkan'}</button>
+        ${u.id!==currentUser.id?`<button class="action-btn" style="color:var(--red);margin-left:10px" onclick="resetPassword('${u.id}')">Reset PW</button>`:''}
+      </td>
+    </tr>`).join('');
+}
+
+function toggleUserActive(uid){
+  const db=getDB();
+  const u=db.users.find(x=>x.id===uid);
+  if(u) u.active=!u.active;
+  saveDB(db);
+  loadAdminUsers();
+}
+
+function resetPassword(uid){
+  const newpw=prompt('Masukkan password baru:');
+  if(!newpw) return;
+  const db=getDB();
+  const u=db.users.find(x=>x.id===uid);
+  if(u){u.password=newpw;saveDB(db);showToast('Password berhasil direset ✓');}
+}
+
+function openAddUserModal(){openModal('modalAddUser');}
+
+function saveNewUser(){
+  const nama=document.getElementById('newUNama').value.trim();
+  const uname=document.getElementById('newUUser').value.trim();
+  const pass=document.getElementById('newUPass').value;
+  const role=document.getElementById('newURole').value;
+  if(!nama||!uname||!pass){showToast('Lengkapi semua field');return;}
+  const db=getDB();
+  if(db.users.find(u=>u.username===uname)){showToast('Username sudah digunakan!');return;}
+  db.users.push({id:'u'+db.settings.nextUserId++,username:uname,password:pass,role,nama,active:true});
+  saveDB(db);
+  closeModal('modalAddUser');
+  loadAdminUsers();
+  showToast(`Pengguna ${nama} berhasil ditambahkan ✓`);
+}
+
+// ============================================================
+//  UTILS
+// ============================================================
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+function formatDate(str){
+  if(!str)return'—';
+  const d=new Date(str+'T00:00:00');
+  return d.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
+}
+function formatDateShort(str){
+  if(!str)return'';
+  const d=new Date(str+'T00:00:00');
+  return d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
+}
+
+// Close modal on background click
+document.querySelectorAll('.modal-bg').forEach(bg=>{
+  bg.addEventListener('click',e=>{if(e.target===bg)bg.classList.remove('open');});
+});
+</script>
+</body>
+</html>
