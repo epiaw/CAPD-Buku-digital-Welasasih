@@ -1188,7 +1188,7 @@ function showPage(pageId){
   if(pageId==='datapasien') loadDataPasien();
   else if(pageId==='riwayat') loadRiwayat();
   else if(pageId==='catatan') loadNotes();
-  else if(pageId==='harian') loadHarian();
+  else if(pageId==='harian'){ currentHarianDate=todayLocalStr(); pendingData={}; loadHarian(); }
   else if(pageId==='rekap') loadRekap();
   else if(pageId==='perawat-pantau') loadNurseView();
   else if(pageId==='admin-pasien') loadAdminPatients();
@@ -1236,6 +1236,7 @@ function renderContactGrid(){
   const db=getDB();
   const grid=document.getElementById('contactGrid');
   if(!grid)return;
+  if(!db.contacts) db.contacts=[]; // jaga-jaga jika server belum mengirim data kontak
   const colors=['#0891B2','#16A34A','#7C3AED','#DC2626'];
   grid.innerHTML=db.contacts.map((c,i)=>{
     const telDigits=(c.phone||'').replace(/[^0-9+]/g,'');
@@ -1254,6 +1255,7 @@ function renderContactGrid(){
 }
 function openContactModal(){
   const db=getDB();
+  if(!db.contacts) db.contacts=[];
   document.getElementById('contactEditList').innerHTML=db.contacts.map((c,i)=>`
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--gray-100)">
       <input value="${c.role}" onchange="updateContactField(${i},'role',this.value)" style="border:1px solid var(--gray-200);border-radius:6px;padding:6px 8px;font-size:12px;font-family:inherit">
@@ -1415,7 +1417,7 @@ async function saveNote(){
   if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
   const db=getDB();
   if(!db.notes[currentPatientId]) db.notes[currentPatientId]=[];
-  const note={id:'n'+Date.now(),author:currentUser.nama,role:{admin:'Administrator',perawat:'Perawat CAPD',pasien:'Pasien'}[currentUser.role],date:new Date().toISOString().slice(0,10),text};
+  const note={id:'n'+Date.now(),author:currentUser.nama,role:{admin:'Administrator',perawat:'Perawat CAPD',pasien:'Pasien'}[currentUser.role],date:todayLocalStr(),text};
   db.notes[currentPatientId].push(note);
   toggleNoteForm(false);
   loadNotes();
@@ -1444,7 +1446,7 @@ function daysUntil(dateStr){
 function toggleMhForm(show){
   document.getElementById('mhAddForm').style.display=show?'block':'none';
   if(!show){ ['mhTanggal','mhJudul','mhDetail'].forEach(id=>document.getElementById(id).value=''); }
-  else if(!document.getElementById('mhTanggal').value){ document.getElementById('mhTanggal').value=new Date().toISOString().slice(0,10); }
+  else if(!document.getElementById('mhTanggal').value){ document.getElementById('mhTanggal').value=todayLocalStr(); }
 }
 function toggleMpForm(show){
   document.getElementById('mpAddForm').style.display=show?'block':'none';
@@ -1654,11 +1656,20 @@ function addDays(dateStr,n){
   d.setDate(d.getDate()+n);
   return d.toISOString().slice(0,10);
 }
+// todayLocalStr: tanggal "hari ini" berdasarkan waktu LOKAL device (bukan UTC),
+// supaya selalu akurat untuk zona waktu Indonesia (WIB/WITA/WIT) kapan pun dibuka.
+function todayLocalStr(){
+  const n=new Date();
+  const y=n.getFullYear();
+  const m=String(n.getMonth()+1).padStart(2,'0');
+  const d=String(n.getDate()).padStart(2,'0');
+  return `${y}-${m}-${d}`;
+}
 
 // pendingData holds unsaved changes per date: { dateKey: { ...fields, sN:{...} } }
 let pendingData = {};
 // currentHarianDate: tanggal yang sedang dipilih & ditampilkan di form harian
-let currentHarianDate = new Date().toISOString().slice(0,10);
+let currentHarianDate = todayLocalStr();
 
 function getDayDataFromDB(dateStr){
   if(!currentPatientId) return {};
@@ -1681,7 +1692,7 @@ function jumpHarianDate(delta){
   loadHarian();
 }
 function jumpHarianToday(){
-  currentHarianDate=new Date().toISOString().slice(0,10);
+  currentHarianDate=todayLocalStr();
   pendingData={};
   loadHarian();
 }
@@ -1717,7 +1728,7 @@ function sessionFilled(sk){
 
 function renderDayForm(dateStr){
   const dayData=getDayDataFromDB(dateStr);
-  const todayStr=new Date().toISOString().slice(0,10);
+  const todayStr=todayLocalStr();
   const isToday=dateStr===todayStr;
   const dateObj=new Date(dateStr+'T00:00:00');
   const dateLabel=dateObj.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
@@ -2280,7 +2291,7 @@ function loadRekap(){
 function loadNurseView(){
   const db=getDB();
   const wk=getWeekKey(0);
-  const todayStr=new Date().toISOString().slice(0,10);
+  const todayStr=todayLocalStr();
   const totalNotes=Object.values(db.notes).reduce((a,v)=>a+v.length,0);
   const filledThisWeek=db.patients.filter(p=>{
     const wkData=(db.dailyData[p.id]||{})[wk]||{};
