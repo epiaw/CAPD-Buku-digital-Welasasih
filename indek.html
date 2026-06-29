@@ -1,0 +1,2325 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catatan Harian CAPD — Renal Unit RSUD Welas Asih</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0F2D4A;--navy2:#1A3D5C;--teal:#0891B2;--teal2:#0E7490;--teal-light:#E0F4FA;
+  --red:#DC2626;--red-light:#FEF2F2;--green:#16A34A;--green-light:#F0FDF4;
+  --amber:#D97706;--amber-light:#FFFBEB;--purple:#7C3AED;--purple-light:#EDE9FE;
+  --gray-50:#F8FAFC;--gray-100:#F1F5F9;--gray-200:#E2E8F0;--gray-300:#CBD5E1;
+  --gray-400:#94A3B8;--gray-500:#64748B;--gray-600:#475569;--gray-700:#334155;
+  --gray-800:#1E293B;--gray-900:#0F172A;--white:#FFFFFF;
+  --radius:8px;--shadow:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.10),0 2px 4px rgba(0,0,0,0.06);
+}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F7;min-height:100vh;color:var(--gray-800);font-size:14px;line-height:1.5}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--gray-100)}
+::-webkit-scrollbar-thumb{background:var(--gray-300);border-radius:10px}
+
+/* LOGIN */
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 50%,#0F4C6B 100%);padding:20px}
+.login-box{background:white;border-radius:20px;padding:40px;width:100%;max-width:420px;box-shadow:var(--shadow-md)}
+.login-logo{text-align:center;margin-bottom:28px}
+.login-logo-icon{width:72px;height:72px;background:linear-gradient(135deg,var(--teal),var(--teal2));border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 4px 14px rgba(8,145,178,0.35)}
+.login-logo-icon svg{width:38px;height:38px;fill:white}
+.login-inst{font-size:11px;color:var(--gray-400);font-weight:500;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:4px}
+.login-title{font-size:20px;font-weight:700;color:var(--gray-900);line-height:1.2}
+.login-sub{font-size:13px;color:var(--gray-500);margin-top:4px}
+.form-field{margin-bottom:14px}
+.form-field label{display:block;font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:5px}
+.form-field input,.form-field select{width:100%;border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:10px 14px;font-size:14px;color:var(--gray-800);background:var(--gray-50);transition:border-color 0.15s;outline:none;font-family:inherit}
+.form-field input:focus,.form-field select:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(8,145,178,0.12);background:white}
+.btn-login{width:100%;background:linear-gradient(135deg,var(--teal),var(--teal2));color:white;border:none;border-radius:var(--radius);padding:12px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;transition:opacity 0.15s}
+.btn-login:hover{opacity:0.92}
+.login-error{background:var(--red-light);border:1px solid #FECACA;border-radius:var(--radius);padding:10px 14px;font-size:13px;color:var(--red);margin-top:10px;display:none}
+.demo-box{margin-top:18px;padding-top:16px;border-top:1px solid var(--gray-200)}
+.demo-label{font-size:11px;color:var(--gray-400);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.demo-text{font-size:12px;color:var(--gray-500);line-height:1.9}
+
+/* APP SHELL */
+#app{display:none;min-height:100vh;flex-direction:column}
+.app-topbar{background:var(--navy);padding:0 20px;height:56px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
+.topbar-logo{width:36px;height:36px;background:rgba(255,255,255,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.topbar-logo svg{width:20px;height:20px;fill:white}
+.topbar-text{flex:1;min-width:0}
+.topbar-inst{font-size:10px;color:rgba(255,255,255,0.55);font-weight:500;letter-spacing:0.5px;text-transform:uppercase}
+.topbar-title{font-size:14px;font-weight:600;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar-user{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:5px 12px 5px 5px}
+.topbar-avatar{width:26px;height:26px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;flex-shrink:0}
+.topbar-user-name{font-size:12px;color:rgba(255,255,255,0.9);font-weight:500;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topbar-role-badge{font-size:10px;background:rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);border-radius:4px;padding:2px 6px;font-weight:600}
+.btn-logout{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:5px 10px;color:rgba(255,255,255,0.8);font-size:12px;cursor:pointer;white-space:nowrap}
+.btn-logout:hover{background:rgba(255,255,255,0.18)}
+
+/* ALERT BANNER */
+.alert-banner{background:#FEF2F2;border-bottom:2px solid var(--red);padding:9px 20px;display:flex;align-items:center;gap:10px}
+.alert-banner-text{font-size:12px;font-weight:600;color:#991B1B}
+
+/* MAIN LAYOUT */
+.main-layout{display:flex;flex:1;min-height:calc(100vh - 56px)}
+.sidebar{width:230px;background:white;border-right:1px solid var(--gray-200);flex-shrink:0;display:flex;flex-direction:column;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
+.sidebar-section{padding:16px 12px 4px;font-size:10px;font-weight:700;color:var(--gray-400);letter-spacing:0.8px;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;font-size:13px;color:var(--gray-600);cursor:pointer;border-radius:var(--radius);margin:1px 8px;transition:background 0.1s}
+.nav-item:hover{background:var(--gray-50);color:var(--gray-800)}
+.nav-item.active{background:var(--teal-light);color:var(--teal2);font-weight:600}
+.sidebar-footer{margin-top:auto;padding:12px;border-top:1px solid var(--gray-100);font-size:11px;color:var(--gray-400);text-align:center}
+
+/* MOBILE TAB BAR (pengganti sidebar di layar kecil) */
+.mobile-tabbar{display:none;background:white;border-bottom:1px solid var(--gray-200);position:sticky;top:56px;z-index:90;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}
+.mobile-tabbar::-webkit-scrollbar{display:none}
+.mobile-tabbar-inner{display:flex;gap:4px;padding:8px 10px}
+.mobile-tab-item{flex-shrink:0;display:flex;align-items:center;gap:6px;padding:8px 14px;font-size:12.5px;font-weight:600;color:var(--gray-600);background:var(--gray-50);border-radius:20px;cursor:pointer;border:1.5px solid transparent;white-space:nowrap}
+.mobile-tab-item.active{background:var(--teal);color:white;border-color:var(--teal)}
+.mobile-patient-select-wrap{padding:8px 10px 0;border-bottom:1px solid var(--gray-100)}
+.mobile-patient-select-wrap select{width:100%;border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:8px 10px;font-size:12.5px;color:var(--gray-700);background:var(--gray-50);outline:none;font-family:inherit}
+.patient-selector-wrap{padding:12px}
+.patient-selector-wrap select{width:100%;border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:7px 10px;font-size:12px;color:var(--gray-700);background:var(--gray-50);outline:none;cursor:pointer;font-family:inherit}
+
+/* CONTENT */
+.content{flex:1;padding:24px;overflow-y:auto;max-width:1000px}
+.page{display:none}
+.page.active{display:block}
+.page-header{margin-bottom:22px}
+.page-header h1{font-size:20px;font-weight:700;color:var(--gray-900);margin-bottom:4px}
+.page-header p{font-size:13px;color:var(--gray-500)}
+
+/* CARDS */
+.card{background:white;border-radius:12px;border:1px solid var(--gray-200);padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-title{font-size:14px;font-weight:700;color:var(--gray-800)}
+
+/* FORM */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.form-row-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:5px}
+.form-group input,.form-group select,.form-group textarea{width:100%;border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:9px 12px;font-size:13px;color:var(--gray-800);background:var(--gray-50);font-family:inherit;outline:none;transition:border-color 0.15s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--teal);background:white;box-shadow:0 0 0 3px rgba(8,145,178,0.10)}
+.form-group textarea{resize:vertical;min-height:70px}
+.form-group input[readonly]{background:var(--gray-100);color:var(--gray-500)}
+.section-label{font-size:11px;font-weight:700;color:var(--teal2);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--teal-light)}
+
+/* BUTTONS */
+.btn{border-radius:var(--radius);padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:opacity 0.15s,transform 0.1s;font-family:inherit}
+.btn:hover{opacity:0.88}
+.btn:active{transform:scale(0.98)}
+.btn-primary{background:var(--teal);color:white}
+.btn-success{background:var(--green);color:white}
+.btn-danger{background:var(--red);color:white}
+.btn-secondary{background:white;color:var(--gray-700);border:1.5px solid var(--gray-300)}
+.btn-ghost{background:transparent;color:var(--teal);border:1.5px solid var(--teal-light)}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-teal{background:var(--teal-light);color:var(--teal2)}
+.badge-red{background:var(--red-light);color:var(--red)}
+.badge-green{background:var(--green-light);color:var(--green)}
+.badge-amber{background:var(--amber-light);color:var(--amber)}
+.badge-gray{background:var(--gray-100);color:var(--gray-500)}
+.badge-purple{background:var(--purple-light);color:var(--purple)}
+.tag-group{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.tag{background:var(--gray-100);border:1.5px solid var(--gray-200);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--gray-600);cursor:pointer;transition:all 0.1s;user-select:none}
+.tag:hover{border-color:var(--teal);color:var(--teal)}
+.tag.selected{background:var(--teal-light);border-color:var(--teal);color:var(--teal2);font-weight:600}
+
+/* ==========================================
+   CATATAN HARIAN — BAXTER/VANTIVE STYLE
+   ========================================== */
+.week-nav{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.week-nav button{background:white;border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:6px 14px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--gray-700)}
+.week-nav button:hover{border-color:var(--teal);color:var(--teal)}
+.week-label{font-size:14px;font-weight:700;color:var(--gray-800);flex:1;text-align:center}
+
+/* Day card layout — satu hari satu card */
+.day-card{background:white;border:1.5px solid var(--gray-200);border-radius:12px;margin-bottom:14px;overflow:hidden;box-shadow:var(--shadow)}
+.day-card.today{border-color:var(--teal);box-shadow:0 0 0 2px rgba(8,145,178,0.15)}
+.day-card-header{background:var(--navy);color:white;padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+.day-card.today .day-card-header{background:var(--teal2)}
+.day-name{font-size:14px;font-weight:700}
+.day-date{font-size:12px;color:rgba(255,255,255,0.7)}
+.today-badge{background:rgba(255,255,255,0.25);font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700}
+
+/* Tanda vital row */
+.vitals-row{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border-bottom:1px solid var(--gray-200)}
+.vital-cell{padding:10px 12px;border-right:1px solid var(--gray-200)}
+.vital-cell:last-child{border-right:none}
+.vital-label{font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.vital-input{width:100%;border:1.5px solid var(--gray-200);border-radius:6px;padding:6px 8px;font-size:13px;font-weight:600;color:var(--gray-900);background:white;outline:none;text-align:center;font-family:inherit}
+.vital-input:focus{border-color:var(--teal);box-shadow:0 0 0 2px rgba(8,145,178,0.12)}
+
+/* Siklus table */
+.siklus-wrap{overflow-x:auto}
+.siklus-table{width:100%;border-collapse:collapse;min-width:1180px}
+.siklus-table th{background:var(--gray-50);font-size:10px;font-weight:700;color:var(--gray-500);padding:8px 10px;text-align:center;border-bottom:2px solid var(--gray-200);border-right:1px solid var(--gray-200);letter-spacing:0.4px;text-transform:uppercase}
+.siklus-table th:last-child{border-right:none}
+.siklus-table td{padding:5px 6px;border-bottom:1px solid var(--gray-100);border-right:1px solid var(--gray-100);text-align:center;vertical-align:middle}
+.siklus-table td:last-child{border-right:none}
+.siklus-table tr:last-child td{border-bottom:none}
+.siklus-num{background:var(--navy);color:white;font-size:11px;font-weight:700;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center}
+.siklus-table input{border:1.5px solid var(--gray-200);background:white;font-size:12px;text-align:center;color:var(--gray-800);outline:none;width:100%;font-family:inherit;padding:5px 4px;border-radius:5px}
+.siklus-table input:focus{border-color:var(--teal);background:var(--teal-light)}
+.siklus-table select{border:1.5px solid var(--gray-200);background:white;font-size:11px;text-align:center;color:var(--gray-800);outline:none;width:100%;font-family:inherit;padding:5px 4px;border-radius:5px}
+.siklus-table select:focus{border-color:var(--teal)}
+.uf-cell{font-size:12px;font-weight:700;color:var(--teal2)}
+.jam-pair{display:flex;flex-direction:column;gap:3px;align-items:center}
+.jam-pair input{width:74px!important}
+.jam-arrow{font-size:9px;color:var(--gray-400);line-height:1}
+.durasi-badge{display:inline-block;font-size:10px;font-weight:700;color:var(--purple);background:var(--purple-light);border-radius:10px;padding:2px 8px;margin-top:2px;white-space:nowrap}
+.durasi-badge.durasi-warn{color:var(--red);background:var(--red-light)}
+.uf-neg{color:var(--red)}
+.siklus-note-row td{padding:8px 12px;background:var(--gray-50);text-align:left}
+.siklus-note-row input{border:1.5px solid var(--gray-200);border-radius:6px;padding:6px 10px;font-size:12px;font-family:inherit;width:100%;background:white;outline:none}
+.siklus-note-row input:focus{border-color:var(--teal)}
+
+/* Exit site */
+.exit-site-row{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--gray-200)}
+.exit-site-cell{padding:10px 12px;border-right:1px solid var(--gray-200)}
+.exit-site-cell:last-child{border-right:none}
+.exit-label{font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.exit-options{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.exit-opt{font-size:11px;padding:3px 10px;border-radius:10px;border:1.5px solid var(--gray-200);cursor:pointer;background:white;color:var(--gray-600);transition:all 0.1s;user-select:none;font-family:inherit}
+.exit-opt:hover{border-color:var(--teal);color:var(--teal)}
+.exit-opt.selected{background:var(--teal-light);border-color:var(--teal);color:var(--teal2);font-weight:700}
+.exit-opt.selected-red{background:var(--red-light);border-color:var(--red);color:var(--red);font-weight:700}
+
+/* Rekap harian bottom */
+.day-rekap{padding:10px 16px;border-top:2px solid var(--gray-200);background:var(--gray-50);display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:12px}
+.rekap-item{text-align:center}
+.rekap-val{font-size:15px;font-weight:800;color:var(--navy)}
+.rekap-lbl{font-size:10px;color:var(--gray-500);margin-top:1px}
+
+/* PERITONITIS */
+.perit-card{background:var(--red-light);border:1.5px solid #FECACA;border-radius:12px;padding:18px;margin-bottom:16px}
+.perit-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.perit-icon{width:40px;height:40px;background:var(--red);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.perit-title{font-size:15px;font-weight:700;color:#991B1B}
+.perit-sub{font-size:12px;color:#B91C1C;margin-top:2px}
+.symptom-item{display:flex;align-items:center;gap:10px;background:white;border:1px solid #FECACA;border-radius:8px;padding:9px 14px;margin-bottom:7px}
+.symptom-dot{width:8px;height:8px;background:var(--red);border-radius:50%;flex-shrink:0}
+.symptom-txt{font-size:13px;color:#7F1D1D;font-weight:500}
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:4px}
+.contact-card{background:white;border:1px solid var(--gray-200);border-radius:10px;padding:14px;box-shadow:var(--shadow)}
+.contact-role{font-size:10px;color:var(--gray-400);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px}
+.contact-name{font-size:14px;font-weight:600;color:var(--gray-900);margin-bottom:7px}
+.contact-phone{display:flex;align-items:center;gap:6px;color:var(--teal);font-size:13px;font-weight:600;cursor:pointer}
+
+/* NOTES */
+.note-card{background:white;border:1px solid var(--gray-200);border-radius:12px;padding:16px;margin-bottom:12px}
+.note-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.note-author{display:flex;align-items:center;gap:10px}
+.note-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0}
+.note-body-text{font-size:13px;color:var(--gray-700);line-height:1.7;background:var(--gray-50);border-radius:8px;padding:12px 14px;border-left:3px solid var(--teal)}
+.note-date{font-size:11px;color:var(--gray-400)}
+
+/* RIWAYAT MEDIS & RENCANA */
+.mh-card{background:white;border:1px solid var(--gray-200);border-radius:12px;padding:14px 16px;margin-bottom:10px;border-left:4px solid var(--gray-300)}
+.mh-card.jenis-rawat-inap{border-left-color:var(--red)}
+.mh-card.jenis-pemeriksaan{border-left-color:var(--teal)}
+.mh-card.jenis-transfusi{border-left-color:var(--purple)}
+.mh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:6px}
+.mh-judul{font-size:13.5px;font-weight:700;color:var(--gray-900)}
+.mh-tanggal{font-size:11px;color:var(--gray-400);font-weight:600}
+.mh-detail{font-size:12.5px;color:var(--gray-600);line-height:1.6;margin-top:4px}
+.mh-meta{font-size:10.5px;color:var(--gray-400);margin-top:8px;display:flex;justify-content:space-between;align-items:center}
+
+.mp-card{background:white;border:1px solid var(--gray-200);border-radius:12px;padding:14px 16px;margin-bottom:10px;border-left:4px solid var(--amber)}
+.mp-card.status-selesai{border-left-color:var(--green);opacity:0.75}
+.mp-card.status-mendesak{border-left-color:var(--red);background:#FFFBFB}
+.mp-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.mp-actions .btn-sm{padding:5px 12px}
+.badge-due-soon{background:var(--red-light);color:var(--red);animation:pulse-due 2s infinite}
+@keyframes pulse-due{0%,100%{opacity:1}50%{opacity:0.6}}
+.medplan-alert{background:#FEF2F2;border:1.5px solid #FECACA;border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:12.5px;color:#991B1B}
+.medplan-alert b{display:block;margin-bottom:4px;font-size:13px}
+.medplan-alert ul{margin:4px 0 0 18px;padding:0}
+.medplan-alert li{margin-bottom:2px}
+
+/* REKAP BULANAN */
+.monthly-table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--gray-200)}
+.monthly-table{width:100%;border-collapse:collapse;font-size:11px;min-width:1700px}
+.monthly-table th{background:var(--navy);color:rgba(255,255,255,0.9);font-weight:600;padding:8px 6px;text-align:center;font-size:10px;letter-spacing:0.2px}
+.monthly-table td{padding:5px 6px;border-bottom:1px solid var(--gray-100);border-right:1px solid var(--gray-100);vertical-align:middle;text-align:center}
+.monthly-table tr:last-child td{border-bottom:none}
+.monthly-table .date-col{background:var(--gray-50);font-weight:700;color:var(--gray-700);text-align:left;padding-left:10px;font-size:11px}
+
+/* ADMIN TABLES */
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th{background:var(--gray-50);font-weight:700;color:var(--gray-600);padding:10px 14px;text-align:left;border-bottom:2px solid var(--gray-200);font-size:11px;text-transform:uppercase;letter-spacing:0.4px}
+.data-table td{padding:11px 14px;border-bottom:1px solid var(--gray-100);color:var(--gray-700);vertical-align:middle}
+.data-table tr:hover td{background:var(--gray-50)}
+.data-table .action-btn{color:var(--teal);background:none;border:none;font-size:12px;cursor:pointer;font-weight:600;padding:0;font-family:inherit}
+.data-table .action-btn:hover{text-decoration:underline}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:white;border-radius:12px;border:1px solid var(--gray-200);padding:16px;box-shadow:var(--shadow)}
+.stat-num{font-size:28px;font-weight:800;color:var(--gray-900);line-height:1}
+.stat-label{font-size:11px;color:var(--gray-500);margin-top:4px;font-weight:500}
+
+/* COUNTER */
+.counter-row{display:flex;align-items:center;gap:12px;background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:11px 16px;margin-bottom:8px}
+.counter-lbl{flex:1;font-size:13px;color:var(--gray-700);font-weight:500}
+.counter-ctrl{display:flex;align-items:center;gap:10px}
+.counter-btn{width:30px;height:30px;border:1.5px solid var(--gray-300);border-radius:6px;background:white;font-size:18px;line-height:1;cursor:pointer;color:var(--gray-600);display:flex;align-items:center;justify-content:center}
+.counter-val{font-size:16px;font-weight:700;min-width:28px;text-align:center;color:var(--gray-900)}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;z-index:1000;padding:20px;display:none}
+.modal-bg.open{display:flex}
+.modal{background:white;border-radius:16px;padding:28px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-size:16px;font-weight:700;color:var(--gray-900)}
+.modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--gray-400);line-height:1;padding:0}
+
+/* TOAST */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--gray-900);color:white;border-radius:10px;padding:12px 22px;font-size:13px;font-weight:500;z-index:9999;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap}
+#toast.show{opacity:1}
+
+/* PRINT */
+.print-header{display:none}
+@media print{
+  .app-topbar,.sidebar,.mobile-tabbar,.alert-banner,.btn-row,.week-nav,.btn,.modal-bg,#toast,.print-hide{display:none!important}
+  .main-layout{display:block}
+  .content{padding:0;max-width:100%}
+  .print-header{display:block;text-align:center;margin-bottom:16px;border-bottom:2px solid #000;padding-bottom:10px}
+  .print-header h2{font-size:15px;font-weight:700}
+  .print-header p{font-size:11px}
+  .day-card{break-inside:avoid;margin-bottom:10px}
+  body{background:white;font-size:11px}
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .sidebar{display:none}
+  .mobile-tabbar{display:block}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .form-row,.form-row-3,.form-row-4{grid-template-columns:1fr}
+  .content{padding:14px}
+  .vitals-row{grid-template-columns:1fr 1fr}
+  .exit-site-row{grid-template-columns:1fr}
+}
+
+/* Legend */
+.legend-row{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--gray-500);margin-bottom:12px}
+.legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px}
+
+/* UF summary strip */
+.uf-strip{background:linear-gradient(135deg,var(--teal-light),#fff);border:1px solid var(--teal);border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:16px;margin-top:8px;flex-wrap:wrap}
+.uf-strip-item{font-size:12px;color:var(--gray-700)}
+.uf-strip-val{font-weight:800;font-size:15px;color:var(--teal2)}
+.uf-strip-lbl{font-size:10px;color:var(--gray-500)}
+</style>
+</head>
+<body>
+
+<!-- CONFIG (setup URL Apps Script — hanya tampil sekali per device) -->
+<div id="configScreen" style="display:none;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 50%,#0F4C6B 100%);padding:20px">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 18a8 8 0 110-16 8 8 0 010 16zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+      </div>
+      <div class="login-inst">Renal Unit · RSUD Welas Asih Prov. Jawa Barat</div>
+      <div class="login-title">Buku Catatan Harian CAPD</div>
+      <div style="font-size:11px;color:var(--gray-400);margin-top:3px">Pengaturan Server (sekali saja)</div>
+    </div>
+    <div style="font-size:13px;color:var(--gray-500);margin-bottom:16px;line-height:1.6">
+      Tempelkan <b>URL Web App Google Apps Script</b> yang sudah Bapak deploy untuk aplikasi ini. URL ini akan disimpan di perangkat ini saja.
+    </div>
+    <div class="form-field"><label>URL Web App (.../exec)</label>
+      <input id="cfgUrl" type="text" placeholder="https://script.google.com/macros/s/XXXX/exec" autocomplete="off">
+    </div>
+    <button class="btn-login" onclick="saveServerConfig()">Simpan & Lanjutkan</button>
+    <div class="login-error" id="cfgError">Gagal terhubung ke server. Periksa kembali URL.</div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div id="loadingScreen" style="display:none;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 50%,#0F4C6B 100%);padding:20px;flex-direction:column;color:#fff">
+  <div style="width:42px;height:42px;border:4px solid rgba(255,255,255,0.25);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite"></div>
+  <div style="margin-top:16px;font-size:13px;letter-spacing:0.3px" id="loadingText">Memuat data dari server...</div>
+  <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+</div>
+
+<!-- LOGIN -->
+<div id="loginScreen" style="display:none">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 18a8 8 0 110-16 8 8 0 010 16zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+      </div>
+      <div class="login-inst">Renal Unit · RSUD Welas Asih Prov. Jawa Barat</div>
+      <div class="login-title">Buku Catatan Harian CAPD</div>
+      <div style="font-size:11px;color:var(--gray-400);margin-top:3px">Formulir Digital · Baxter/Vantive</div>
+    </div>
+    <div style="font-size:14px;font-weight:600;color:var(--gray-700);margin-bottom:16px">Masuk ke Akun</div>
+    <div class="form-field" style="position:relative">
+      <label>Username</label>
+      <input id="loginUser" type="text" placeholder="Ketik nama atau username..." autocomplete="off">
+      <div id="loginUserDropdown" style="display:none;position:absolute;left:0;right:0;top:100%;background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);box-shadow:var(--shadow-md);max-height:220px;overflow-y:auto;z-index:50;margin-top:2px"></div>
+    </div>
+    <div class="form-field">
+      <label>Password</label>
+      <div style="position:relative">
+        <input id="loginPass" type="password" placeholder="Masukkan password..." style="padding-right:64px">
+        <button type="button" onclick="togglePw('loginPass',this)" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;padding:4px 6px">Lihat</button>
+      </div>
+    </div>
+    <div class="form-field"><label>Masuk Sebagai</label>
+      <select id="loginRole"></select>
+    </div>
+    <button class="btn-login" onclick="doLogin()">Masuk</button>
+    <div class="login-error" id="loginError">Username atau password salah.</div>
+    <div style="text-align:center;margin-top:16px">
+      <a href="#" onclick="event.preventDefault();showConfigScreen(true)" style="font-size:11px;color:var(--gray-400);text-decoration:underline">Ubah pengaturan server</a>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none;flex-direction:column">
+  <div class="app-topbar">
+    <div class="topbar-logo"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 18a8 8 0 110-16 8 8 0 010 16zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg></div>
+    <div class="topbar-text">
+      <div class="topbar-inst">Renal Unit · RSUD Welas Asih Provinsi Jawa Barat</div>
+      <div class="topbar-title">Buku Catatan Harian CAPD</div>
+    </div>
+    <div class="topbar-user">
+      <div class="topbar-avatar" id="topbarAv">?</div>
+      <div class="topbar-user-name" id="topbarName">-</div>
+      <div class="topbar-role-badge" id="topbarRoleBadge">-</div>
+    </div>
+    <button class="btn-logout" style="background:rgba(255,255,255,0.1);margin-right:6px" onclick="openModal('modalMyPassword')" title="Ganti password akun Anda">🔑 Password</button>
+    <button class="btn-logout" style="background:rgba(255,255,255,0.1);margin-right:6px" onclick="refreshFromServer()" id="btnRefresh" title="Tarik data terbaru dari server">⟳ Refresh</button>
+    <button class="btn-logout" onclick="doLogout()">✕ Keluar</button>
+  </div>
+
+  <div class="alert-banner">
+    <span style="color:var(--red);font-size:16px;flex-shrink:0">⚠</span>
+    <div class="alert-banner-text">Hubungi segera Tim CAPD jika: Cairan <b>keruh</b> · <b>Nyeri perut</b> · <b>Demam</b> · <b>Mual/muntah</b> — Tanda peritonitis!</div>
+  </div>
+
+  <!-- MOBILE TAB BAR (pengganti sidebar saat layar kecil) -->
+  <div class="mobile-tabbar" id="mobileTabbar">
+    <div class="mobile-patient-select-wrap" id="mobilePatientSelectorWrap" style="display:none">
+      <select id="mobilePatientSelector" onchange="selectPatient(this.value)"></select>
+    </div>
+    <div class="mobile-tabbar-inner" id="mobileNavItems"></div>
+  </div>
+
+  <div class="main-layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+      <div id="patientSelectorWrap" style="display:none" class="patient-selector-wrap">
+        <div style="font-size:10px;font-weight:700;color:var(--gray-400);letter-spacing:0.6px;text-transform:uppercase;margin-bottom:6px">Pilih Pasien</div>
+        <select id="patientSelector" onchange="selectPatient(this.value)"></select>
+      </div>
+      <div class="sidebar-section">Menu</div>
+      <div id="navItems"></div>
+      <div class="sidebar-footer">v2.0 · CAPD Digital Baxter · 2024</div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content" id="mainContent">
+
+      <!-- ============ PAGE: PERINGATAN ============ -->
+      <div class="page" id="page-peringatan">
+        <div class="page-header"><h1>⚠ Peringatan Peritonitis</h1><p>Kenali gejala dan hubungi tim CAPD segera</p></div>
+        <div class="perit-card">
+          <div class="perit-header">
+            <div class="perit-icon"><svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+            <div><div class="perit-title">Hubungi segera unit CAPD jika:</div><div class="perit-sub">Gejala peritonitis di bawah ini berbahaya dan memerlukan penanganan segera</div></div>
+          </div>
+          <div class="symptom-item"><div class="symptom-dot"></div><div class="symptom-txt">Cairan dialisat <b>keruh atau berawan</b> (bukan jernih seperti biasa)</div></div>
+          <div class="symptom-item"><div class="symptom-dot"></div><div class="symptom-txt"><b>Nyeri abdomen / perut</b> (ringan sampai berat)</div></div>
+          <div class="symptom-item"><div class="symptom-dot"></div><div class="symptom-txt"><b>Demam</b> (suhu ≥ 37,5°C atau terasa panas)</div></div>
+          <div class="symptom-item"><div class="symptom-dot"></div><div class="symptom-txt"><b>Mual, muntah, dan/atau diare</b></div></div>
+          <div class="symptom-item"><div class="symptom-dot"></div><div class="symptom-txt">Exit site <b>kemerahan, bengkak, atau mengeluarkan cairan/nanah</b></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📞 Kontak Tim CAPD — Hubungi Segera</div>
+            <button class="btn btn-sm btn-ghost print-hide" onclick="openContactModal()">+ Edit Kontak</button>
+          </div>
+          <div class="contact-grid" id="contactGrid"></div>
+        </div>
+        <div class="card">
+          <div class="section-label">Panduan Kebersihan Harian</div>
+          <div style="font-size:13px;color:var(--gray-700);line-height:1.9">
+            <div style="margin-bottom:6px">🧼 <b>Cuci tangan</b> 6 langkah selama min. 20 detik sebelum dan sesudah penggantian cairan</div>
+            <div style="margin-bottom:6px">😷 Selalu pakai <b>masker wajah</b> saat melakukan prosedur pertukaran</div>
+            <div style="margin-bottom:6px">🏠 Pertukaran dilakukan di <b>ruangan bersih</b> dengan pintu dan jendela tertutup</div>
+            <div style="margin-bottom:6px">👁 Periksa kantong cairan — jangan pakai jika <b>kantong bocor, keruh, atau sudah kadaluarsa</b></div>
+            <div>🌡 Hangatkan cairan infus terlebih dahulu (<b>jangan panaskan dengan microwave</b>)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ PAGE: DATA PASIEN ============ -->
+      <div class="page" id="page-datapasien">
+        <div class="page-header"><h1>Data Pasien</h1><p>Identitas lengkap dan informasi CAPD</p></div>
+        <div class="card">
+          <div class="section-label">Identitas Pasien</div>
+          <div class="form-row">
+            <div class="form-group"><label>Nama Lengkap *</label><input id="pNama" type="text" placeholder="Nama lengkap pasien"></div>
+            <div class="form-group"><label>No. Rekam Medis</label><input id="pRM" type="text" readonly></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Jenis Kelamin</label><select id="pJK"><option value="">-- Pilih --</option><option>Laki-laki</option><option>Perempuan</option></select></div>
+            <div class="form-group"><label>Tanggal Lahir</label><input id="pTTL" type="date"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Pendidikan Terakhir</label><select id="pPend"><option value="">-- Pilih --</option><option>Tidak sekolah</option><option>SD</option><option>SMP</option><option>SMA/SMK</option><option>D3</option><option>S1/S2/S3</option></select></div>
+            <div class="form-group"><label>Pekerjaan</label><input id="pKerja" type="text"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Status Perkawinan</label><select id="pKawin"><option value="">-- Pilih --</option><option>Belum menikah</option><option>Menikah</option><option>Janda/Duda</option></select></div>
+            <div class="form-group"><label>Nama Pendamping / Keluarga</label><input id="pPendamping" type="text"></div>
+          </div>
+          <div class="form-group"><label>Alamat Lengkap</label><textarea id="pAlamat" rows="2"></textarea></div>
+          <div class="form-group"><label>No. Telepon Pasien / Keluarga</label><input id="pTelp" type="text" placeholder="08xx-xxxx-xxxx"></div>
+        </div>
+        <div class="card">
+          <div class="section-label">Informasi Tenckhoff Catheter & CAPD</div>
+          <div class="form-row">
+            <div class="form-group"><label>Tanggal Pasang Tenckhoff Catheter</label><input id="pTglTenk" type="date"></div>
+            <div class="form-group"><label>Tanggal Mulai CAPD</label><input id="pTglCAPD" type="date"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Jenis Tenckhoff</label><select id="pJenisTenk"><option value="">-- Pilih --</option><option>Standard straight</option><option>Coiled</option><option>Swan neck</option></select></div>
+            <div class="form-group"><label>Letak Exit Site</label><select id="pExitSite"><option value="">-- Pilih --</option><option>Kanan bawah</option><option>Kiri bawah</option><option>Midline / Median</option></select></div>
+          </div>
+          <div class="form-group"><label>Akses Vaskular Sebelumnya</label><select id="pAkses"><option value="">-- Pilih --</option><option>AVF (Arteriovenous Fistula)</option><option>CVC (Cath. Vena Centralis)</option><option>Hemodialisis (HD)</option><option>Tidak ada / Belum pernah</option></select></div>
+          <div class="form-group"><label>Program CAPD yang Ditetapkan Dokter</label><textarea id="pProgram" rows="2" placeholder="Contoh: 4 × pertukaran/hari, 2000 mL per siklus, dwell time 4–6 jam, menggunakan larutan 1.5% glukosa"></textarea></div>
+        </div>
+        <div class="btn-row print-hide">
+          <button class="btn btn-primary" onclick="saveDataPasien()">💾 Simpan Data</button>
+          <button class="btn btn-secondary" onclick="window.print()">🖨 Cetak</button>
+        </div>
+      </div>
+
+      <!-- ============ PAGE: RIWAYAT ============ -->
+      <div class="page" id="page-riwayat">
+        <div class="page-header"><h1>Riwayat Penyakit</h1><p>Etiologi, penyakit penyerta, dan riwayat CAPD</p></div>
+        <div class="card">
+          <div class="section-label">Etiologi & Diagnosis</div>
+          <div class="form-group"><label>Etiologi CAPD (penyebab gagal ginjal)</label><div class="tag-group" id="tagEtiologi"></div></div>
+          <div class="form-group"><label>Penyakit Penyerta (Komorbid)</label><div class="tag-group" id="tagKomorbid"></div></div>
+          <div class="form-group"><label>Keterangan tambahan</label><textarea id="rEtiologiNote" rows="2" placeholder="Catatan tambahan..."></textarea></div>
+        </div>
+        <div class="card">
+          <div class="section-label">Riwayat Training & CAPD</div>
+          <div class="form-row">
+            <div class="form-group"><label>Tanggal Mulai Training</label><input id="rTglTraining" type="date"></div>
+            <div class="form-group"><label>Lama Training (hari)</label><input id="rHariTraining" type="number" min="1" placeholder="Contoh: 14"></div>
+          </div>
+          <div class="form-group"><label>Dialisis Sebelum CAPD</label><select id="rDialSblm"><option value="">-- Pilih --</option><option>Belum pernah dialisis</option><option>Hemodialisis (HD)</option><option>APD (Automated PD)</option></select></div>
+        </div>
+        <div class="card">
+          <div class="section-label">Riwayat Komplikasi</div>
+          <div class="counter-row"><div class="counter-lbl">🦠 Peritonitis (total episode)</div><div class="counter-ctrl"><button class="counter-btn" onclick="changeCounter('rPeritonitis',-1)">−</button><div class="counter-val" id="rPeritonitis">0</div><button class="counter-btn" onclick="changeCounter('rPeritonitis',1)">+</button></div></div>
+          <div class="counter-row"><div class="counter-lbl">🔴 Infeksi Exit Site (total episode)</div><div class="counter-ctrl"><button class="counter-btn" onclick="changeCounter('rExitInfeksi',-1)">−</button><div class="counter-val" id="rExitInfeksi">0</div><button class="counter-btn" onclick="changeCounter('rExitInfeksi',1)">+</button></div></div>
+          <div class="counter-row"><div class="counter-lbl">🔀 Infeksi Tunnel (total episode)</div><div class="counter-ctrl"><button class="counter-btn" onclick="changeCounter('rTunnelInfeksi',-1)">−</button><div class="counter-val" id="rTunnelInfeksi">0</div><button class="counter-btn" onclick="changeCounter('rTunnelInfeksi',1)">+</button></div></div>
+        </div>
+        <div class="card">
+          <div class="section-label">Obat-obatan Rutin</div>
+          <div class="form-group"><textarea id="rObat" rows="5" placeholder="Daftar obat rutin pasien:&#10;1. Nama obat — dosis — frekuensi&#10;2. ..."></textarea></div>
+        </div>
+        <div class="btn-row print-hide"><button class="btn btn-primary" onclick="saveRiwayat()">💾 Simpan Riwayat</button></div>
+      </div>
+
+      <!-- ============ PAGE: RIWAYAT MEDIS & RENCANA ============ -->
+      <div class="page" id="page-medplan">
+        <div class="page-header"><h1>🏥 Riwayat Medis &amp; Rencana</h1><p>Rawat inap, pemeriksaan, transfusi, dan rencana tindak lanjut</p></div>
+
+        <div id="medplanAlertBox"></div>
+
+        <!-- SUB-BAGIAN: RIWAYAT MEDIS -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📜 Riwayat Medis (Rawat Inap / Pemeriksaan / Transfusi)</div>
+          </div>
+          <div id="mhAddForm" style="display:none;margin-bottom:14px;padding:14px;background:var(--gray-50);border-radius:10px;border:1px solid var(--gray-200)">
+            <div class="form-row">
+              <div class="form-group"><label>Jenis</label>
+                <select id="mhJenis">
+                  <option value="rawat-inap">🛏️ Rawat Inap</option>
+                  <option value="pemeriksaan">🔬 Pemeriksaan / Rontgen / Lab</option>
+                  <option value="transfusi">🩸 Transfusi</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Tanggal</label><input id="mhTanggal" type="date"></div>
+            </div>
+            <div class="form-group"><label>Judul Singkat</label><input id="mhJudul" type="text" placeholder="cth: Rawat inap demam tifoid / Rontgen toraks / Transfusi PRC 2 kolf"></div>
+            <div class="form-group"><label>Detail / Hasil</label><textarea id="mhDetail" rows="3" placeholder="Tuliskan detail, hasil pemeriksaan, atau catatan terkait..."></textarea></div>
+            <div class="btn-row"><button class="btn btn-primary" onclick="saveMedHistory()">Simpan</button><button class="btn btn-secondary" onclick="toggleMhForm(false)">Batal</button></div>
+          </div>
+          <div class="btn-row print-hide" id="addMhBtn"><button class="btn btn-ghost" onclick="toggleMhForm(true)">+ Tambah Riwayat</button></div>
+          <div id="mhList" style="margin-top:12px"></div>
+        </div>
+
+        <!-- SUB-BAGIAN: RENCANA TINDAK LANJUT -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🗓️ Rencana &amp; Tindak Lanjut</div>
+          </div>
+          <div id="mpAddForm" style="display:none;margin-bottom:14px;padding:14px;background:var(--gray-50);border-radius:10px;border:1px solid var(--gray-200)">
+            <div class="form-row">
+              <div class="form-group"><label>Jenis Rencana</label>
+                <select id="mpJenis">
+                  <option value="resep-cairan">💧 Resep Cairan Selanjutnya</option>
+                  <option value="ganti-transferset">🔄 Ganti Transfer Set</option>
+                  <option value="tindakan-lain">📌 Tindakan Lainnya</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Tanggal Target</label><input id="mpTanggal" type="date"></div>
+            </div>
+            <div class="form-group"><label>Judul Singkat</label><input id="mpJudul" type="text" placeholder="cth: Evaluasi resep cairan / Ganti transfer set rutin"></div>
+            <div class="form-group"><label>Detail Rencana</label><textarea id="mpDetail" rows="3" placeholder="Tuliskan rincian rencana / instruksi tindak lanjut..."></textarea></div>
+            <div class="btn-row"><button class="btn btn-primary" onclick="saveMedPlan()">Simpan</button><button class="btn btn-secondary" onclick="toggleMpForm(false)">Batal</button></div>
+          </div>
+          <div class="btn-row print-hide" id="addMpBtn"><button class="btn btn-ghost" onclick="toggleMpForm(true)">+ Tambah Rencana</button></div>
+          <div id="mpList" style="margin-top:12px"></div>
+        </div>
+      </div>
+
+      <!-- ============ PAGE: CATATAN PETUGAS ============ -->
+      <div class="page" id="page-catatan">
+        <div class="page-header"><h1>Catatan Petugas</h1><p>Catatan dari perawat dan dokter</p></div>
+        <div id="noteAddForm" style="display:none" class="card">
+          <div class="section-label">Tambah Catatan Baru</div>
+          <div class="form-group"><label>Isi Catatan</label><textarea id="noteInput" rows="4" placeholder="Tuliskan catatan klinis, observasi, instruksi, atau informasi penting..."></textarea></div>
+          <div class="btn-row"><button class="btn btn-primary" onclick="saveNote()">Simpan Catatan</button><button class="btn btn-secondary" onclick="toggleNoteForm(false)">Batal</button></div>
+        </div>
+        <div class="btn-row print-hide" id="addNoteBtn"><button class="btn btn-ghost" onclick="toggleNoteForm(true)">+ Tambah Catatan</button></div>
+        <div id="noteList" style="margin-top:12px"></div>
+      </div>
+
+
+      <!-- ============ PAGE: CATATAN HARIAN (BAXTER/VANTIVE) ============ -->
+      <div class="page" id="page-harian">
+        <div class="page-header">
+          <h1>📋 Catatan Harian CAPD</h1>
+          <p>Format buku Baxter/Vantive — isi setiap hari setelah selesai semua siklus pertukaran</p>
+        </div>
+
+        <div class="legend-row print-hide">
+          <span><span class="legend-dot" style="background:var(--teal);border:1px solid var(--teal2)"></span>UF (+) = cairan lebih banyak keluar (ultrafiltrasi positif)</span>
+          <span><span class="legend-dot" style="background:var(--red);border:1px solid #B91C1C"></span>UF (−) = cairan lebih sedikit keluar (ultrafiltrasi negatif)</span>
+          <span><span class="legend-dot" style="background:var(--amber);border:1px solid #B45309"></span>Vol. Infus = cairan yang dimasukkan</span>
+        </div>
+
+        <div class="card">
+          <div class="week-nav print-hide">
+            <button onclick="changeWeek(-1)">← Minggu Lalu</button>
+            <div class="week-label" id="weekLabel">-</div>
+            <button onclick="changeWeek(1)">Minggu Depan →</button>
+          </div>
+          <div class="print-header">
+            <h2>Catatan Harian CAPD — RSUD Welas Asih</h2>
+            <p id="printWeekLabel"></p>
+            <p id="printPatientLabel"></p>
+          </div>
+          <div id="dailyCards"></div>
+          <div style="margin-top:16px">
+            <div style="font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:6px">Catatan Tambahan Minggu Ini (untuk perawat)</div>
+            <textarea id="weeklyNote" rows="3" style="width:100%;border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:10px 14px;font-size:13px;font-family:inherit;outline:none;resize:vertical" placeholder="Tuliskan gejala tidak biasa, pertanyaan untuk perawat, atau catatan penting minggu ini..."></textarea>
+          </div>
+          <div class="btn-row print-hide">
+            <button class="btn btn-primary" onclick="saveDailyData()">💾 Simpan Minggu Ini</button>
+            <button class="btn btn-secondary" onclick="window.print()">🖨 Cetak / PDF</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ PAGE: REKAP BULANAN ============ -->
+      <div class="page" id="page-rekap">
+        <div class="page-header"><h1>📊 Rekap Bulanan</h1><p>Ringkasan catatan harian per bulan</p></div>
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+            <select id="rekapMonth" onchange="loadRekap()" style="border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:8px 12px;font-size:13px;font-family:inherit;outline:none;background:var(--gray-50)"></select>
+            <select id="rekapYear" onchange="loadRekap()" style="border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:8px 12px;font-size:13px;font-family:inherit;outline:none;background:var(--gray-50)"></select>
+          </div>
+          <div id="rekapStats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px"></div>
+          <div class="monthly-table-wrap">
+            <table class="monthly-table" id="rekapTable">
+              <thead id="rekapTableHead"></thead>
+              <tbody id="rekapBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ PAGE: PERAWAT PANTAU ============ -->
+      <div class="page" id="page-perawat-pantau">
+        <div class="page-header"><h1>Pantau Semua Pasien</h1><p>Ringkasan kondisi seluruh pasien CAPD</p></div>
+        <div class="stats-grid" id="nurseStats"></div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <div style="padding:16px 20px;border-bottom:1px solid var(--gray-200);font-size:14px;font-weight:700;color:var(--gray-800)">Daftar Pasien & Status Hari Ini</div>
+          <table class="data-table" id="nursePatientTable">
+            <thead><tr><th>No. RM</th><th>Nama Pasien</th><th>Terakhir Isi</th><th>Status Minggu Ini</th><th>Total UF Hari Ini</th><th>Aksi</th></tr></thead>
+            <tbody id="nursePatientBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============ PAGE: ADMIN PASIEN ============ -->
+      <div class="page" id="page-admin-pasien">
+        <div class="page-header"><h1>Kelola Pasien</h1><p>Daftar semua pasien CAPD</p></div>
+        <div class="btn-row print-hide" style="margin-bottom:16px"><button class="btn btn-primary" onclick="openAddPatientModal()">+ Daftarkan Pasien Baru</button></div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table class="data-table"><thead><tr><th>#</th><th>No. RM</th><th>Nama Pasien</th><th>Username</th><th>Tgl. Mulai CAPD</th><th>Status</th><th>Aksi</th></tr></thead>
+          <tbody id="adminPatientBody"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ============ PAGE: ADMIN PENGGUNA ============ -->
+      <div class="page" id="page-admin-pengguna">
+        <div class="page-header"><h1>Kelola Pengguna</h1></div>
+        <div class="btn-row print-hide" style="margin-bottom:16px"><button class="btn btn-primary" onclick="openAddUserModal()">+ Tambah Pengguna</button></div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table class="data-table"><thead><tr><th>#</th><th>Username</th><th>Nama</th><th>Role</th><th>Status</th><th>Aksi</th></tr></thead>
+          <tbody id="adminUserBody"></tbody></table>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main-layout -->
+</div><!-- /app -->
+
+<!-- MODAL: TAMBAH PASIEN -->
+<div class="modal-bg" id="modalAddPatient">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Daftarkan Pasien Baru</div><button class="modal-close" onclick="closeModal('modalAddPatient')">×</button></div>
+    <div class="form-group"><label>Nama Lengkap Pasien *</label><input id="newPNama" type="text" placeholder="Nama lengkap"></div>
+    <div class="form-row">
+      <div class="form-group"><label>No. Rekam Medis *</label><input id="newPRM" type="text" placeholder="RM-XXXXXX"></div>
+      <div class="form-group"><label>Jenis Kelamin</label><select id="newPJK"><option value="">-- Pilih --</option><option>Laki-laki</option><option>Perempuan</option></select></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Username Login *</label><input id="newPUser" type="text" placeholder="username pasien"></div>
+      <div class="form-group"><label>Password *</label>
+        <div style="position:relative"><input id="newPPass" type="password" placeholder="password awal (bebas, tidak harus kombinasi)" style="padding-right:64px"><button type="button" onclick="togglePw('newPPass',this)" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;padding:4px 6px">Lihat</button></div>
+      </div>
+    </div>
+    <div class="form-group"><label>Tanggal Mulai CAPD</label><input id="newPTglCAPD" type="date"></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="saveNewPatient()">Daftarkan Pasien</button><button class="btn btn-secondary" onclick="closeModal('modalAddPatient')">Batal</button></div>
+  </div>
+</div>
+
+<!-- MODAL: TAMBAH USER -->
+<div class="modal-bg" id="modalAddUser">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Tambah Pengguna Baru</div><button class="modal-close" onclick="closeModal('modalAddUser')">×</button></div>
+    <div class="form-group"><label>Nama Lengkap *</label><input id="newUNama" type="text"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Username *</label><input id="newUUser" type="text"></div>
+      <div class="form-group"><label>Password *</label>
+        <div style="position:relative"><input id="newUPass" type="password" placeholder="bebas, tidak harus kombinasi" style="padding-right:64px"><button type="button" onclick="togglePw('newUPass',this)" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;padding:4px 6px">Lihat</button></div>
+      </div>
+    </div>
+    <div class="form-group"><label>Peran (boleh pilih lebih dari satu)</label>
+      <div style="display:flex;gap:18px;flex-wrap:wrap;padding:8px 0">
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--gray-700);cursor:pointer">
+          <input type="checkbox" id="newURolePerawat" value="perawat" style="width:16px;height:16px;cursor:pointer"> Perawat CAPD
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--gray-700);cursor:pointer">
+          <input type="checkbox" id="newURoleAdmin" value="admin" style="width:16px;height:16px;cursor:pointer"> Administrator
+        </label>
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="saveNewUser()">Tambah Pengguna</button><button class="btn btn-secondary" onclick="closeModal('modalAddUser')">Batal</button></div>
+  </div>
+</div>
+
+<!-- MODAL: GANTI PASSWORD SAYA -->
+<div class="modal-bg" id="modalMyPassword">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Ganti Password Saya</div><button class="modal-close" onclick="closeModal('modalMyPassword')">×</button></div>
+    <div class="form-group"><label>Password Lama *</label>
+      <div style="position:relative"><input id="mpwOld" type="password" style="padding-right:64px"><button type="button" onclick="togglePw('mpwOld',this)" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;padding:4px 6px">Lihat</button></div>
+    </div>
+    <div class="form-group"><label>Password Baru *</label>
+      <div style="position:relative"><input id="mpwNew" type="password" placeholder="bebas, tidak harus kombinasi huruf/angka" style="padding-right:64px"><button type="button" onclick="togglePw('mpwNew',this)" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;padding:4px 6px">Lihat</button></div>
+    </div>
+    <div class="form-group"><label>Ulangi Password Baru *</label>
+      <div style="position:relative"><input id="mpwConfirm" type="password" style="padding-right:64px"><button type="button" onclick="togglePw('mpwConfirm',this)" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;padding:4px 6px">Lihat</button></div>
+    </div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="saveMyPassword()">Simpan Password Baru</button><button class="btn btn-secondary" onclick="closeModal('modalMyPassword')">Batal</button></div>
+  </div>
+</div>
+
+<!-- MODAL: EDIT KONTAK -->
+<div class="modal-bg" id="modalContact">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Edit Kontak Tim CAPD</div><button class="modal-close" onclick="saveContacts()">×</button></div>
+    <div id="contactEditList"></div>
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--gray-200)">
+      <div style="font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:10px">Tambah Kontak Baru</div>
+      <div class="form-row">
+        <div class="form-group"><label>Role/Jabatan</label><input id="newCRole" placeholder="cth: Perawat CAPD"></div>
+        <div class="form-group"><label>Nama</label><input id="newCName" placeholder="Nama lengkap"></div>
+      </div>
+      <div class="form-group"><label>No. HP</label><input id="newCPhone" placeholder="0812-xxxx-xxxx"></div>
+      <button class="btn btn-ghost btn-sm" onclick="addContact()">+ Tambah</button>
+    </div>
+    <div class="btn-row" style="margin-top:16px"><button class="btn btn-primary" onclick="saveContacts()">Simpan Kontak</button></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ============================================================
+//  KONEKSI SERVER (Google Apps Script Web App + Google Sheets)
+// ============================================================
+const GAS_URL_KEY = 'capd_gas_url';
+let SERVER_URL = localStorage.getItem(GAS_URL_KEY) || '';
+let DB = null; // cache database di memori, dimuat dari server saat login screen dibuka
+
+function getDB(){ return DB; }
+
+// Semua request pakai text/plain agar tidak memicu CORS preflight (request "simple"),
+// sehingga kompatibel dengan Google Apps Script Web App tanpa konfigurasi tambahan.
+async function apiGet(action, params){
+  params = params || {};
+  const qs = new URLSearchParams(Object.assign({action:action}, params)).toString();
+  const res = await fetch(SERVER_URL + '?' + qs, {method:'GET'});
+  const data = await res.json();
+  if(!data.ok) throw new Error(data.error || 'Permintaan server gagal');
+  return data;
+}
+async function apiPost(action, payload){
+  payload = payload || {};
+  const res = await fetch(SERVER_URL, {
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify(Object.assign({action:action}, payload))
+  });
+  const data = await res.json();
+  if(!data.ok) throw new Error(data.error || 'Permintaan server gagal');
+  return data;
+}
+
+async function loadDBFromServer(){
+  const data = await apiGet('getAll');
+  DB = data.db;
+}
+
+function showConfigScreen(show){
+  document.getElementById('configScreen').style.display = show ? 'flex' : 'none';
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('loadingScreen').style.display='none';
+  if(show) document.getElementById('cfgUrl').value = SERVER_URL;
+}
+function showLoadingScreen(show, text){
+  document.getElementById('loadingScreen').style.display = show ? 'flex' : 'none';
+  if(text) document.getElementById('loadingText').textContent = text;
+}
+
+async function saveServerConfig(){
+  const url = document.getElementById('cfgUrl').value.trim();
+  document.getElementById('cfgError').style.display='none';
+  if(!url){ document.getElementById('cfgError').textContent='URL belum diisi.'; document.getElementById('cfgError').style.display='block'; return; }
+  showConfigScreen(false);
+  showLoadingScreen(true, 'Menghubungkan ke server...');
+  const prevUrl = SERVER_URL;
+  SERVER_URL = url;
+  try{
+    await loadDBFromServer();
+    localStorage.setItem(GAS_URL_KEY, url);
+    showLoadingScreen(false);
+    populateLoginUserList();
+    updateLoginRoleOptions();
+    document.getElementById('loginScreen').style.display='flex';
+  }catch(err){
+    SERVER_URL = prevUrl;
+    showLoadingScreen(false);
+    document.getElementById('cfgError').textContent = 'Gagal terhubung: ' + err.message;
+    document.getElementById('cfgError').style.display='block';
+    showConfigScreen(true);
+  }
+}
+
+async function refreshFromServer(){
+  const btn=document.getElementById('btnRefresh');
+  if(btn){btn.disabled=true;btn.textContent='⟳ Memuat...';}
+  try{
+    await loadDBFromServer();
+    buildPatientSelector();
+    renderContactGrid();
+    initRekapSelectors();
+    if(currentPageId) showPage(currentPageId);
+    showToast('Data terbaru berhasil dimuat ✓');
+  }catch(e){
+    showToast('Gagal memuat data: '+e.message);
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='⟳ Refresh';}
+  }
+}
+
+async function boot(){
+  if(!SERVER_URL){ showConfigScreen(true); return; }
+  showLoadingScreen(true, 'Memuat data dari server...');
+  try{
+    await loadDBFromServer();
+    showLoadingScreen(false);
+    populateLoginUserList();
+    updateLoginRoleOptions();
+    document.getElementById('loginScreen').style.display='flex';
+  }catch(err){
+    showLoadingScreen(false);
+    document.getElementById('cfgError').textContent = 'Gagal terhubung: ' + err.message;
+    document.getElementById('cfgError').style.display='block';
+    showConfigScreen(true);
+  }
+}
+
+// ============================================================
+//  STATE
+// ============================================================
+let currentUser = null;
+let currentPatientId = null;
+let currentWeekOffset = 0;
+
+const ETIOLOGI_LIST = ['Diabetes Mellitus','Hipertensi','GN Kronik (Glomerulonefritis)','Obstruksi Uropati','Lupus Eritematosus Sistemik','Penyakit Ginjal Polikistik','Lain-lain'];
+const KOMORBID_LIST = ['DM Tipe 2','Hipertensi','Anemia','Penyakit Jantung','Stroke','Hipotiroid','Dislipidemia','Obesitas','Lain-lain'];
+const DAYS = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'];
+const MONTHS = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const N_SIKLUS = 6;
+
+// Colors for warna cairan
+const WARNA_OPTIONS = [
+  {val:'',label:'-- Warna --'},
+  {val:'jernih-kuning',label:'Jernih (kng muda)'},
+  {val:'jernih-bening',label:'Jernih (bening)'},
+  {val:'kuning-tua',label:'Kuning tua'},
+  {val:'keruh',label:'⚠ Keruh'},
+  {val:'kemerahan',label:'⚠ Kemerahan'},
+  {val:'berdarah',label:'🚨 Berdarah'},
+  {val:'hijau',label:'🚨 Kehijauan'},
+];
+
+const EXIT_OPTIONS = ['Bersih','Kemerahan','Bengkak','Nyeri tekan','Keluar cairan','Keluar nanah'];
+
+// ============================================================
+//  LOGIN / LOGOUT
+// ============================================================
+const ROLE_LABELS={admin:'Administrator',perawat:'Perawat CAPD',pasien:'Pasien'};
+
+function getUserRoles(u){
+  // Kompatibel dengan data lama yang hanya punya field role tunggal
+  return (u.roles&&u.roles.length)?u.roles:[u.role];
+}
+
+let LOGIN_USERS_CACHE = [];
+function populateLoginUserList(){
+  const db=getDB();
+  LOGIN_USERS_CACHE = db.users.filter(u=>u.active);
+}
+function renderLoginUserDropdown(){
+  const q = document.getElementById('loginUser').value.trim().toLowerCase();
+  const dd = document.getElementById('loginUserDropdown');
+  const matches = q ? LOGIN_USERS_CACHE.filter(u=>u.username.toLowerCase().includes(q)||u.nama.toLowerCase().includes(q)) : LOGIN_USERS_CACHE;
+  if(!matches.length){ dd.style.display='none'; dd.innerHTML=''; return; }
+  dd.innerHTML = matches.map(u=>`<div onclick="selectLoginUser('${u.username.replace(/'/g,"\\'")}')" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--gray-100);font-size:13px">
+      <div style="font-weight:600;color:var(--gray-700)">${u.nama}</div>
+      <div style="font-size:11px;color:var(--gray-400)">@${u.username}</div>
+    </div>`).join('');
+  dd.style.display='block';
+}
+function selectLoginUser(username){
+  document.getElementById('loginUser').value = username;
+  document.getElementById('loginUserDropdown').style.display='none';
+  updateLoginRoleOptions();
+  document.getElementById('loginPass').focus();
+}
+function hideLoginUserDropdown(){ setTimeout(()=>{ const dd=document.getElementById('loginUserDropdown'); if(dd) dd.style.display='none'; }, 180); }
+function togglePw(id, btn){
+  const el = document.getElementById(id);
+  if(el.type==='password'){ el.type='text'; btn.textContent='Sembunyikan'; }
+  else { el.type='password'; btn.textContent='Lihat'; }
+}
+
+function updateLoginRoleOptions(){
+  const uname=document.getElementById('loginUser').value.trim();
+  const db=getDB();
+  const sel=document.getElementById('loginRole');
+  const found=db.users.find(u=>u.username===uname&&u.active);
+  let roles=found?getUserRoles(found):['pasien','perawat','admin'];
+  sel.innerHTML=roles.map(r=>`<option value="${r}">${ROLE_LABELS[r]||r}</option>`).join('');
+}
+
+async function doLogin(){
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  const role = document.getElementById('loginRole').value;
+  const loginBtn=document.querySelector('.btn-login');
+  if(loginBtn){loginBtn.disabled=true;loginBtn.textContent='Menghubungkan...';}
+  try{
+    await loadDBFromServer(); // muat data terbaru dari server sebelum validasi login
+  }catch(e){
+    if(loginBtn){loginBtn.disabled=false;loginBtn.textContent='Masuk';}
+    showToast('Gagal menghubungi server: '+e.message);
+    return;
+  }
+  if(loginBtn){loginBtn.disabled=false;loginBtn.textContent='Masuk';}
+  const db = getDB();
+  const found = db.users.find(u=>u.username===user&&u.password===pass&&u.active&&getUserRoles(u).includes(role));
+  if(!found){ document.getElementById('loginError').style.display='block'; return; }
+  document.getElementById('loginError').style.display='none';
+  currentUser = {...found, role}; // role = peran aktif yang dipilih saat login ini
+  if(role==='pasien') currentPatientId = found.patientId;
+  startApp();
+}
+function doLogout(){
+  currentUser=null; currentPatientId=null; currentWeekOffset=0;
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('app').style.display='none';
+  populateLoginUserList();
+  updateLoginRoleOptions();
+  loadDBFromServer().catch(()=>{}); // sinkron ulang di latar belakang
+}
+document.getElementById('loginUser').addEventListener('keydown',e=>{if(e.key==='Enter'){document.getElementById('loginUserDropdown').style.display='none';doLogin();}});
+document.getElementById('loginUser').addEventListener('input',()=>{renderLoginUserDropdown();updateLoginRoleOptions();});
+document.getElementById('loginUser').addEventListener('focus',renderLoginUserDropdown);
+document.getElementById('loginUser').addEventListener('blur',hideLoginUserDropdown);
+document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+boot();
+
+// ============================================================
+//  APP START
+// ============================================================
+function startApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  const av=currentUser.nama.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('topbarAv').textContent=av;
+  document.getElementById('topbarName').textContent=currentUser.nama;
+  document.getElementById('topbarRoleBadge').textContent={admin:'Admin',perawat:'Perawat',pasien:'Pasien'}[currentUser.role];
+  buildNav();
+  buildPatientSelector();
+  renderContactGrid();
+  initRekapSelectors();
+  if(currentUser.role==='admin') showPage('admin-pasien');
+  else if(currentUser.role==='perawat') showPage('perawat-pantau');
+  else showPage('peringatan');
+}
+
+// ============================================================
+//  NAV
+// ============================================================
+const navConfig = {
+  pasien:[
+    {id:'peringatan',icon:'⚠️',label:'Peringatan & Kontak'},
+    {id:'datapasien',icon:'👤',label:'Data Diri Saya'},
+    {id:'riwayat',icon:'📋',label:'Riwayat Penyakit'},
+    {id:'medplan',icon:'🏥',label:'Riwayat & Rencana'},
+    {id:'catatan',icon:'📝',label:'Catatan Petugas'},
+    {id:'harian',icon:'📅',label:'Catatan Harian'},
+    {id:'rekap',icon:'📊',label:'Rekap Bulanan'},
+  ],
+  perawat:[
+    {id:'perawat-pantau',icon:'👁️',label:'Pantau Semua Pasien'},
+    {id:'peringatan',icon:'⚠️',label:'Peringatan & Kontak'},
+    {id:'datapasien',icon:'👤',label:'Data Pasien'},
+    {id:'riwayat',icon:'📋',label:'Riwayat Penyakit'},
+    {id:'medplan',icon:'🏥',label:'Riwayat & Rencana'},
+    {id:'catatan',icon:'📝',label:'Catatan Petugas'},
+    {id:'harian',icon:'📅',label:'Catatan Harian'},
+    {id:'rekap',icon:'📊',label:'Rekap Bulanan'},
+  ],
+  admin:[
+    {id:'admin-pasien',icon:'🏥',label:'Kelola Pasien'},
+    {id:'admin-pengguna',icon:'👥',label:'Kelola Pengguna'},
+    {id:'perawat-pantau',icon:'👁️',label:'Pantau Pasien'},
+    {id:'medplan',icon:'🏥',label:'Riwayat & Rencana'},
+    {id:'peringatan',icon:'⚠️',label:'Peringatan & Kontak'},
+  ],
+};
+
+function countUrgentPlans(){
+  if(!currentPatientId) return 0;
+  const db=getDB();
+  const items=db.medPlans[currentPatientId]||[];
+  return items.filter(mp=>mp.status==='belum'&&daysUntil(mp.tanggalTarget)!==null&&daysUntil(mp.tanggalTarget)<=3).length;
+}
+
+function buildNav(){
+  const items = navConfig[currentUser.role]||[];
+  const urgentCount=countUrgentPlans();
+  const renderLabel=(it)=> it.id==='medplan'&&urgentCount>0
+    ? `${it.icon} ${it.label} <span class="badge badge-due-soon" style="margin-left:4px;padding:1px 6px;font-size:10px">${urgentCount}</span>`
+    : `${it.icon} ${it.label}`;
+  document.getElementById('navItems').innerHTML = items.map(it=>`
+    <div class="nav-item" id="nav-${it.id}" onclick="showPage('${it.id}')">${renderLabel(it)}</div>`).join('');
+  document.getElementById('mobileNavItems').innerHTML = items.map(it=>`
+    <div class="mobile-tab-item" id="mnav-${it.id}" onclick="showPage('${it.id}')">${renderLabel(it)}</div>`).join('');
+}
+
+let currentPageId = null;
+function showPage(pageId){
+  currentPageId = pageId;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.mobile-tab-item').forEach(n=>n.classList.remove('active'));
+  const p=document.getElementById('page-'+pageId);
+  if(p) p.classList.add('active');
+  const n=document.getElementById('nav-'+pageId);
+  if(n) n.classList.add('active');
+  const mn=document.getElementById('mnav-'+pageId);
+  if(mn){ mn.classList.add('active'); if(typeof mn.scrollIntoView==='function') mn.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'}); }
+  if(pageId==='datapasien') loadDataPasien();
+  else if(pageId==='riwayat') loadRiwayat();
+  else if(pageId==='catatan') loadNotes();
+  else if(pageId==='harian') loadHarian();
+  else if(pageId==='rekap') loadRekap();
+  else if(pageId==='perawat-pantau') loadNurseView();
+  else if(pageId==='admin-pasien') loadAdminPatients();
+  else if(pageId==='admin-pengguna') loadAdminUsers();
+  else if(pageId==='peringatan') renderContactGrid();
+  else if(pageId==='medplan') loadMedPlan();
+}
+
+function buildPatientSelector(){
+  const wrap=document.getElementById('patientSelectorWrap');
+  const mobileWrap=document.getElementById('mobilePatientSelectorWrap');
+  if(currentUser.role==='pasien'){wrap.style.display='none';mobileWrap.style.display='none';return;}
+  wrap.style.display='block';
+  mobileWrap.style.display='block';
+  const db=getDB();
+  const optsHtml='<option value="">-- Pilih Pasien --</option>'+db.patients.map(p=>`<option value="${p.id}">${p.rm} — ${p.nama}</option>`).join('');
+  const sel=document.getElementById('patientSelector');
+  const mobileSel=document.getElementById('mobilePatientSelector');
+  sel.innerHTML=optsHtml;
+  mobileSel.innerHTML=optsHtml;
+  if(currentPatientId){ sel.value=currentPatientId; mobileSel.value=currentPatientId; }
+}
+
+function selectPatient(pid){
+  currentPatientId=pid;
+  const sel=document.getElementById('patientSelector');
+  const mobileSel=document.getElementById('mobilePatientSelector');
+  if(sel.value!==pid) sel.value=pid;
+  if(mobileSel.value!==pid) mobileSel.value=pid;
+  buildNav();
+  const active=document.querySelector('.page.active');
+  if(active) showPage(active.id.replace('page-',''));
+}
+
+// ============================================================
+//  CONTACTS
+// ============================================================
+function toWaNumber(phone){
+  let digits=(phone||'').replace(/[^0-9]/g,'');
+  if(digits.startsWith('0')) digits='62'+digits.slice(1);
+  else if(!digits.startsWith('62')) digits='62'+digits;
+  return digits;
+}
+function renderContactGrid(){
+  const db=getDB();
+  const grid=document.getElementById('contactGrid');
+  if(!grid)return;
+  const colors=['#0891B2','#16A34A','#7C3AED','#DC2626'];
+  grid.innerHTML=db.contacts.map((c,i)=>{
+    const telDigits=(c.phone||'').replace(/[^0-9+]/g,'');
+    const waNumber=toWaNumber(c.phone);
+    return `
+    <div class="contact-card">
+      <div class="contact-role">${c.role}</div>
+      <div class="contact-name">${c.name}</div>
+      <div class="contact-phone" style="color:${colors[i%colors.length]}">📞 ${c.phone}</div>
+      <div style="display:flex;gap:6px;margin-top:9px">
+        <a href="tel:${telDigits}" style="flex:1;text-align:center;background:var(--gray-100);color:var(--gray-700);border-radius:8px;padding:8px 6px;font-size:12px;font-weight:600;text-decoration:none">📞 Telepon</a>
+        <a href="https://wa.me/${waNumber}" target="_blank" rel="noopener" style="flex:1;text-align:center;background:#25D366;color:#fff;border-radius:8px;padding:8px 6px;font-size:12px;font-weight:600;text-decoration:none">💬 WhatsApp</a>
+      </div>
+    </div>`;
+  }).join('');
+}
+function openContactModal(){
+  const db=getDB();
+  document.getElementById('contactEditList').innerHTML=db.contacts.map((c,i)=>`
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--gray-100)">
+      <input value="${c.role}" onchange="updateContactField(${i},'role',this.value)" style="border:1px solid var(--gray-200);border-radius:6px;padding:6px 8px;font-size:12px;font-family:inherit">
+      <input value="${c.name}" onchange="updateContactField(${i},'name',this.value)" style="border:1px solid var(--gray-200);border-radius:6px;padding:6px 8px;font-size:12px;font-family:inherit">
+      <input value="${c.phone}" onchange="updateContactField(${i},'phone',this.value)" style="border:1px solid var(--gray-200);border-radius:6px;padding:6px 8px;font-size:12px;font-family:inherit">
+      <button onclick="removeContact(${i})" style="background:var(--red-light);border:none;border-radius:6px;padding:6px 10px;cursor:pointer;color:var(--red);font-size:12px">✕</button>
+    </div>`).join('');
+  openModal('modalContact');
+}
+function updateContactField(i,field,val){const db=getDB();db.contacts[i][field]=val;}
+function removeContact(i){const db=getDB();db.contacts.splice(i,1);openContactModal();}
+function addContact(){
+  const role=document.getElementById('newCRole').value.trim();
+  const name=document.getElementById('newCName').value.trim();
+  const phone=document.getElementById('newCPhone').value.trim();
+  if(!name||!phone){showToast('Isi nama dan nomor HP');return;}
+  const db=getDB();
+  db.contacts.push({role,name,phone});
+  ['newCRole','newCName','newCPhone'].forEach(id=>document.getElementById(id).value='');
+  openContactModal();
+}
+async function saveContacts(){
+  closeModal('modalContact');
+  renderContactGrid();
+  try{
+    await apiPost('saveContacts',{contacts:getDB().contacts});
+    showToast('Kontak berhasil disimpan ✓');
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
+}
+
+// ============================================================
+//  DATA PASIEN
+// ============================================================
+function loadDataPasien(){
+  if(!currentPatientId)return;
+  const db=getDB();
+  const p=db.patients.find(x=>x.id===currentPatientId);
+  if(!p)return;
+  const map={pNama:'nama',pRM:'rm',pJK:'jk',pTTL:'ttl',pPend:'pend',pKerja:'kerja',pKawin:'kawin',pPendamping:'pendamping',pAlamat:'alamat',pTelp:'telp',pTglTenk:'tglTenk',pTglCAPD:'tglCAPD',pJenisTenk:'jenisTenk',pExitSite:'exitSite',pAkses:'akses',pProgram:'program'};
+  Object.entries(map).forEach(([eid,pk])=>{
+    const el=document.getElementById(eid);
+    if(el) el.value=p[pk]||'';
+  });
+  document.getElementById('pRM').readOnly=true; // No. RM tetap terkunci, hanya bisa diatur lewat menu Kelola Pasien
+  const editable=true; // Admin, Perawat CAPD, dan Pasien semuanya boleh input/edit data diri
+  ['pNama','pJK','pTTL','pPend','pKerja','pKawin','pPendamping','pAlamat','pTelp','pTglTenk','pTglCAPD','pJenisTenk','pExitSite','pAkses','pProgram'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA') el.readOnly=!editable;
+    if(el.tagName==='SELECT') el.disabled=!editable;
+  });
+}
+async function saveDataPasien(){
+  if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
+  const db=getDB();
+  const idx=db.patients.findIndex(x=>x.id===currentPatientId);
+  if(idx<0)return;
+  const map={nama:'pNama',rm:'pRM',jk:'pJK',ttl:'pTTL',pend:'pPend',kerja:'pKerja',kawin:'pKawin',pendamping:'pPendamping',alamat:'pAlamat',telp:'pTelp',tglTenk:'pTglTenk',tglCAPD:'pTglCAPD',jenisTenk:'pJenisTenk',exitSite:'pExitSite',akses:'pAkses',program:'pProgram'};
+  Object.entries(map).forEach(([pk,eid])=>{const el=document.getElementById(eid);if(el)db.patients[idx][pk]=el.value;});
+  try{
+    await apiPost('updatePatient',{patient:db.patients[idx]});
+    showToast('Data pasien berhasil disimpan ✓');
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
+}
+
+// ============================================================
+//  RIWAYAT
+// ============================================================
+function buildTagGroup(cid,list,sel){
+  const c=document.getElementById(cid);
+  if(!c)return;
+  c.innerHTML=list.map(item=>`<div class="tag${sel.includes(item)?' selected':''}" onclick="this.classList.toggle('selected')">${item}</div>`).join('');
+}
+function getSelectedTags(cid){
+  return Array.from(document.querySelectorAll(`#${cid} .tag.selected`)).map(t=>t.textContent);
+}
+function loadRiwayat(){
+  if(!currentPatientId)return;
+  const db=getDB();
+  const r=db.riwayat[currentPatientId]||{etiologi:[],komorbid:[],etiologiNote:'',tglTraining:'',hariTraining:'',dialSblm:'',peritonitis:0,exitInfeksi:0,tunnelInfeksi:0,obat:''};
+  buildTagGroup('tagEtiologi',ETIOLOGI_LIST,r.etiologi||[]);
+  buildTagGroup('tagKomorbid',KOMORBID_LIST,r.komorbid||[]);
+  ['rEtiologiNote','rTglTraining','rHariTraining','rObat'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.value=r[id.replace('r','').charAt(0).toLowerCase()+id.replace('r','').slice(1)]||r[{rEtiologiNote:'etiologiNote',rTglTraining:'tglTraining',rHariTraining:'hariTraining',rObat:'obat'}[id]]||'';
+  });
+  document.getElementById('rEtiologiNote').value=r.etiologiNote||'';
+  document.getElementById('rTglTraining').value=r.tglTraining||'';
+  document.getElementById('rHariTraining').value=r.hariTraining||'';
+  document.getElementById('rObat').value=r.obat||'';
+  const dialEl=document.getElementById('rDialSblm');
+  if(dialEl) dialEl.value=r.dialSblm||'';
+  document.getElementById('rPeritonitis').textContent=r.peritonitis||0;
+  document.getElementById('rExitInfeksi').textContent=r.exitInfeksi||0;
+  document.getElementById('rTunnelInfeksi').textContent=r.tunnelInfeksi||0;
+}
+async function saveRiwayat(){
+  if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
+  const db=getDB();
+  const r={
+    etiologi:getSelectedTags('tagEtiologi'),
+    komorbid:getSelectedTags('tagKomorbid'),
+    etiologiNote:document.getElementById('rEtiologiNote').value,
+    tglTraining:document.getElementById('rTglTraining').value,
+    hariTraining:document.getElementById('rHariTraining').value,
+    dialSblm:document.getElementById('rDialSblm').value,
+    peritonitis:parseInt(document.getElementById('rPeritonitis').textContent)||0,
+    exitInfeksi:parseInt(document.getElementById('rExitInfeksi').textContent)||0,
+    tunnelInfeksi:parseInt(document.getElementById('rTunnelInfeksi').textContent)||0,
+    obat:document.getElementById('rObat').value,
+  };
+  db.riwayat[currentPatientId]=r;
+  try{
+    await apiPost('saveRiwayat',{patientId:currentPatientId, riwayat:r});
+    showToast('Riwayat berhasil disimpan ✓');
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
+}
+function changeCounter(id,delta){
+  const el=document.getElementById(id);
+  el.textContent=Math.max(0,(parseInt(el.textContent)||0)+delta);
+}
+
+// ============================================================
+//  CATATAN PETUGAS
+// ============================================================
+function loadNotes(){
+  if(!currentPatientId){document.getElementById('noteList').innerHTML='<p style="color:var(--gray-400);font-size:13px">Pilih pasien untuk melihat catatan.</p>';return;}
+  const db=getDB();
+  const notes=(db.notes[currentPatientId]||[]).slice().reverse();
+  const canAdd=currentUser.role==='perawat'||currentUser.role==='admin';
+  document.getElementById('addNoteBtn').style.display=canAdd?'flex':'none';
+  if(notes.length===0){document.getElementById('noteList').innerHTML='<p style="color:var(--gray-400);font-size:13px;padding:8px 0">Belum ada catatan untuk pasien ini.</p>';return;}
+  const colors=['#0891B2','#16A34A','#7C3AED','#DC2626','#D97706'];
+  document.getElementById('noteList').innerHTML=notes.map((n,i)=>`
+    <div class="note-card">
+      <div class="note-meta">
+        <div class="note-author">
+          <div class="note-av" style="background:${colors[i%colors.length]}">${n.author.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
+          <div><div style="font-size:13px;font-weight:600;color:var(--gray-900)">${n.author}</div><div style="font-size:11px;color:var(--gray-400)">${n.role}</div></div>
+        </div>
+        <div class="note-date">${formatDate(n.date)}</div>
+      </div>
+      <div class="note-body-text">${n.text}</div>
+    </div>`).join('');
+}
+function toggleNoteForm(show){
+  document.getElementById('noteAddForm').style.display=show?'block':'none';
+  if(!show) document.getElementById('noteInput').value='';
+}
+async function saveNote(){
+  const text=document.getElementById('noteInput').value.trim();
+  if(!text){showToast('Tulis isi catatan terlebih dahulu');return;}
+  if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
+  const db=getDB();
+  if(!db.notes[currentPatientId]) db.notes[currentPatientId]=[];
+  const note={id:'n'+Date.now(),author:currentUser.nama,role:{admin:'Administrator',perawat:'Perawat CAPD',pasien:'Pasien'}[currentUser.role],date:new Date().toISOString().slice(0,10),text};
+  db.notes[currentPatientId].push(note);
+  toggleNoteForm(false);
+  loadNotes();
+  try{
+    await apiPost('addNote',{patientId:currentPatientId, note});
+    showToast('Catatan berhasil disimpan ✓');
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
+}
+
+// ============================================================
+//  RIWAYAT MEDIS & RENCANA TINDAK LANJUT
+// ============================================================
+const MH_JENIS_LABEL={'rawat-inap':'🛏️ Rawat Inap','pemeriksaan':'🔬 Pemeriksaan/Rontgen/Lab','transfusi':'🩸 Transfusi'};
+const MP_JENIS_LABEL={'resep-cairan':'💧 Resep Cairan','ganti-transferset':'🔄 Ganti Transfer Set','tindakan-lain':'📌 Tindakan Lain'};
+const ROLE_LABEL_FULL={admin:'Administrator',perawat:'Perawat CAPD',pasien:'Pasien'};
+
+function daysUntil(dateStr){
+  if(!dateStr) return null;
+  const today=new Date(); today.setHours(0,0,0,0);
+  const target=new Date(dateStr+'T00:00:00');
+  return Math.round((target-today)/(1000*60*60*24));
+}
+
+function toggleMhForm(show){
+  document.getElementById('mhAddForm').style.display=show?'block':'none';
+  if(!show){ ['mhTanggal','mhJudul','mhDetail'].forEach(id=>document.getElementById(id).value=''); }
+  else if(!document.getElementById('mhTanggal').value){ document.getElementById('mhTanggal').value=new Date().toISOString().slice(0,10); }
+}
+function toggleMpForm(show){
+  document.getElementById('mpAddForm').style.display=show?'block':'none';
+  if(!show){ ['mpTanggal','mpJudul','mpDetail'].forEach(id=>document.getElementById(id).value=''); }
+}
+
+async function saveMedHistory(){
+  if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
+  const jenis=document.getElementById('mhJenis').value;
+  const tanggal=document.getElementById('mhTanggal').value;
+  const judul=document.getElementById('mhJudul').value.trim();
+  const detail=document.getElementById('mhDetail').value.trim();
+  if(!tanggal||!judul){showToast('Tanggal dan judul wajib diisi');return;}
+  const db=getDB();
+  if(!db.medHistory[currentPatientId]) db.medHistory[currentPatientId]=[];
+  const item={id:'mh'+Date.now(),jenis,tanggal,judul,detail,author:currentUser.nama,role:ROLE_LABEL_FULL[currentUser.role]};
+  db.medHistory[currentPatientId].push(item);
+  toggleMhForm(false);
+  loadMedPlan();
+  try{
+    await apiPost('addMedHistory',{patientId:currentPatientId, item});
+    showToast('Riwayat medis berhasil disimpan ✓');
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
+}
+
+async function saveMedPlan(){
+  if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
+  const jenis=document.getElementById('mpJenis').value;
+  const tanggalTarget=document.getElementById('mpTanggal').value;
+  const judul=document.getElementById('mpJudul').value.trim();
+  const detail=document.getElementById('mpDetail').value.trim();
+  if(!tanggalTarget||!judul){showToast('Tanggal target dan judul wajib diisi');return;}
+  const db=getDB();
+  if(!db.medPlans[currentPatientId]) db.medPlans[currentPatientId]=[];
+  const item={id:'mp'+Date.now(),jenis,tanggalTarget,judul,detail,status:'belum',author:currentUser.nama,role:ROLE_LABEL_FULL[currentUser.role]};
+  db.medPlans[currentPatientId].push(item);
+  toggleMpForm(false);
+  loadMedPlan();
+  try{
+    await apiPost('addMedPlan',{patientId:currentPatientId, item});
+    showToast('Rencana berhasil disimpan ✓');
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
+}
+
+async function deleteMh(id){
+  if(!currentPatientId)return;
+  const db=getDB();
+  db.medHistory[currentPatientId]=(db.medHistory[currentPatientId]||[]).filter(x=>x.id!==id);
+  loadMedPlan();
+  try{
+    await apiPost('deleteMedHistory',{patientId:currentPatientId, id});
+    showToast('Riwayat dihapus');
+  }catch(e){
+    showToast('Gagal menghapus di server: '+e.message);
+  }
+}
+async function deleteMp(id){
+  if(!currentPatientId)return;
+  const db=getDB();
+  db.medPlans[currentPatientId]=(db.medPlans[currentPatientId]||[]).filter(x=>x.id!==id);
+  loadMedPlan();
+  try{
+    await apiPost('deleteMedPlan',{patientId:currentPatientId, id});
+    showToast('Rencana dihapus');
+  }catch(e){
+    showToast('Gagal menghapus di server: '+e.message);
+  }
+}
+async function setMpStatus(id,status){
+  if(!currentPatientId)return;
+  const db=getDB();
+  const item=(db.medPlans[currentPatientId]||[]).find(x=>x.id===id);
+  if(item) item.status=status;
+  loadMedPlan();
+  try{
+    await apiPost('updateMedPlanStatus',{patientId:currentPatientId, id, status});
+    showToast(status==='selesai'?'Rencana ditandai selesai ✓':'Status diperbarui');
+  }catch(e){
+    showToast('Gagal update ke server: '+e.message);
+  }
+}
+
+function loadMedPlan(){
+  if(!currentPatientId){
+    document.getElementById('mhList').innerHTML='<p style="color:var(--gray-400);font-size:13px">Pilih pasien terlebih dahulu.</p>';
+    document.getElementById('mpList').innerHTML='';
+    document.getElementById('medplanAlertBox').innerHTML='';
+    return;
+  }
+  const db=getDB();
+  const canEdit=true; // semua role (pasien, perawat, admin) boleh mengisi sesuai kesepakatan
+  document.getElementById('addMhBtn').style.display=canEdit?'flex':'none';
+  document.getElementById('addMpBtn').style.display=canEdit?'flex':'none';
+
+  // --- RIWAYAT MEDIS (terbaru di atas) ---
+  const mhItems=(db.medHistory[currentPatientId]||[]).slice().sort((a,b)=>b.tanggal.localeCompare(a.tanggal));
+  document.getElementById('mhList').innerHTML = mhItems.length===0
+    ? '<p style="color:var(--gray-400);font-size:13px;padding:8px 0">Belum ada riwayat rawat inap, pemeriksaan, atau transfusi.</p>'
+    : mhItems.map(mh=>`
+      <div class="mh-card jenis-${mh.jenis}">
+        <div class="mh-top">
+          <div class="mh-judul">${MH_JENIS_LABEL[mh.jenis]||mh.jenis} — ${mh.judul}</div>
+          <div class="mh-tanggal">${formatDate(mh.tanggal)}</div>
+        </div>
+        ${mh.detail?`<div class="mh-detail">${mh.detail}</div>`:''}
+        <div class="mh-meta">
+          <span>Dicatat oleh: ${mh.author} (${mh.role})</span>
+          <button class="action-btn print-hide" style="color:var(--red)" onclick="deleteMh('${mh.id}')">Hapus</button>
+        </div>
+      </div>`).join('');
+
+  // --- RENCANA TINDAK LANJUT (belum selesai dulu, urut tanggal target terdekat) ---
+  const mpItems=(db.medPlans[currentPatientId]||[]).slice().sort((a,b)=>{
+    if(a.status!==b.status) return a.status==='belum'?-1:1;
+    return a.tanggalTarget.localeCompare(b.tanggalTarget);
+  });
+  document.getElementById('mpList').innerHTML = mpItems.length===0
+    ? '<p style="color:var(--gray-400);font-size:13px;padding:8px 0">Belum ada rencana atau tindak lanjut yang dijadwalkan.</p>'
+    : mpItems.map(mp=>{
+        const sisaHari=daysUntil(mp.tanggalTarget);
+        const mendesak=mp.status==='belum'&&sisaHari!==null&&sisaHari<=3;
+        const statusCls=mp.status==='selesai'?'status-selesai':(mendesak?'status-mendesak':'');
+        let dueLabel='';
+        if(mp.status==='selesai') dueLabel=`<span class="badge badge-green">✓ Selesai</span>`;
+        else if(sisaHari===null) dueLabel='';
+        else if(sisaHari<0) dueLabel=`<span class="badge badge-due-soon">⏰ Terlewat ${Math.abs(sisaHari)} hari</span>`;
+        else if(sisaHari===0) dueLabel=`<span class="badge badge-due-soon">⏰ Target: Hari ini</span>`;
+        else if(sisaHari<=3) dueLabel=`<span class="badge badge-due-soon">⏰ ${sisaHari} hari lagi</span>`;
+        else dueLabel=`<span class="badge badge-amber">${sisaHari} hari lagi</span>`;
+        return `
+      <div class="mp-card ${statusCls}">
+        <div class="mh-top">
+          <div class="mh-judul">${MP_JENIS_LABEL[mp.jenis]||mp.jenis} — ${mp.judul}</div>
+          <div class="mh-tanggal">Target: ${formatDate(mp.tanggalTarget)}</div>
+        </div>
+        ${dueLabel?`<div style="margin-top:4px">${dueLabel}</div>`:''}
+        ${mp.detail?`<div class="mh-detail">${mp.detail}</div>`:''}
+        <div class="mh-meta">
+          <span>Dibuat oleh: ${mp.author} (${mp.role})</span>
+          <button class="action-btn print-hide" style="color:var(--red)" onclick="deleteMp('${mp.id}')">Hapus</button>
+        </div>
+        <div class="mp-actions print-hide">
+          ${mp.status==='belum'
+            ?`<button class="btn btn-success btn-sm" onclick="setMpStatus('${mp.id}','selesai')">✓ Tandai Selesai</button>`
+            :`<button class="btn btn-secondary btn-sm" onclick="setMpStatus('${mp.id}','belum')">↺ Buka Lagi</button>`}
+        </div>
+      </div>`;}).join('');
+
+  // --- PENGINGAT: tampilkan alert box kalau ada rencana mendesak/terlewat ---
+  const urgent=mpItems.filter(mp=>mp.status==='belum'&&daysUntil(mp.tanggalTarget)!==null&&daysUntil(mp.tanggalTarget)<=3);
+  if(urgent.length){
+    document.getElementById('medplanAlertBox').innerHTML=`
+      <div class="medplan-alert">
+        <b>⏰ ${urgent.length} rencana perlu perhatian segera:</b>
+        <ul>${urgent.map(mp=>{
+          const sisaHari=daysUntil(mp.tanggalTarget);
+          const ket=sisaHari<0?`terlewat ${Math.abs(sisaHari)} hari`:sisaHari===0?'hari ini':`${sisaHari} hari lagi`;
+          return `<li>${MP_JENIS_LABEL[mp.jenis]||mp.jenis} — ${mp.judul} (${ket})</li>`;
+        }).join('')}</ul>
+      </div>`;
+  } else {
+    document.getElementById('medplanAlertBox').innerHTML='';
+  }
+  buildNav();
+}
+
+// ============================================================
+//  CATATAN HARIAN — BAXTER/VANTIVE
+// ============================================================
+function getWeekKey(offset=0){
+  const now=new Date();
+  const day=now.getDay();
+  const monday=new Date(now);
+  monday.setDate(now.getDate()-(day===0?6:day-1)+(offset*7));
+  monday.setHours(0,0,0,0);
+  return monday.toISOString().slice(0,10);
+}
+function hitungDurasi(jamMulai,jamSelesai){
+  // jamMulai & jamSelesai format 'HH:MM'. Return {menit, label} atau null jika data tidak lengkap.
+  if(!jamMulai||!jamSelesai) return null;
+  const [h1,m1]=jamMulai.split(':').map(Number);
+  const [h2,m2]=jamSelesai.split(':').map(Number);
+  let menit=(h2*60+m2)-(h1*60+m1);
+  if(menit<0) menit+=24*60; // lewat tengah malam
+  const jam=Math.floor(menit/60);
+  const sisaMenit=menit%60;
+  let label='';
+  if(jam>0) label+=jam+' j ';
+  label+=sisaMenit+' mnt';
+  return {menit, label:label.trim()};
+}
+
+function getWeekDates(weekKey){
+  const monday=new Date(weekKey+'T00:00:00');
+  return DAYS.map((_,i)=>{const d=new Date(monday);d.setDate(monday.getDate()+i);return d.toISOString().slice(0,10);});
+}
+
+// pendingData holds unsaved changes: { weekKey: { dateKey: { ... } } }
+let pendingData = {};
+
+function getDayData(wkData, dateKey){
+  return (wkData && wkData[dateKey]) ? wkData[dateKey] : {};
+}
+
+function loadHarian(){
+  if(!currentPatientId){
+    document.getElementById('dailyCards').innerHTML='<div style="padding:20px;text-align:center;color:var(--gray-400)">Pilih pasien terlebih dahulu</div>';
+    return;
+  }
+  const wk=getWeekKey(currentWeekOffset);
+  const dates=getWeekDates(wk);
+  const label=`Minggu: ${formatDateShort(dates[0])} — ${formatDateShort(dates[6])}`;
+  document.getElementById('weekLabel').textContent=label;
+  const pi=document.getElementById('printWeekLabel');
+  if(pi) pi.textContent=label;
+  const pp=document.getElementById('printPatientLabel');
+  const db=getDB();
+  const pat=db.patients.find(x=>x.id===currentPatientId);
+  if(pp&&pat) pp.textContent=`Pasien: ${pat.nama} (${pat.rm})`;
+
+  const wkData=(db.dailyData[currentPatientId]||{})[wk]||{};
+  const todayStr=new Date().toISOString().slice(0,10);
+
+  const html=dates.map((dateStr,di)=>{
+    const dayData=getDayData(wkData,dateStr);
+    const isToday=dateStr===todayStr;
+    const dateObj=new Date(dateStr+'T00:00:00');
+    const dateLabel=dateObj.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+    // Tanda vital
+    const bb=dayData.bb||'';
+    const td=dayData.td||'';
+    const nadi=dayData.nadi||'';
+    const suhu=dayData.suhu||'';
+    const bb_pre=dayData.bb_pre||'';
+
+    // Exit site
+    const exitSel=dayData.exit||[];
+
+    // Per-siklus
+    let silusRows='';
+    let totalIn=0, totalOut=0;
+    for(let s=0;s<N_SIKLUS;s++){
+      const sk=dayData['s'+s]||{};
+      const jamMasukMulai=sk.jamMasukMulai||'';
+      const jamMasukSelesai=sk.jamMasukSelesai||'';
+      const jamDrainMulai=sk.jamDrainMulai||'';
+      const jamDrainSelesai=sk.jamDrainSelesai||'';
+      const infus=sk.infus||'';
+      const drain=sk.drain||'';
+      const warna=sk.warna||'';
+      const larutan=sk.larutan||'';
+      const keterangan=sk.keterangan||'';
+      const ufVal=infus&&drain?(parseInt(drain)-parseInt(infus)):null;
+      if(infus) totalIn+=parseInt(infus)||0;
+      if(drain) totalOut+=parseInt(drain)||0;
+      const ufStr=ufVal===null?'—':(ufVal>=0?'+'+ufVal:String(ufVal));
+      const ufClass=ufVal===null?'':(ufVal>=0?'uf-cell':'uf-cell uf-neg');
+
+      const durMasuk=hitungDurasi(jamMasukMulai,jamMasukSelesai);
+      const durDrain=hitungDurasi(jamDrainMulai,jamDrainSelesai);
+      const durMasukHtml=durMasuk?`<span class="durasi-badge" id="durMasuk_${dateStr}_${s}">⏱ ${durMasuk.label}</span>`:`<span class="durasi-badge" id="durMasuk_${dateStr}_${s}" style="visibility:hidden">—</span>`;
+      const durDrainHtml=durDrain?`<span class="durasi-badge" id="durDrain_${dateStr}_${s}">⏱ ${durDrain.label}</span>`:`<span class="durasi-badge" id="durDrain_${dateStr}_${s}" style="visibility:hidden">—</span>`;
+
+      const warnaOpts=WARNA_OPTIONS.map(w=>`<option value="${w.val}"${warna===w.val?' selected':''}>${w.label}</option>`).join('');
+      silusRows+=`
+        <tr>
+          <td><span class="siklus-num">${s+1}</span></td>
+          <td>
+            <div class="jam-pair">
+              <input type="time" value="${jamMasukMulai}" title="Jam mulai infus" oninput="setPD('${dateStr}','s${s}','jamMasukMulai',this.value);updateDurasi('${dateStr}',${s})">
+              <span class="jam-arrow">▼ s.d.</span>
+              <input type="time" value="${jamMasukSelesai}" title="Jam selesai infus" oninput="setPD('${dateStr}','s${s}','jamMasukSelesai',this.value);updateDurasi('${dateStr}',${s})">
+              ${durMasukHtml}
+            </div>
+          </td>
+          <td>
+            <div class="jam-pair">
+              <input type="time" value="${jamDrainMulai}" title="Jam mulai drain" oninput="setPD('${dateStr}','s${s}','jamDrainMulai',this.value);updateDurasi('${dateStr}',${s})">
+              <span class="jam-arrow">▼ s.d.</span>
+              <input type="time" value="${jamDrainSelesai}" title="Jam selesai drain" oninput="setPD('${dateStr}','s${s}','jamDrainSelesai',this.value);updateDurasi('${dateStr}',${s})">
+              ${durDrainHtml}
+            </div>
+          </td>
+          <td>
+            <select onchange="setPD('${dateStr}','s${s}','larutan',this.value)" style="width:100px">
+              <option value=""${!larutan?' selected':''}>-- Pilih --</option>
+              <option value="1.5%"${larutan==='1.5%'?' selected':''}>1.5% Glukosa</option>
+              <option value="2.5%"${larutan==='2.5%'?' selected':''}>2.5% Glukosa</option>
+              <option value="4.25%"${larutan==='4.25%'?' selected':''}>4.25% Glukosa</option>
+              <option value="icodextrin"${larutan==='icodextrin'?' selected':''}>Icodextrin</option>
+            </select>
+          </td>
+          <td><input type="number" value="${infus}" placeholder="2000" min="0" max="3000" style="width:68px" oninput="setPD('${dateStr}','s${s}','infus',this.value);calcUF('${dateStr}',${s})"></td>
+          <td><input type="number" value="${drain}" placeholder="2000" min="0" max="5000" style="width:68px" oninput="setPD('${dateStr}','s${s}','drain',this.value);calcUF('${dateStr}',${s})"></td>
+          <td><span id="uf_${dateStr}_${s}" class="${ufClass}">${ufStr}</span></td>
+          <td>
+            <select onchange="setPD('${dateStr}','s${s}','warna',this.value);updateWarnaClass(this)">${warnaOpts}</select>
+          </td>
+          <td><input type="text" value="${keterangan}" placeholder="cth: drain lambat" style="width:110px" oninput="setPD('${dateStr}','s${s}','keterangan',this.value)"></td>
+        </tr>`;
+    }
+    // Total UF
+    const totalUF=totalOut-totalIn;
+    const totalUFStr=totalIn||totalOut?(totalUF>=0?'+'+totalUF:String(totalUF)):'—';
+
+    // Exit site buttons
+    const exitBtns=EXIT_OPTIONS.map(opt=>{
+      const isSel=exitSel.includes(opt);
+      const isDanger=['Keluar cairan','Keluar nanah','Bengkak'].includes(opt);
+      const cls=isSel?(isDanger?'exit-opt selected-red':'exit-opt selected'):'exit-opt';
+      return `<button class="${cls}" onclick="toggleExit('${dateStr}','${opt}',this)">${opt}</button>`;
+    }).join('');
+
+    // Keluhan hari
+    const keluhan=dayData.keluhan||'';
+
+    return `
+    <div class="day-card${isToday?' today':''}" id="daycard_${dateStr}">
+      <div class="day-card-header">
+        <div>
+          <div class="day-name">${DAYS[di]}${isToday?' <span class="today-badge">Hari ini</span>':''}</div>
+          <div class="day-date">${dateLabel}</div>
+        </div>
+      </div>
+
+      <!-- TANDA VITAL -->
+      <div class="vitals-row">
+        <div class="vital-cell">
+          <div class="vital-label">BB Sebelum (kg)</div>
+          <input class="vital-input" type="number" step="0.1" value="${bb_pre}" placeholder="65.0" oninput="setPDDirect('${dateStr}','bb_pre',this.value)">
+        </div>
+        <div class="vital-cell">
+          <div class="vital-label">BB Sesudah (kg)</div>
+          <input class="vital-input" type="number" step="0.1" value="${bb}" placeholder="65.0" oninput="setPDDirect('${dateStr}','bb',this.value)">
+        </div>
+        <div class="vital-cell">
+          <div class="vital-label">Tekanan Darah</div>
+          <input class="vital-input" type="text" value="${td}" placeholder="120/80" oninput="setPDDirect('${dateStr}','td',this.value)">
+        </div>
+        <div class="vital-cell">
+          <div class="vital-label">Nadi (x/mnt)</div>
+          <input class="vital-input" type="number" value="${nadi}" placeholder="80" oninput="setPDDirect('${dateStr}','nadi',this.value)">
+        </div>
+        <div class="vital-cell">
+          <div class="vital-label">Suhu (°C)</div>
+          <input class="vital-input" type="number" step="0.1" value="${suhu}" placeholder="36.5" oninput="setPDDirect('${dateStr}','suhu',this.value)">
+        </div>
+      </div>
+
+      <!-- SIKLUS TABLE -->
+      <div class="siklus-wrap">
+        <table class="siklus-table">
+          <thead>
+            <tr>
+              <th style="width:36px">Siklus</th>
+              <th style="width:170px">Jam Masuk<br><span style="font-weight:500;text-transform:none;font-size:9px">(mulai – selesai &amp; durasi)</span></th>
+              <th style="width:170px">Jam Drain/Keluar<br><span style="font-weight:500;text-transform:none;font-size:9px">(mulai – selesai &amp; durasi)</span></th>
+              <th style="width:110px">Larutan</th>
+              <th style="width:80px">Vol. Infus (mL)</th>
+              <th style="width:80px">Vol. Drain (mL)</th>
+              <th style="width:70px">UF (mL)</th>
+              <th style="width:130px">Warna Effluen</th>
+              <th>Keterangan Siklus</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${silusRows}
+            <tr class="siklus-note-row">
+              <td colspan="4" style="text-align:right;font-size:11px;color:var(--gray-500);font-weight:600">TOTAL HARI INI (Intake / Output / Balance):</td>
+              <td style="font-size:12px;font-weight:700;color:var(--amber)">${totalIn||'—'} mL</td>
+              <td style="font-size:12px;font-weight:700;color:var(--teal2)">${totalOut||'—'} mL</td>
+              <td colspan="3"><span style="font-size:13px;font-weight:800;color:${totalUF>=0?'var(--teal2)':'var(--red)'}">${totalUFStr} mL Balance</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- EXIT SITE & KELUHAN -->
+      <div class="exit-site-row">
+        <div class="exit-site-cell">
+          <div class="exit-label">Kondisi Exit Site / Tunnel</div>
+          <div class="exit-options" id="exit_${dateStr}">${exitBtns}</div>
+        </div>
+        <div class="exit-site-cell">
+          <div class="exit-label">Keluhan / Gejala Hari Ini</div>
+          <input type="text" value="${keluhan}" placeholder="cth: tidak ada / rasa berat / mual..." 
+            style="width:100%;border:1.5px solid var(--gray-200);border-radius:6px;padding:7px 10px;font-size:12px;font-family:inherit;outline:none;margin-top:4px"
+            oninput="setPDDirect('${dateStr}','keluhan',this.value)">
+        </div>
+      </div>
+
+    </div>`;
+  }).join('');
+
+  document.getElementById('dailyCards').innerHTML=html;
+  document.getElementById('weeklyNote').value=wkData['__note__']||'';
+}
+
+function setPD(dateStr, subKey, field, val){
+  const wk=getWeekKey(currentWeekOffset);
+  if(!pendingData[wk]) pendingData[wk]={};
+  if(!pendingData[wk][dateStr]) pendingData[wk][dateStr]={};
+  if(!pendingData[wk][dateStr][subKey]) pendingData[wk][dateStr][subKey]={};
+  pendingData[wk][dateStr][subKey][field]=val;
+}
+function setPDDirect(dateStr,field,val){
+  const wk=getWeekKey(currentWeekOffset);
+  if(!pendingData[wk]) pendingData[wk]={};
+  if(!pendingData[wk][dateStr]) pendingData[wk][dateStr]={};
+  pendingData[wk][dateStr][field]=val;
+}
+function toggleExit(dateStr,opt,btn){
+  const wk=getWeekKey(currentWeekOffset);
+  if(!pendingData[wk]) pendingData[wk]={};
+  if(!pendingData[wk][dateStr]) pendingData[wk][dateStr]={};
+  const db=getDB();
+  const wkData=((db.dailyData[currentPatientId]||{})[wk])||{};
+  const dayData=wkData[dateStr]||{};
+  let arr=[...(pendingData[wk][dateStr].exit||dayData.exit||[])];
+  const idx=arr.indexOf(opt);
+  if(idx>=0){ arr.splice(idx,1); }else{ arr.push(opt); }
+  pendingData[wk][dateStr].exit=arr;
+  const isDanger=['Keluar cairan','Keluar nanah','Bengkak'].includes(opt);
+  if(arr.includes(opt)){
+    btn.className=isDanger?'exit-opt selected-red':'exit-opt selected';
+  }else{
+    btn.className='exit-opt';
+  }
+}
+
+function calcUF(dateStr,s){
+  // Re-read from DOM to update the UF span in real-time
+  const card=document.getElementById('daycard_'+dateStr);
+  if(!card)return;
+  const rows=card.querySelectorAll('.siklus-table tbody tr:not(.siklus-note-row)');
+  const row=rows[s];
+  if(!row)return;
+  // Kolom: 1=Siklus, 2=Jam Masuk, 3=Jam Drain, 4=Larutan, 5=Infus, 6=Drain, 7=UF, 8=Warna, 9=Keterangan
+  const infusInput=row.querySelector('td:nth-child(5) input');
+  const drainInput=row.querySelector('td:nth-child(6) input');
+  const ufSpan=document.getElementById('uf_'+dateStr+'_'+s);
+  if(!infusInput||!drainInput||!ufSpan)return;
+  const infus=parseInt(infusInput.value)||0;
+  const drain=parseInt(drainInput.value)||0;
+  if(!infusInput.value&&!drainInput.value){ufSpan.textContent='—';ufSpan.className='';return;}
+  const uf=drain-infus;
+  ufSpan.textContent=(uf>=0?'+':'')+uf;
+  ufSpan.className=uf>=0?'uf-cell':'uf-cell uf-neg';
+  // Update total row
+  updateTotalRow(dateStr);
+}
+
+function updateDurasi(dateStr,s){
+  const card=document.getElementById('daycard_'+dateStr);
+  if(!card)return;
+  const rows=card.querySelectorAll('.siklus-table tbody tr:not(.siklus-note-row)');
+  const row=rows[s];
+  if(!row)return;
+  // Kolom 2 = Jam Masuk (2 input time), Kolom 3 = Jam Drain (2 input time)
+  const masukInputs=row.querySelectorAll('td:nth-child(2) input[type=time]');
+  const drainInputs=row.querySelectorAll('td:nth-child(3) input[type=time]');
+  const durMasukSpan=document.getElementById('durMasuk_'+dateStr+'_'+s);
+  const durDrainSpan=document.getElementById('durDrain_'+dateStr+'_'+s);
+
+  if(masukInputs.length===2&&durMasukSpan){
+    const d=hitungDurasi(masukInputs[0].value,masukInputs[1].value);
+    if(d){durMasukSpan.style.visibility='visible';durMasukSpan.textContent='⏱ '+d.label;durMasukSpan.classList.toggle('durasi-warn',d.menit<=0);}
+    else{durMasukSpan.style.visibility='hidden';}
+  }
+  if(drainInputs.length===2&&durDrainSpan){
+    const d=hitungDurasi(drainInputs[0].value,drainInputs[1].value);
+    if(d){durDrainSpan.style.visibility='visible';durDrainSpan.textContent='⏱ '+d.label;durDrainSpan.classList.toggle('durasi-warn',d.menit<=0);}
+    else{durDrainSpan.style.visibility='hidden';}
+  }
+}
+
+function updateTotalRow(dateStr){
+  const card=document.getElementById('daycard_'+dateStr);
+  if(!card)return;
+  const rows=card.querySelectorAll('.siklus-table tbody tr:not(.siklus-note-row)');
+  let totalIn=0,totalOut=0,anyVal=false;
+  rows.forEach(row=>{
+    const infusEl=row.querySelector('td:nth-child(5) input');
+    const drainEl=row.querySelector('td:nth-child(6) input');
+    if(infusEl&&infusEl.value){totalIn+=parseInt(infusEl.value)||0;anyVal=true;}
+    if(drainEl&&drainEl.value){totalOut+=parseInt(drainEl.value)||0;anyVal=true;}
+  });
+  const totalUF=totalOut-totalIn;
+  const totalRow=card.querySelector('.siklus-note-row');
+  if(!totalRow)return;
+  // Baris total cuma punya 4 <td> nyata: [0]=label(colspan4), [1]=Infus, [2]=Drain, [3]=UF(colspan3)
+  const cells=totalRow.querySelectorAll('td');
+  if(cells.length>=4){
+    cells[1].innerHTML=`<span style="font-size:12px;font-weight:700;color:var(--amber)">${anyVal?totalIn:'—'} mL</span>`;
+    cells[2].innerHTML=`<span style="font-size:12px;font-weight:700;color:var(--teal2)">${anyVal?totalOut:'—'} mL</span>`;
+    const ufStr=anyVal?(totalUF>=0?'+'+totalUF:String(totalUF)):'—';
+    cells[3].innerHTML=`<span style="font-size:13px;font-weight:800;color:${totalUF>=0?'var(--teal2)':'var(--red)'}">${ufStr} mL Balance</span>`;
+  }
+}
+
+function updateWarnaClass(sel){
+  const val=sel.value;
+  if(val==='keruh'||val==='berdarah'||val==='hijau'){
+    sel.style.background='#FEF2F2';
+    sel.style.color='#DC2626';
+    sel.style.borderColor='#DC2626';
+  } else {
+    sel.style.background='white';
+    sel.style.color='';
+    sel.style.borderColor='';
+  }
+}
+
+function collectAllFromDOM(){
+  // Before saving, collect all current DOM values
+  const wk=getWeekKey(currentWeekOffset);
+  const dates=getWeekDates(wk);
+  if(!pendingData[wk]) pendingData[wk]={};
+  dates.forEach(dateStr=>{
+    const card=document.getElementById('daycard_'+dateStr);
+    if(!card)return;
+    if(!pendingData[wk][dateStr]) pendingData[wk][dateStr]={};
+
+    // Vitals
+    const vitals=[['bb_pre',0],['bb',1],['td',2],['nadi',3],['suhu',4]];
+    const vitInputs=card.querySelectorAll('.vital-input');
+    vitals.forEach(([k,i])=>{if(vitInputs[i]&&vitInputs[i].value)pendingData[wk][dateStr][k]=vitInputs[i].value;});
+
+    // Siklus rows
+    const siklRows=card.querySelectorAll('.siklus-table tbody tr:not(.siklus-note-row)');
+    siklRows.forEach((row,s)=>{
+      if(!pendingData[wk][dateStr]['s'+s]) pendingData[wk][dateStr]['s'+s]={};
+      const sk=pendingData[wk][dateStr]['s'+s];
+      const timeInputs=row.querySelectorAll('input[type=time]'); // [0]=masukMulai,[1]=masukSelesai,[2]=drainMulai,[3]=drainSelesai
+      const larSel=row.querySelector('select:first-of-type');
+      const numInputs=row.querySelectorAll('input[type=number]');
+      const warnaSel=row.querySelector('select:last-of-type');
+      const txtInput=row.querySelector('input[type=text]');
+      if(timeInputs[0]&&timeInputs[0].value) sk.jamMasukMulai=timeInputs[0].value;
+      if(timeInputs[1]&&timeInputs[1].value) sk.jamMasukSelesai=timeInputs[1].value;
+      if(timeInputs[2]&&timeInputs[2].value) sk.jamDrainMulai=timeInputs[2].value;
+      if(timeInputs[3]&&timeInputs[3].value) sk.jamDrainSelesai=timeInputs[3].value;
+      if(larSel&&larSel.value) sk.larutan=larSel.value;
+      if(numInputs[0]&&numInputs[0].value) sk.infus=numInputs[0].value;
+      if(numInputs[1]&&numInputs[1].value) sk.drain=numInputs[1].value;
+      if(warnaSel&&warnaSel.value) sk.warna=warnaSel.value;
+      if(txtInput&&txtInput.value) sk.keterangan=txtInput.value;
+    });
+
+    // Keluhan
+    const keluhanInput=card.querySelector('.exit-site-cell:last-child input');
+    if(keluhanInput&&keluhanInput.value) pendingData[wk][dateStr].keluhan=keluhanInput.value;
+  });
+}
+
+async function saveDailyData(){
+  if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
+  collectAllFromDOM();
+  const wk=getWeekKey(currentWeekOffset);
+  const db=getDB();
+  if(!db.dailyData[currentPatientId]) db.dailyData[currentPatientId]={};
+  const existing=(db.dailyData[currentPatientId][wk])||{};
+  const pending=pendingData[wk]||{};
+  // Deep merge
+  const merged={...existing};
+  Object.keys(pending).forEach(dateStr=>{
+    if(!merged[dateStr]) merged[dateStr]={};
+    const pDay=pending[dateStr];
+    Object.keys(pDay).forEach(k=>{
+      if(k.startsWith('s')&&typeof pDay[k]==='object'&&!Array.isArray(pDay[k])){
+        merged[dateStr][k]={...(merged[dateStr][k]||{}),...pDay[k]};
+      } else {
+        merged[dateStr][k]=pDay[k];
+      }
+    });
+  });
+  merged['__note__']=document.getElementById('weeklyNote').value;
+  db.dailyData[currentPatientId][wk]=merged;
+  pendingData={};
+  try{
+    await apiPost('saveDailyData',{patientId:currentPatientId, weekKey:wk, data:merged});
+    showToast('Catatan harian berhasil disimpan ✓');
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
+}
+
+function changeWeek(delta){
+  // Auto-save before switching
+  if(currentPatientId){
+    collectAllFromDOM();
+    const wk=getWeekKey(currentWeekOffset);
+    const db=getDB();
+    if(!db.dailyData[currentPatientId]) db.dailyData[currentPatientId]={};
+    const existing=(db.dailyData[currentPatientId][wk])||{};
+    const pending=pendingData[wk]||{};
+    if(Object.keys(pending).length){
+      const merged={...existing};
+      Object.keys(pending).forEach(dk=>{
+        if(!merged[dk]) merged[dk]={};
+        Object.assign(merged[dk],pending[dk]);
+      });
+      merged['__note__']=document.getElementById('weeklyNote').value;
+      db.dailyData[currentPatientId][wk]=merged;
+      // Auto-save ke server di latar belakang (tidak menahan perpindahan minggu)
+      apiPost('saveDailyData',{patientId:currentPatientId, weekKey:wk, data:merged})
+        .catch(e=>showToast('Auto-save gagal: '+e.message));
+    }
+  }
+  pendingData={};
+  currentWeekOffset+=delta;
+  loadHarian();
+}
+
+// ============================================================
+//  REKAP BULANAN
+// ============================================================
+function initRekapSelectors(){
+  const now=new Date();
+  const mSel=document.getElementById('rekapMonth');
+  const ySel=document.getElementById('rekapYear');
+  if(!mSel||!ySel)return;
+  mSel.innerHTML=MONTHS.map((m,i)=>`<option value="${i}"${i===now.getMonth()?' selected':''}>${m}</option>`).join('');
+  ySel.innerHTML='';
+  for(let y=now.getFullYear()-2;y<=now.getFullYear();y++){
+    ySel.innerHTML+=`<option value="${y}"${y===now.getFullYear()?' selected':''}>${y}</option>`;
+  }
+}
+
+function loadRekap(){
+  if(!currentPatientId){document.getElementById('rekapBody').innerHTML='<tr><td colspan="22" style="padding:20px;text-align:center;color:var(--gray-400)">Pilih pasien terlebih dahulu</td></tr>';return;}
+  const month=parseInt(document.getElementById('rekapMonth').value);
+  const year=parseInt(document.getElementById('rekapYear').value);
+  const db=getDB();
+  const allData=db.dailyData[currentPatientId]||{};
+
+  // Render header tabel secara dinamis sesuai jumlah sesi (N_SIKLUS)
+  const siklHeadTop=Array.from({length:N_SIKLUS},(_,i)=>`<th colspan="4">Siklus ${i+1}</th>`).join('');
+  const siklHeadSub=Array.from({length:N_SIKLUS},()=>`<th>Jam</th><th>In</th><th>Out</th><th>UF</th>`).join('');
+  document.getElementById('rekapTableHead').innerHTML=`
+    <tr>
+      <th rowspan="2" style="min-width:80px">Tanggal</th>
+      <th rowspan="2">BB (kg)</th>
+      <th rowspan="2">TD (mmHg)</th>
+      <th rowspan="2">Nadi</th>
+      <th rowspan="2">Suhu °C</th>
+      ${siklHeadTop}
+      <th rowspan="2">Total UF (mL)</th>
+      <th rowspan="2">Exit Site</th>
+      <th rowspan="2">Keluhan</th>
+    </tr>
+    <tr>${siklHeadSub}</tr>`;
+
+  // Get all dates in month
+  const daysInMonth=new Date(year,month+1,0).getDate();
+  let totalInM=0,totalOutM=0,rowsHtml='',daysWithData=0,totalUFM=0;
+  const anomalies=[];
+  for(let day=1;day<=daysInMonth;day++){
+    const dateStr=`${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    // Find week key
+    const d=new Date(dateStr+'T00:00:00');
+    const dow=d.getDay();
+    const monday=new Date(d);
+    monday.setDate(d.getDate()-(dow===0?6:dow-1));
+    const wk=monday.toISOString().slice(0,10);
+    const wkData=allData[wk]||{};
+    const dayData=wkData[dateStr]||{};
+    const hasData=Object.keys(dayData).length>0;
+    if(hasData) daysWithData++;
+    let dayIn=0,dayOut=0;
+    let siklCells='';
+    for(let s=0;s<N_SIKLUS;s++){
+      const sk=dayData['s'+s]||{};
+      const jamRingkas=sk.jamMasukMulai?sk.jamMasukMulai+(sk.jamDrainSelesai?'–'+sk.jamDrainSelesai:''):'';
+      const infus=sk.infus||'';
+      const drain=sk.drain||'';
+      const uf=infus&&drain?(parseInt(drain)-parseInt(infus)):null;
+      const ufStr=uf===null?'—':(uf>=0?'+'+uf:String(uf));
+      if(infus){dayIn+=parseInt(infus)||0;totalInM+=parseInt(infus)||0;}
+      if(drain){dayOut+=parseInt(drain)||0;totalOutM+=parseInt(drain)||0;}
+      siklCells+=`<td style="font-size:10px">${jamRingkas||'—'}</td><td>${infus||'—'}</td><td>${drain||'—'}</td><td style="${uf!==null&&uf<0?'color:var(--red);font-weight:700':''}">${ufStr}</td>`;
+    }
+    const dayUF=dayOut-dayIn;
+    if(hasData) totalUFM+=dayUF;
+    const exitArr=dayData.exit||[];
+    const hasWarning=exitArr.some(x=>['Keluar cairan','Keluar nanah'].includes(x));
+    if(hasWarning) anomalies.push(dateStr);
+    const warna=dayData['s0']?.warna||'';
+    const warnaAlert=warna==='keruh'||warna==='berdarah';
+    rowsHtml+=`
+      <tr style="${!hasData?'opacity:0.45':''}${warnaAlert?'background:#FEF2F2':''}">
+        <td class="date-col">${day} ${MONTHS[month].slice(0,3)}</td>
+        <td>${dayData.bb||'—'}</td>
+        <td>${dayData.td||'—'}</td>
+        <td>${dayData.nadi||'—'}</td>
+        <td>${dayData.suhu||'—'}</td>
+        ${siklCells}
+        <td style="font-weight:700;color:${dayIn||dayOut?(dayUF>=0?'var(--teal2)':'var(--red)'):'var(--gray-400)'}">
+          ${hasData?(dayUF>=0?'+':'')+dayUF+' mL':'—'}
+        </td>
+        <td style="font-size:11px;color:${hasWarning?'var(--red)':'var(--gray-600)'}">
+          ${exitArr.length?exitArr.join(', '):hasData?'Bersih':'—'}
+        </td>
+        <td style="font-size:11px;color:var(--gray-600)">${dayData.keluhan||'—'}</td>
+      </tr>`;
+  }
+  document.getElementById('rekapBody').innerHTML=rowsHtml;
+  const totalUFStr=totalUFM>=0?'+'+totalUFM:String(totalUFM);
+  document.getElementById('rekapStats').innerHTML=`
+    <div class="stat-card"><div class="stat-num">${daysWithData}</div><div class="stat-label">Hari Terisi</div></div>
+    <div class="stat-card"><div class="stat-num" style="font-size:18px">${totalInM.toLocaleString()}</div><div class="stat-label">Total Vol. Infus (mL)</div></div>
+    <div class="stat-card"><div class="stat-num" style="font-size:18px">${totalOutM.toLocaleString()}</div><div class="stat-label">Total Vol. Drain (mL)</div></div>
+    <div class="stat-card"><div class="stat-num" style="font-size:18px;color:${totalUFM>=0?'var(--teal2)':'var(--red)'}">${totalUFStr}</div><div class="stat-label">Total UF Bulan Ini (mL)</div></div>`;
+}
+
+// ============================================================
+//  NURSE VIEW
+// ============================================================
+function loadNurseView(){
+  const db=getDB();
+  const wk=getWeekKey(0);
+  const todayStr=new Date().toISOString().slice(0,10);
+  const totalNotes=Object.values(db.notes).reduce((a,v)=>a+v.length,0);
+  const filledThisWeek=db.patients.filter(p=>{
+    const wkData=(db.dailyData[p.id]||{})[wk]||{};
+    return Object.keys(wkData).some(k=>k!=='__note__'&&Object.keys(wkData[k]).length>0);
+  }).length;
+  document.getElementById('nurseStats').innerHTML=`
+    <div class="stat-card"><div class="stat-num">${db.patients.length}</div><div class="stat-label">Total Pasien CAPD</div></div>
+    <div class="stat-card"><div class="stat-num">${filledThisWeek}</div><div class="stat-label" style="color:var(--green)">Sudah Isi Minggu Ini</div></div>
+    <div class="stat-card"><div class="stat-num">${db.patients.length-filledThisWeek}</div><div class="stat-label" style="color:var(--amber)">Belum Isi</div></div>
+    <div class="stat-card"><div class="stat-num">${totalNotes}</div><div class="stat-label">Total Catatan Petugas</div></div>`;
+  document.getElementById('nursePatientBody').innerHTML=db.patients.map(p=>{
+    const wkData=(db.dailyData[p.id]||{})[wk]||{};
+    const todayData=wkData[todayStr]||{};
+    let todayUF='—';
+    let dayIn=0,dayOut=0,anyVal=false;
+    for(let s=0;s<N_SIKLUS;s++){
+      const sk=todayData['s'+s]||{};
+      if(sk.infus){dayIn+=parseInt(sk.infus)||0;anyVal=true;}
+      if(sk.drain){dayOut+=parseInt(sk.drain)||0;anyVal=true;}
+    }
+    if(anyVal){const uf=dayOut-dayIn;todayUF=(uf>=0?'+':'')+uf+' mL';}
+    const hasFilled=Object.keys(wkData).some(k=>k!=='__note__');
+    const exitToday=todayData.exit||[];
+    const hasAlert=exitToday.some(x=>['Keluar cairan','Keluar nanah'].includes(x));
+    return `<tr style="${hasAlert?'background:#FEF2F2':''}">
+      <td><span class="badge badge-gray">${p.rm}</span></td>
+      <td style="font-weight:600">${p.nama}${hasAlert?'<span class="badge badge-red" style="margin-left:6px">⚠ Alert</span>':''}</td>
+      <td style="font-size:12px;color:var(--gray-500)">${todayData.bb?todayData.bb+' kg':'—'}</td>
+      <td>${hasFilled?'<span class="badge badge-green">✓ Sudah isi</span>':'<span class="badge badge-amber">Belum isi</span>'}</td>
+      <td style="font-weight:700;color:${anyVal&&(dayOut-dayIn)<0?'var(--red)':'var(--teal2)'}">${todayUF}</td>
+      <td><button class="action-btn" onclick="viewPatientAsNurse('${p.id}')">Lihat Data →</button></td>
+    </tr>`;
+  }).join('');
+}
+function viewPatientAsNurse(pid){
+  currentPatientId=pid;
+  document.getElementById('patientSelector').value=pid;
+  document.getElementById('mobilePatientSelector').value=pid;
+  showPage('harian');
+}
+
+// ============================================================
+//  ADMIN
+// ============================================================
+function loadAdminPatients(){
+  const db=getDB();
+  document.getElementById('adminPatientBody').innerHTML=db.patients.map((p,i)=>{
+    const user=db.users.find(u=>u.patientId===p.id);
+    return `<tr>
+      <td>${i+1}</td>
+      <td><span class="badge badge-teal">${p.rm}</span></td>
+      <td style="font-weight:600">${p.nama}</td>
+      <td style="font-size:12px;color:var(--gray-500)">${user?user.username:'—'}</td>
+      <td style="font-size:12px">${p.tglCAPD?formatDate(p.tglCAPD):'—'}</td>
+      <td><span class="badge badge-green">Aktif</span></td>
+      <td>
+        <button class="action-btn" onclick="viewPatientAsNurse('${p.id}')">Lihat →</button>
+        <button class="action-btn" style="color:var(--red);margin-left:8px" onclick="deletePatient('${p.id}')">Hapus</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+function openAddPatientModal(){openModal('modalAddPatient');}
+async function saveNewPatient(){
+  const nama=document.getElementById('newPNama').value.trim();
+  const rm=document.getElementById('newPRM').value.trim();
+  const jk=document.getElementById('newPJK').value;
+  const uname=document.getElementById('newPUser').value.trim();
+  const pass=document.getElementById('newPPass').value;
+  const tglCAPD=document.getElementById('newPTglCAPD').value;
+  if(!nama||!rm||!uname||!pass){showToast('Lengkapi field wajib (*)');return;}
+  const db=getDB();
+  if(db.patients.find(p=>p.rm===rm)){showToast('No. Rekam Medis sudah terdaftar!');return;}
+  if(db.users.find(u=>u.username===uname)){showToast('Username sudah digunakan!');return;}
+  try{
+    const res=await apiPost('addPatient',{
+      patient:{rm,nama,jk,ttl:'',pend:'',kerja:'',kawin:'',pendamping:'',alamat:'',telp:'',tglTenk:'',tglCAPD,jenisTenk:'',exitSite:'',akses:'',program:''},
+      user:{username:uname,password:pass,role:'pasien',roles:['pasien'],nama,active:true}
+    });
+    db.patients.push(res.patient);
+    db.users.push(res.user);
+    closeModal('modalAddPatient');
+    buildPatientSelector();
+    loadAdminPatients();
+    populateLoginUserList();
+    showToast(`Pasien ${nama} berhasil didaftarkan ✓`);
+    ['newPNama','newPRM','newPUser','newPPass','newPTglCAPD'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('newPJK').value='';
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
+}
+async function deletePatient(pid){
+  const db=getDB();
+  const p=db.patients.find(x=>x.id===pid);
+  if(!p) return;
+  if(!confirm(`Hapus pasien "${p.nama}" (${p.rm})?\n\nSemua riwayat, catatan petugas, riwayat medis, rencana, dan catatan harian pasien ini akan ikut terhapus PERMANEN dari server. Tindakan ini tidak bisa dibatalkan.`)) return;
+  db.patients = db.patients.filter(x=>x.id!==pid);
+  db.users = db.users.filter(x=>x.patientId!==pid);
+  delete db.riwayat[pid]; delete db.notes[pid]; delete db.medHistory[pid]; delete db.medPlans[pid]; delete db.dailyData[pid];
+  if(currentPatientId===pid){ currentPatientId=null; }
+  buildPatientSelector();
+  loadAdminPatients();
+  populateLoginUserList();
+  try{
+    await apiPost('deletePatient',{patientId:pid});
+    showToast(`Pasien ${p.nama} berhasil dihapus`);
+  }catch(e){
+    showToast('Gagal menghapus di server: '+e.message);
+    refreshFromServer();
+  }
+}
+function loadAdminUsers(){
+  const db=getDB();
+  const roleLabel={admin:'Admin',perawat:'Perawat',pasien:'Pasien'};
+  const roleBadge={admin:'badge-red',perawat:'badge-teal',pasien:'badge-gray'};
+  document.getElementById('adminUserBody').innerHTML=db.users.map((u,i)=>{
+    const rolesBadges=getUserRoles(u).map(r=>`<span class="badge ${roleBadge[r]}" style="margin-right:4px">${roleLabel[r]}</span>`).join('');
+    const isSelf = u.id===currentUser.id;
+    return `
+    <tr>
+      <td>${i+1}</td>
+      <td style="font-weight:600;font-family:monospace">${u.username}</td>
+      <td>${u.nama}${isSelf?' <span style="font-size:11px;color:var(--gray-400)">(Anda)</span>':''}</td>
+      <td>${rolesBadges}</td>
+      <td><span class="badge ${u.active?'badge-green':'badge-gray'}">${u.active?'Aktif':'Nonaktif'}</span></td>
+      <td>
+        <button class="action-btn" onclick="toggleUserActive('${u.id}')" ${isSelf?'disabled title="Tidak bisa menonaktifkan akun sendiri"':''}>${u.active?'Nonaktifkan':'Aktifkan'}</button>
+        <button class="action-btn" style="margin-left:8px" onclick="resetPassword('${u.id}')">${isSelf?'Ganti Password Saya':'Reset PW'}</button>
+        <button class="action-btn" style="color:var(--red);margin-left:8px" onclick="deleteUser('${u.id}')" ${isSelf?'disabled title="Tidak bisa menghapus akun sendiri"':''}>Hapus</button>
+      </td>
+    </tr>`;}).join('');
+}
+async function toggleUserActive(uid){
+  if(uid===currentUser.id){showToast('Tidak bisa menonaktifkan akun Anda sendiri');return;}
+  const db=getDB();const u=db.users.find(x=>x.id===uid);if(!u)return;
+  u.active=!u.active; loadAdminUsers();
+  try{
+    await apiPost('updateUser',{id:uid, fields:{active:u.active}});
+  }catch(e){
+    u.active=!u.active; loadAdminUsers();
+    showToast('Gagal update ke server: '+e.message);
+  }
+}
+async function deleteUser(uid){
+  if(uid===currentUser.id){showToast('Tidak bisa menghapus akun Anda sendiri');return;}
+  const db=getDB();
+  const u=db.users.find(x=>x.id===uid);
+  if(!u) return;
+  const isLastAdmin = getUserRoles(u).includes('admin') && db.users.filter(x=>x.active&&getUserRoles(x).includes('admin')).length<=1;
+  if(isLastAdmin){showToast('Tidak bisa menghapus satu-satunya akun admin yang aktif');return;}
+  let msg = `Hapus pengguna "${u.nama}" (${u.username})? Tindakan ini tidak bisa dibatalkan.`;
+  if(u.patientId){
+    const p=db.patients.find(x=>x.id===u.patientId);
+    msg += `\n\nCatatan: ini hanya menghapus akun login. Data pasien "${p?p.nama:''}" TIDAK ikut terhapus — kalau memang ingin hapus pasiennya juga, gunakan menu Kelola Pasien.`;
+  }
+  if(!confirm(msg)) return;
+  db.users = db.users.filter(x=>x.id!==uid);
+  loadAdminUsers();
+  populateLoginUserList();
+  try{
+    await apiPost('deleteUser',{id:uid});
+    showToast('Pengguna berhasil dihapus');
+  }catch(e){
+    showToast('Gagal menghapus di server: '+e.message);
+    refreshFromServer();
+  }
+}
+async function resetPassword(uid){
+  const db=getDB();const u=db.users.find(x=>x.id===uid);if(!u)return;
+  const np=prompt(u.id===currentUser.id?'Password baru untuk akun Anda:':`Password baru untuk ${u.nama}:`);
+  if(!np)return;
+  const old=u.password;
+  u.password=np;
+  if(u.id===currentUser.id) currentUser.password=np;
+  try{
+    await apiPost('updateUser',{id:uid, fields:{password:np}});
+    showToast('Password berhasil diganti ✓');
+  }catch(e){
+    u.password=old;
+    if(u.id===currentUser.id) currentUser.password=old;
+    showToast('Gagal update ke server: '+e.message);
+  }
+}
+function openAddUserModal(){
+  document.getElementById('newURolePerawat').checked=false;
+  document.getElementById('newURoleAdmin').checked=false;
+  openModal('modalAddUser');
+}
+async function saveNewUser(){
+  const nama=document.getElementById('newUNama').value.trim();
+  const uname=document.getElementById('newUUser').value.trim();
+  const pass=document.getElementById('newUPass').value;
+  const roles=[];
+  if(document.getElementById('newURolePerawat').checked) roles.push('perawat');
+  if(document.getElementById('newURoleAdmin').checked) roles.push('admin');
+  if(!nama||!uname||!pass){showToast('Lengkapi semua field');return;}
+  if(!roles.length){showToast('Pilih minimal satu peran');return;}
+  const db=getDB();
+  if(db.users.find(u=>u.username===uname)){showToast('Username sudah digunakan!');return;}
+  try{
+    const res=await apiPost('addUser',{user:{username:uname,password:pass,role:roles[0],roles,nama,active:true}});
+    db.users.push(res.user);
+    closeModal('modalAddUser');
+    loadAdminUsers();
+    populateLoginUserList();
+    showToast(`Pengguna ${nama} berhasil ditambahkan ✓`);
+    ['newUNama','newUUser','newUPass'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('newURolePerawat').checked=false;
+    document.getElementById('newURoleAdmin').checked=false;
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
+}
+
+// ============================================================
+//  UTILS
+// ============================================================
+function openModal(id){
+  if(id==='modalMyPassword'){ ['mpwOld','mpwNew','mpwConfirm'].forEach(i=>document.getElementById(i).value=''); }
+  document.getElementById(id).classList.add('open');
+}
+async function saveMyPassword(){
+  const oldPw=document.getElementById('mpwOld').value;
+  const newPw=document.getElementById('mpwNew').value;
+  const confirmPw=document.getElementById('mpwConfirm').value;
+  const db=getDB();
+  const u=db.users.find(x=>x.id===currentUser.id);
+  if(!u){showToast('Sesi tidak valid, silakan login ulang');return;}
+  if(oldPw!==u.password){showToast('Password lama salah');return;}
+  if(!newPw){showToast('Password baru belum diisi');return;}
+  if(newPw!==confirmPw){showToast('Konfirmasi password baru tidak cocok');return;}
+  const old=u.password;
+  u.password=newPw; currentUser.password=newPw;
+  try{
+    await apiPost('updateUser',{id:u.id, fields:{password:newPw}});
+    closeModal('modalMyPassword');
+    showToast('Password berhasil diganti ✓');
+  }catch(e){
+    u.password=old; currentUser.password=old;
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
+}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+function formatDate(str){if(!str)return'—';const d=new Date(str+'T00:00:00');return d.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});}
+function formatDateShort(str){if(!str)return'';const d=new Date(str+'T00:00:00');return d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});}
+
+document.querySelectorAll('.modal-bg').forEach(bg=>{
+  bg.addEventListener('click',e=>{
+    if(e.target===bg){
+      if(bg.id==='modalContact') saveContacts();
+      else bg.classList.remove('open');
+    }
+  });
+});
+</script>
+</body>
+</html>
