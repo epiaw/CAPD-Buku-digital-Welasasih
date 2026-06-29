@@ -56,6 +56,19 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
 .btn-logout{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:5px 10px;color:rgba(255,255,255,0.8);font-size:12px;cursor:pointer;white-space:nowrap}
 .btn-logout:hover{background:rgba(255,255,255,0.18)}
 
+/* Topbar actions: versi lengkap (desktop) vs versi ringkas/menu (HP) */
+.topbar-actions-full{display:flex;align-items:center;flex-shrink:0}
+.topbar-actions-compact{display:none;align-items:center;gap:8px;flex-shrink:0}
+.topbar-more-wrap{position:relative}
+.topbar-more-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;width:32px;height:32px;color:white;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.topbar-more-btn:hover{background:rgba(255,255,255,0.18)}
+.topbar-more-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:1px solid var(--gray-200);border-radius:10px;box-shadow:var(--shadow-md);min-width:180px;overflow:hidden;z-index:200}
+.topbar-more-menu.open{display:block}
+.topbar-more-menu button{display:block;width:100%;text-align:left;background:none;border:none;padding:11px 14px;font-size:13px;color:var(--gray-700);cursor:pointer;font-family:inherit;border-bottom:1px solid var(--gray-100)}
+.topbar-more-menu button:last-child{border-bottom:none}
+.topbar-more-menu button:hover{background:var(--gray-50)}
+.btn-logout-compact{padding:6px 10px;flex-shrink:0}
+
 /* ALERT BANNER */
 .alert-banner{background:#FEF2F2;border-bottom:2px solid var(--red);padding:9px 20px;display:flex;align-items:center;gap:10px}
 .alert-banner-text{font-size:12px;font-weight:600;color:#991B1B}
@@ -131,7 +144,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
 .tag.selected{background:var(--teal-light);border-color:var(--teal);color:var(--teal2);font-weight:600}
 
 /* ==========================================
-   CATATAN HARIAN — BAXTER/VANTIVE STYLE
+   CATATAN HARIAN — FORMULIR DIGITAL
    ========================================== */
 .week-nav{display:flex;align-items:center;gap:12px;margin-bottom:16px}
 .week-nav button{background:white;border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:6px 14px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--gray-700)}
@@ -307,6 +320,18 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
   .exit-site-row{grid-template-columns:1fr}
 }
 
+/* Topbar di layar HP: sembunyikan tombol panjang, pakai menu ⋮ + tombol Keluar ringkas */
+@media(max-width:560px){
+  .app-topbar{padding:0 10px;gap:8px}
+  .topbar-inst{display:none}
+  .topbar-title{font-size:13px}
+  .topbar-user{padding:4px 8px 4px 4px;gap:6px}
+  .topbar-user-name{max-width:64px;font-size:11px}
+  .topbar-role-badge{display:none}
+  .topbar-actions-full{display:none}
+  .topbar-actions-compact{display:flex}
+}
+
 /* Legend */
 .legend-row{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--gray-500);margin-bottom:12px}
 .legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px}
@@ -316,6 +341,51 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
 .uf-strip-item{font-size:12px;color:var(--gray-700)}
 .uf-strip-val{font-weight:800;font-size:15px;color:var(--teal2)}
 .uf-strip-lbl{font-size:10px;color:var(--gray-500)}
+
+/* ==========================================
+   CATATAN HARIAN — FORM PER SESI (1 HARI)
+   ========================================== */
+.session-card{background:white;border:1.5px solid var(--gray-200);border-radius:12px;margin-bottom:12px;overflow:hidden;box-shadow:var(--shadow);transition:border-color 0.15s}
+.session-card.session-saved{border-color:var(--green)}
+.session-card.session-dirty{border-color:var(--amber)}
+.session-card-header{background:var(--navy);color:white;padding:9px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.session-card-header .session-title{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
+.session-status{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:10px;white-space:nowrap}
+.session-status.status-saved{background:rgba(34,197,94,0.25);color:#DCFCE7}
+.session-status.status-empty{background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.65)}
+.session-status.status-dirty{background:rgba(217,119,6,0.3);color:#FEF3C7}
+.session-card-body{padding:12px 14px}
+.session-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 14px;margin-bottom:10px}
+.session-grid-full{grid-template-columns:1fr}
+.session-field label{display:block;font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:4px}
+.session-field select,.session-field input{width:100%;border:1.5px solid var(--gray-200);border-radius:6px;padding:7px 9px;font-size:12.5px;color:var(--gray-800);background:var(--gray-50);outline:none;font-family:inherit}
+.session-field select:focus,.session-field input:focus{border-color:var(--teal);background:white}
+.session-time-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.session-time-row input[type=time]{flex:1;min-width:90px}
+.session-uf-line{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--gray-50);border-radius:8px;padding:8px 12px;margin-top:4px}
+.session-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:var(--gray-50);border-top:1px solid var(--gray-100);flex-wrap:wrap}
+
+.vitals-day-card{background:white;border:1.5px solid var(--gray-200);border-radius:12px;margin-bottom:14px;overflow:hidden;box-shadow:var(--shadow)}
+.vitals-day-card.today{border-color:var(--teal);box-shadow:0 0 0 2px rgba(8,145,178,0.15)}
+
+/* PDF export of weekly recap only */
+body.exporting-pdf .app-topbar,
+body.exporting-pdf .sidebar,
+body.exporting-pdf .mobile-tabbar,
+body.exporting-pdf .alert-banner,
+body.exporting-pdf #dateInputCard,
+body.exporting-pdf #harianLegend,
+body.exporting-pdf #dayFormWrap,
+body.exporting-pdf .page-header,
+body.exporting-pdf .print-hide{display:none!important}
+body.exporting-pdf .main-layout{display:block}
+body.exporting-pdf .content{padding:0;max-width:100%}
+body.exporting-pdf #weeklyRecapPrintHeader{display:block!important;text-align:center;margin-bottom:14px;border-bottom:2px solid #000;padding-bottom:10px}
+body.exporting-pdf #weeklyRecapPrintHeader h2{font-size:15px;font-weight:700}
+body.exporting-pdf #weeklyRecapPrintHeader p{font-size:11px}
+body.exporting-pdf .monthly-table{min-width:100%;font-size:9px}
+body.exporting-pdf .monthly-table-wrap{overflow:visible;border:none}
+body.exporting-pdf{background:white}
 </style>
 </head>
 <body>
@@ -358,7 +428,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
       </div>
       <div class="login-inst">Renal Unit · RSUD Welas Asih Prov. Jawa Barat</div>
       <div class="login-title">Buku Catatan Harian CAPD</div>
-      <div style="font-size:11px;color:var(--gray-400);margin-top:3px">Formulir Digital · Baxter/Vantive</div>
+      <div style="font-size:11px;color:var(--gray-400);margin-top:3px">Formulir Digital By: Epi Abdul Wahid</div>
     </div>
     <div style="font-size:14px;font-weight:600;color:var(--gray-700);margin-bottom:16px">Masuk ke Akun</div>
     <div class="form-field" style="position:relative">
@@ -397,9 +467,21 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
       <div class="topbar-user-name" id="topbarName">-</div>
       <div class="topbar-role-badge" id="topbarRoleBadge">-</div>
     </div>
-    <button class="btn-logout" style="background:rgba(255,255,255,0.1);margin-right:6px" onclick="openModal('modalMyPassword')" title="Ganti password akun Anda">🔑 Password</button>
-    <button class="btn-logout" style="background:rgba(255,255,255,0.1);margin-right:6px" onclick="refreshFromServer()" id="btnRefresh" title="Tarik data terbaru dari server">⟳ Refresh</button>
-    <button class="btn-logout" onclick="doLogout()">✕ Keluar</button>
+    <div class="topbar-actions-full">
+      <button class="btn-logout" style="background:rgba(255,255,255,0.1);margin-right:6px" onclick="openModal('modalMyPassword')" title="Ganti password akun Anda">🔑 Password</button>
+      <button class="btn-logout" style="background:rgba(255,255,255,0.1);margin-right:6px" onclick="refreshFromServer()" id="btnRefresh" title="Tarik data terbaru dari server">⟳ Refresh</button>
+      <button class="btn-logout" onclick="doLogout()">✕ Keluar</button>
+    </div>
+    <div class="topbar-actions-compact">
+      <div class="topbar-more-wrap">
+        <button class="topbar-more-btn" onclick="toggleTopbarMore()" title="Menu lainnya">⋮</button>
+        <div class="topbar-more-menu" id="topbarMoreMenu">
+          <button onclick="openModal('modalMyPassword');closeTopbarMore()">🔑 Ganti Password</button>
+          <button onclick="refreshFromServer();closeTopbarMore()" id="btnRefreshCompact">⟳ Refresh Data</button>
+        </div>
+      </div>
+      <button class="btn-logout btn-logout-compact" onclick="doLogout()" title="Keluar">✕</button>
+    </div>
   </div>
 
   <div class="alert-banner">
@@ -424,7 +506,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
       </div>
       <div class="sidebar-section">Menu</div>
       <div id="navItems"></div>
-      <div class="sidebar-footer">v2.0 · CAPD Digital Baxter · 2024</div>
+      <div class="sidebar-footer">Formulir Digital By: Epi Abdul Wahid</div>
     </div>
 
     <!-- CONTENT -->
@@ -604,43 +686,61 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
       </div>
 
 
-      <!-- ============ PAGE: CATATAN HARIAN (BAXTER/VANTIVE) ============ -->
+      <!-- ============ PAGE: CATATAN HARIAN (FORMULIR DIGITAL) ============ -->
       <div class="page" id="page-harian">
         <div class="page-header">
           <h1>📋 Catatan Harian CAPD</h1>
-          <p>Format buku Baxter/Vantive — isi setiap hari setelah selesai semua siklus pertukaran</p>
+          <p>Pilih tanggal, lalu isi 6 sesi pertukaran untuk hari itu. Setiap sesi bisa disimpan sendiri-sendiri.</p>
         </div>
 
-        <div class="legend-row print-hide">
+        <!-- STEP 1: PILIH TANGGAL -->
+        <div class="card print-hide" id="dateInputCard">
+          <div class="section-label">📅 Pilih Tanggal Catatan</div>
+          <div id="harianMonitorBanner" style="display:none;align-items:center;gap:8px;background:#EFF6FF;border:1px solid #BFDBFE;color:#1E40AF;border-radius:var(--radius);padding:10px 14px;font-size:12px;font-weight:600;margin-bottom:14px">
+            👁️ Mode Pantau — catatan harian hanya bisa diisi/diubah oleh pasien sendiri. Gunakan ini untuk memantau & evaluasi; tulis hasil evaluasi di tab Catatan Petugas.
+          </div>
+          <div style="display:flex;align-items:end;gap:12px;flex-wrap:wrap">
+            <div class="form-group" style="margin-bottom:0;max-width:220px">
+              <label>Tanggal</label>
+              <input type="date" id="harianDateInput" onchange="onHarianDateChange()">
+            </div>
+            <div class="btn-row" style="margin-top:0">
+              <button class="btn btn-secondary btn-sm" onclick="jumpHarianDate(-1)">← Hari Sebelumnya</button>
+              <button class="btn btn-secondary btn-sm" onclick="jumpHarianDate(1)">Hari Berikutnya →</button>
+              <button class="btn btn-ghost btn-sm" onclick="jumpHarianToday()">Hari Ini</button>
+            </div>
+          </div>
+          <div id="harianDateSummary" style="margin-top:10px;font-size:12px;color:var(--gray-500)"></div>
+        </div>
+
+        <!-- STEP 2: FORM 1 HARI — 6 SESI -->
+        <div class="legend-row print-hide" id="harianLegend" style="display:none">
           <span><span class="legend-dot" style="background:var(--teal);border:1px solid var(--teal2)"></span>UF (+) = cairan lebih banyak keluar (ultrafiltrasi positif)</span>
           <span><span class="legend-dot" style="background:var(--red);border:1px solid #B91C1C"></span>UF (−) = cairan lebih sedikit keluar (ultrafiltrasi negatif)</span>
           <span><span class="legend-dot" style="background:var(--amber);border:1px solid #B45309"></span>Vol. Infus = cairan yang dimasukkan</span>
         </div>
 
-        <div class="card">
-          <div class="week-nav print-hide">
-            <button onclick="changeWeek(-1)">← Minggu Lalu</button>
-            <div class="week-label" id="weekLabel">-</div>
-            <button onclick="changeWeek(1)">Minggu Depan →</button>
+        <div id="dayFormWrap"></div>
+
+        <!-- STEP 3: REKAP 1 MINGGU (ROLLING 7 HARI DARI TANGGAL TERPILIH) -->
+        <div class="card" id="weeklyRecapCard" style="display:none">
+          <div class="card-header print-hide">
+            <div class="card-title">📊 Rekap 1 Minggu (Rolling 7 Hari)</div>
+            <button class="btn btn-secondary btn-sm" onclick="exportWeeklyRecapPDF()">🖨 Export PDF (1 Halaman)</button>
           </div>
-          <div id="harianMonitorBanner" class="print-hide" style="display:none;align-items:center;gap:8px;background:#EFF6FF;border:1px solid #BFDBFE;color:#1E40AF;border-radius:var(--radius);padding:10px 14px;font-size:12px;font-weight:600;margin-bottom:12px">
-            👁️ Mode Pantau — catatan harian hanya bisa diisi/diubah oleh pasien sendiri. Gunakan ini untuk memantau & evaluasi; tulis hasil evaluasi di tab Catatan Petugas.
-          </div>
-          <div class="print-header">
-            <h2>Catatan Harian CAPD — RSUD Welas Asih</h2>
+          <div id="weeklyRecapPrintHeader" class="print-header">
+            <h2>Rekap 1 Minggu — Catatan Harian CAPD</h2>
             <p id="printWeekLabel"></p>
             <p id="printPatientLabel"></p>
           </div>
-          <div id="dailyCards"></div>
-          <div style="margin-top:16px">
-            <div style="font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:6px">Catatan Tambahan Minggu Ini (untuk perawat)</div>
-            <textarea id="weeklyNote" rows="3" style="width:100%;border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:10px 14px;font-size:13px;font-family:inherit;outline:none;resize:vertical" placeholder="Tuliskan gejala tidak biasa, pertanyaan untuk perawat, atau catatan penting minggu ini..." oninput="scheduleAutoSave()"></textarea>
+          <div style="font-size:12px;color:var(--gray-500);margin-bottom:12px" id="weeklyRecapRangeLabel"></div>
+          <div id="weeklyRecapStats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px"></div>
+          <div class="monthly-table-wrap">
+            <table class="monthly-table" id="weeklyRecapTable">
+              <thead id="weeklyRecapTableHead"></thead>
+              <tbody id="weeklyRecapBody"></tbody>
+            </table>
           </div>
-          <div class="btn-row print-hide">
-            <button class="btn btn-primary" id="btnSaveHarian" onclick="saveDailyData()">💾 Simpan Minggu Ini</button>
-            <button class="btn btn-secondary" onclick="window.print()">🖨 Cetak / PDF</button>
-          </div>
-          <div id="autoSaveIndicator" class="print-hide" style="font-size:11px;color:var(--gray-400);margin-top:6px;display:none">⏳ Menyimpan otomatis...</div>
         </div>
       </div>
 
@@ -855,7 +955,9 @@ async function saveServerConfig(){
 
 async function refreshFromServer(){
   const btn=document.getElementById('btnRefresh');
+  const btnCompact=document.getElementById('btnRefreshCompact');
   if(btn){btn.disabled=true;btn.textContent='⟳ Memuat...';}
+  if(btnCompact){btnCompact.disabled=true;btnCompact.textContent='⟳ Memuat...';}
   try{
     await loadDBFromServer();
     buildPatientSelector();
@@ -867,6 +969,7 @@ async function refreshFromServer(){
     showToast('Gagal memuat data: '+e.message);
   }finally{
     if(btn){btn.disabled=false;btn.textContent='⟳ Refresh';}
+    if(btnCompact){btnCompact.disabled=false;btnCompact.textContent='⟳ Refresh Data';}
   }
 }
 
@@ -1512,9 +1615,18 @@ function loadMedPlan(){
 }
 
 // ============================================================
-//  CATATAN HARIAN — BAXTER/VANTIVE
+//  CATATAN HARIAN — FORMULIR DIGITAL (FORM PER HARI, 6 SESI)
 // ============================================================
+function getMondayOf(dateStr){
+  const d=new Date(dateStr+'T00:00:00');
+  const dow=d.getDay();
+  const monday=new Date(d);
+  monday.setDate(d.getDate()-(dow===0?6:dow-1));
+  monday.setHours(0,0,0,0);
+  return monday.toISOString().slice(0,10);
+}
 function getWeekKey(offset=0){
+  // Dipakai di tempat lain (mis. loadNurseView) untuk minggu kalender berjalan (Senin-Minggu).
   const now=new Date();
   const day=now.getDay();
   const monday=new Date(now);
@@ -1536,283 +1648,301 @@ function hitungDurasi(jamMulai,jamSelesai){
   label+=sisaMenit+' mnt';
   return {menit, label:label.trim()};
 }
-
-function getWeekDates(weekKey){
-  const monday=new Date(weekKey+'T00:00:00');
-  return DAYS.map((_,i)=>{const d=new Date(monday);d.setDate(monday.getDate()+i);return d.toISOString().slice(0,10);});
+function addDays(dateStr,n){
+  const d=new Date(dateStr+'T00:00:00');
+  d.setDate(d.getDate()+n);
+  return d.toISOString().slice(0,10);
 }
 
-// pendingData holds unsaved changes: { weekKey: { dateKey: { ... } } }
+// pendingData holds unsaved changes per date: { dateKey: { ...fields, sN:{...} } }
 let pendingData = {};
+// currentHarianDate: tanggal yang sedang dipilih & ditampilkan di form harian
+let currentHarianDate = new Date().toISOString().slice(0,10);
 
-function getDayData(wkData, dateKey){
-  return (wkData && wkData[dateKey]) ? wkData[dateKey] : {};
+function getDayDataFromDB(dateStr){
+  if(!currentPatientId) return {};
+  const db=getDB();
+  const wk=getMondayOf(dateStr);
+  const wkData=(db.dailyData[currentPatientId]||{})[wk]||{};
+  return wkData[dateStr]||{};
+}
+
+function onHarianDateChange(){
+  const val=document.getElementById('harianDateInput').value;
+  if(!val) return;
+  currentHarianDate=val;
+  pendingData={};
+  loadHarian();
+}
+function jumpHarianDate(delta){
+  currentHarianDate=addDays(currentHarianDate,delta);
+  pendingData={};
+  loadHarian();
+}
+function jumpHarianToday(){
+  currentHarianDate=new Date().toISOString().slice(0,10);
+  pendingData={};
+  loadHarian();
 }
 
 function loadHarian(){
+  const dateInput=document.getElementById('harianDateInput');
+  if(dateInput) dateInput.value=currentHarianDate;
+
   if(!currentPatientId){
-    document.getElementById('dailyCards').innerHTML='<div style="padding:20px;text-align:center;color:var(--gray-400)">Pilih pasien terlebih dahulu</div>';
+    document.getElementById('dayFormWrap').innerHTML='<div class="card" style="padding:20px;text-align:center;color:var(--gray-400)">Pilih pasien terlebih dahulu</div>';
+    document.getElementById('harianLegend').style.display='none';
+    document.getElementById('weeklyRecapCard').style.display='none';
+    document.getElementById('harianDateSummary').textContent='';
     return;
   }
-  const wk=getWeekKey(currentWeekOffset);
-  const dates=getWeekDates(wk);
-  const label=`Minggu: ${formatDateShort(dates[0])} — ${formatDateShort(dates[6])}`;
-  document.getElementById('weekLabel').textContent=label;
-  const pi=document.getElementById('printWeekLabel');
-  if(pi) pi.textContent=label;
-  const pp=document.getElementById('printPatientLabel');
-  const db=getDB();
-  const pat=db.patients.find(x=>x.id===currentPatientId);
-  if(pp&&pat) pp.textContent=`Pasien: ${pat.nama} (${pat.rm})`;
 
-  const wkData=(db.dailyData[currentPatientId]||{})[wk]||{};
+  document.getElementById('harianLegend').style.display='flex';
+  document.getElementById('weeklyRecapCard').style.display='block';
+
+  const dateObj=new Date(currentHarianDate+'T00:00:00');
+  const dateLabelFull=dateObj.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('harianDateSummary').textContent=`Menampilkan catatan untuk: ${dateLabelFull}`;
+
+  renderDayForm(currentHarianDate);
+  applyHarianAccess();
+  loadWeeklyRecap();
+}
+
+function sessionFilled(sk){
+  if(!sk) return false;
+  return !!(sk.jamMasukMulai||sk.jamMasukSelesai||sk.jamDrainMulai||sk.jamDrainSelesai||sk.infus||sk.drain||sk.larutan||sk.warna||sk.keterangan);
+}
+
+function renderDayForm(dateStr){
+  const dayData=getDayDataFromDB(dateStr);
   const todayStr=new Date().toISOString().slice(0,10);
+  const isToday=dateStr===todayStr;
+  const dateObj=new Date(dateStr+'T00:00:00');
+  const dateLabel=dateObj.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
-  const html=dates.map((dateStr,di)=>{
-    const dayData=getDayData(wkData,dateStr);
-    const isToday=dateStr===todayStr;
-    const dateObj=new Date(dateStr+'T00:00:00');
-    const dateLabel=dateObj.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const bb=dayData.bb||'';
+  const td=dayData.td||'';
+  const nadi=dayData.nadi||'';
+  const suhu=dayData.suhu||'';
+  const bb_pre=dayData.bb_pre||'';
+  const exitSel=dayData.exit||[];
+  const keluhan=dayData.keluhan||'';
 
-    // Tanda vital
-    const bb=dayData.bb||'';
-    const td=dayData.td||'';
-    const nadi=dayData.nadi||'';
-    const suhu=dayData.suhu||'';
-    const bb_pre=dayData.bb_pre||'';
-
-    // Exit site
-    const exitSel=dayData.exit||[];
-
-    // Per-siklus
-    let silusRows='';
-    let totalIn=0, totalOut=0;
-    for(let s=0;s<N_SIKLUS;s++){
-      const sk=dayData['s'+s]||{};
-      const jamMasukMulai=sk.jamMasukMulai||'';
-      const jamMasukSelesai=sk.jamMasukSelesai||'';
-      const jamDrainMulai=sk.jamDrainMulai||'';
-      const jamDrainSelesai=sk.jamDrainSelesai||'';
-      const infus=sk.infus||'';
-      const drain=sk.drain||'';
-      const warna=sk.warna||'';
-      const larutan=sk.larutan||'';
-      const keterangan=sk.keterangan||'';
-      const ufVal=infus&&drain?(parseInt(drain)-parseInt(infus)):null;
-      if(infus) totalIn+=parseInt(infus)||0;
-      if(drain) totalOut+=parseInt(drain)||0;
-      const ufStr=ufVal===null?'—':(ufVal>=0?'+'+ufVal:String(ufVal));
-      const ufClass=ufVal===null?'':(ufVal>=0?'uf-cell':'uf-cell uf-neg');
-
-      const durMasuk=hitungDurasi(jamMasukMulai,jamMasukSelesai);
-      const durDrain=hitungDurasi(jamDrainMulai,jamDrainSelesai);
-      const durMasukHtml=durMasuk?`<span class="durasi-badge" id="durMasuk_${dateStr}_${s}">⏱ ${durMasuk.label}</span>`:`<span class="durasi-badge" id="durMasuk_${dateStr}_${s}" style="visibility:hidden">—</span>`;
-      const durDrainHtml=durDrain?`<span class="durasi-badge" id="durDrain_${dateStr}_${s}">⏱ ${durDrain.label}</span>`:`<span class="durasi-badge" id="durDrain_${dateStr}_${s}" style="visibility:hidden">—</span>`;
-
-      const warnaOpts=WARNA_OPTIONS.map(w=>`<option value="${w.val}"${warna===w.val?' selected':''}>${w.label}</option>`).join('');
-      silusRows+=`
-        <tr>
-          <td><span class="siklus-num">${s+1}</span></td>
-          <td>
-            <div class="jam-pair">
-              <input type="time" value="${jamMasukMulai}" title="Jam mulai infus" oninput="setPD('${dateStr}','s${s}','jamMasukMulai',this.value);updateDurasi('${dateStr}',${s})">
-              <span class="jam-arrow">▼ s.d.</span>
-              <input type="time" value="${jamMasukSelesai}" title="Jam selesai infus" oninput="setPD('${dateStr}','s${s}','jamMasukSelesai',this.value);updateDurasi('${dateStr}',${s})">
-              ${durMasukHtml}
-            </div>
-          </td>
-          <td>
-            <div class="jam-pair">
-              <input type="time" value="${jamDrainMulai}" title="Jam mulai drain" oninput="setPD('${dateStr}','s${s}','jamDrainMulai',this.value);updateDurasi('${dateStr}',${s})">
-              <span class="jam-arrow">▼ s.d.</span>
-              <input type="time" value="${jamDrainSelesai}" title="Jam selesai drain" oninput="setPD('${dateStr}','s${s}','jamDrainSelesai',this.value);updateDurasi('${dateStr}',${s})">
-              ${durDrainHtml}
-            </div>
-          </td>
-          <td>
-            <select onchange="setPD('${dateStr}','s${s}','larutan',this.value)" style="width:100px">
-              <option value=""${!larutan?' selected':''}>-- Pilih --</option>
-              <option value="1.5%"${larutan==='1.5%'?' selected':''}>1.5% Glukosa</option>
-              <option value="2.5%"${larutan==='2.5%'?' selected':''}>2.5% Glukosa</option>
-              <option value="4.25%"${larutan==='4.25%'?' selected':''}>4.25% Glukosa</option>
-              <option value="icodextrin"${larutan==='icodextrin'?' selected':''}>Icodextrin</option>
-            </select>
-          </td>
-          <td><input type="number" value="${infus}" placeholder="2000" min="0" max="3000" style="width:68px" oninput="setPD('${dateStr}','s${s}','infus',this.value);calcUF('${dateStr}',${s})"></td>
-          <td><input type="number" value="${drain}" placeholder="2000" min="0" max="5000" style="width:68px" oninput="setPD('${dateStr}','s${s}','drain',this.value);calcUF('${dateStr}',${s})"></td>
-          <td><span id="uf_${dateStr}_${s}" class="${ufClass}">${ufStr}</span></td>
-          <td>
-            <select onchange="setPD('${dateStr}','s${s}','warna',this.value);updateWarnaClass(this)">${warnaOpts}</select>
-          </td>
-          <td><input type="text" value="${keterangan}" placeholder="cth: drain lambat" style="width:110px" oninput="setPD('${dateStr}','s${s}','keterangan',this.value)"></td>
-        </tr>`;
-    }
-    // Total UF
-    const totalUF=totalOut-totalIn;
-    const totalUFStr=totalIn||totalOut?(totalUF>=0?'+'+totalUF:String(totalUF)):'—';
-
-    // Exit site buttons
-    const exitBtns=EXIT_OPTIONS.map(opt=>{
-      const isSel=exitSel.includes(opt);
-      const isDanger=['Keluar cairan','Keluar nanah','Bengkak'].includes(opt);
-      const cls=isSel?(isDanger?'exit-opt selected-red':'exit-opt selected'):'exit-opt';
-      return `<button class="${cls}" onclick="toggleExit('${dateStr}','${opt}',this)">${opt}</button>`;
-    }).join('');
-
-    // Keluhan hari
-    const keluhan=dayData.keluhan||'';
-
-    return `
-    <div class="day-card${isToday?' today':''}" id="daycard_${dateStr}">
-      <div class="day-card-header">
-        <div>
-          <div class="day-name">${DAYS[di]}${isToday?' <span class="today-badge">Hari ini</span>':''}</div>
-          <div class="day-date">${dateLabel}</div>
-        </div>
-      </div>
-
-      <!-- TANDA VITAL -->
-      <div class="vitals-row">
-        <div class="vital-cell">
-          <div class="vital-label">BB Sebelum (kg)</div>
-          <input class="vital-input" type="number" step="0.1" value="${bb_pre}" placeholder="65.0" oninput="setPDDirect('${dateStr}','bb_pre',this.value)">
-        </div>
-        <div class="vital-cell">
-          <div class="vital-label">BB Sesudah (kg)</div>
-          <input class="vital-input" type="number" step="0.1" value="${bb}" placeholder="65.0" oninput="setPDDirect('${dateStr}','bb',this.value)">
-        </div>
-        <div class="vital-cell">
-          <div class="vital-label">Tekanan Darah</div>
-          <input class="vital-input" type="text" value="${td}" placeholder="120/80" oninput="setPDDirect('${dateStr}','td',this.value)">
-        </div>
-        <div class="vital-cell">
-          <div class="vital-label">Nadi (x/mnt)</div>
-          <input class="vital-input" type="number" value="${nadi}" placeholder="80" oninput="setPDDirect('${dateStr}','nadi',this.value)">
-        </div>
-        <div class="vital-cell">
-          <div class="vital-label">Suhu (°C)</div>
-          <input class="vital-input" type="number" step="0.1" value="${suhu}" placeholder="36.5" oninput="setPDDirect('${dateStr}','suhu',this.value)">
-        </div>
-      </div>
-
-      <!-- SIKLUS TABLE -->
-      <div class="siklus-wrap">
-        <table class="siklus-table">
-          <thead>
-            <tr>
-              <th style="width:36px">Siklus</th>
-              <th style="width:170px">Jam Masuk<br><span style="font-weight:500;text-transform:none;font-size:9px">(mulai – selesai &amp; durasi)</span></th>
-              <th style="width:170px">Jam Drain/Keluar<br><span style="font-weight:500;text-transform:none;font-size:9px">(mulai – selesai &amp; durasi)</span></th>
-              <th style="width:110px">Larutan</th>
-              <th style="width:80px">Vol. Infus (mL)</th>
-              <th style="width:80px">Vol. Drain (mL)</th>
-              <th style="width:70px">UF (mL)</th>
-              <th style="width:130px">Warna Effluen</th>
-              <th>Keterangan Siklus</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${silusRows}
-            <tr class="siklus-note-row">
-              <td colspan="4" style="text-align:right;font-size:11px;color:var(--gray-500);font-weight:600">TOTAL HARI INI (Intake / Output / Balance):</td>
-              <td style="font-size:12px;font-weight:700;color:var(--amber)">${totalIn||'—'} mL</td>
-              <td style="font-size:12px;font-weight:700;color:var(--teal2)">${totalOut||'—'} mL</td>
-              <td colspan="3"><span style="font-size:13px;font-weight:800;color:${totalUF>=0?'var(--teal2)':'var(--red)'}">${totalUFStr} mL Balance</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- EXIT SITE & KELUHAN -->
-      <div class="exit-site-row">
-        <div class="exit-site-cell">
-          <div class="exit-label">Kondisi Exit Site / Tunnel</div>
-          <div class="exit-options" id="exit_${dateStr}">${exitBtns}</div>
-        </div>
-        <div class="exit-site-cell">
-          <div class="exit-label">Keluhan / Gejala Hari Ini</div>
-          <input type="text" value="${keluhan}" placeholder="cth: tidak ada / rasa berat / mual..." 
-            style="width:100%;border:1.5px solid var(--gray-200);border-radius:6px;padding:7px 10px;font-size:12px;font-family:inherit;outline:none;margin-top:4px"
-            oninput="setPDDirect('${dateStr}','keluhan',this.value)">
-        </div>
-      </div>
-
-    </div>`;
+  const exitBtns=EXIT_OPTIONS.map(opt=>{
+    const isSel=exitSel.includes(opt);
+    const isDanger=['Keluar cairan','Keluar nanah','Bengkak'].includes(opt);
+    const cls=isSel?(isDanger?'exit-opt selected-red':'exit-opt selected'):'exit-opt';
+    return `<button class="${cls}" onclick="toggleExit('${dateStr}','${opt}',this)">${opt}</button>`;
   }).join('');
 
-  document.getElementById('dailyCards').innerHTML=html;
-  document.getElementById('weeklyNote').value=wkData['__note__']||'';
-  applyHarianAccess();
+  let sessionsHtml='';
+  for(let s=0;s<N_SIKLUS;s++){
+    sessionsHtml+=renderSessionCard(dateStr,s,dayData['s'+s]||{});
+  }
+
+  const html=`
+  <div class="vitals-day-card${isToday?' today':''}" id="daycard_${dateStr}">
+    <div class="day-card-header">
+      <div>
+        <div class="day-name">${dateLabel}${isToday?' <span class="today-badge">Hari ini</span>':''}</div>
+      </div>
+    </div>
+    <div class="vitals-row">
+      <div class="vital-cell">
+        <div class="vital-label">BB Sebelum (kg)</div>
+        <input class="vital-input" type="number" step="0.1" value="${bb_pre}" placeholder="65.0" oninput="setPDDirect('${dateStr}','bb_pre',this.value)">
+      </div>
+      <div class="vital-cell">
+        <div class="vital-label">BB Sesudah (kg)</div>
+        <input class="vital-input" type="number" step="0.1" value="${bb}" placeholder="65.0" oninput="setPDDirect('${dateStr}','bb',this.value)">
+      </div>
+      <div class="vital-cell">
+        <div class="vital-label">Tekanan Darah</div>
+        <input class="vital-input" type="text" value="${td}" placeholder="120/80" oninput="setPDDirect('${dateStr}','td',this.value)">
+      </div>
+      <div class="vital-cell">
+        <div class="vital-label">Nadi (x/mnt)</div>
+        <input class="vital-input" type="number" value="${nadi}" placeholder="80" oninput="setPDDirect('${dateStr}','nadi',this.value)">
+      </div>
+      <div class="vital-cell">
+        <div class="vital-label">Suhu (°C)</div>
+        <input class="vital-input" type="number" step="0.1" value="${suhu}" placeholder="36.5" oninput="setPDDirect('${dateStr}','suhu',this.value)">
+      </div>
+    </div>
+    <div class="exit-site-row">
+      <div class="exit-site-cell">
+        <div class="exit-label">Kondisi Exit Site / Tunnel</div>
+        <div class="exit-options" id="exit_${dateStr}">${exitBtns}</div>
+      </div>
+      <div class="exit-site-cell">
+        <div class="exit-label">Keluhan / Gejala Hari Ini</div>
+        <input type="text" value="${keluhan}" placeholder="cth: tidak ada / rasa berat / mual..."
+          style="width:100%;border:1.5px solid var(--gray-200);border-radius:6px;padding:7px 10px;font-size:12px;font-family:inherit;outline:none;margin-top:4px"
+          oninput="setPDDirect('${dateStr}','keluhan',this.value)">
+      </div>
+    </div>
+    <div style="padding:10px 16px 4px;font-size:11px;color:var(--gray-500)">
+      💡 Tanda vital &amp; exit site/keluhan di atas akan otomatis ikut tersimpan saat Anda menekan "Simpan" pada salah satu sesi di bawah.
+    </div>
+  </div>
+
+  <div id="sessionsWrap_${dateStr}">${sessionsHtml}</div>
+
+  <div class="card" style="margin-top:4px">
+    <div style="font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:6px">Catatan Tambahan Hari Ini (untuk perawat)</div>
+    <textarea id="dayNote_${dateStr}" rows="3" style="width:100%;border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:10px 14px;font-size:13px;font-family:inherit;outline:none;resize:vertical" placeholder="Tuliskan gejala tidak biasa, pertanyaan untuk perawat, atau catatan penting hari ini...">${(dayData.__daynote__||'')}</textarea>
+    <div class="btn-row print-hide">
+      <button class="btn btn-secondary btn-sm" onclick="saveDayNoteOnly('${dateStr}')">💾 Simpan Catatan Tambahan</button>
+    </div>
+  </div>`;
+
+  document.getElementById('dayFormWrap').innerHTML=html;
+}
+
+function renderSessionCard(dateStr,s,sk){
+  const jamMasukMulai=sk.jamMasukMulai||'';
+  const jamMasukSelesai=sk.jamMasukSelesai||'';
+  const jamDrainMulai=sk.jamDrainMulai||'';
+  const jamDrainSelesai=sk.jamDrainSelesai||'';
+  const infus=sk.infus||'';
+  const drain=sk.drain||'';
+  const warna=sk.warna||'';
+  const larutan=sk.larutan||'';
+  const keterangan=sk.keterangan||'';
+  const ufVal=infus&&drain?(parseInt(drain)-parseInt(infus)):null;
+  const ufStr=ufVal===null?'—':(ufVal>=0?'+'+ufVal:String(ufVal));
+  const ufClass=ufVal===null?'':(ufVal>=0?'uf-cell':'uf-cell uf-neg');
+
+  const durMasuk=hitungDurasi(jamMasukMulai,jamMasukSelesai);
+  const durDrain=hitungDurasi(jamDrainMulai,jamDrainSelesai);
+  const durMasukHtml=durMasuk?`<span class="durasi-badge" id="durMasuk_${dateStr}_${s}">⏱ ${durMasuk.label}</span>`:`<span class="durasi-badge" id="durMasuk_${dateStr}_${s}" style="visibility:hidden">—</span>`;
+  const durDrainHtml=durDrain?`<span class="durasi-badge" id="durDrain_${dateStr}_${s}">⏱ ${durDrain.label}</span>`:`<span class="durasi-badge" id="durDrain_${dateStr}_${s}" style="visibility:hidden">—</span>`;
+
+  const warnaOpts=WARNA_OPTIONS.map(w=>`<option value="${w.val}"${warna===w.val?' selected':''}>${w.label}</option>`).join('');
+
+  const isSaved=sessionFilled(sk);
+  const statusCls=isSaved?'session-saved':'';
+  const statusBadge=isSaved?'<span class="session-status status-saved" id="sessStatus_'+dateStr+'_'+s+'">✓ Tersimpan</span>':'<span class="session-status status-empty" id="sessStatus_'+dateStr+'_'+s+'">Belum diisi</span>';
+
+  return `
+  <div class="session-card ${statusCls}" id="sesscard_${dateStr}_${s}">
+    <div class="session-card-header">
+      <div class="session-title"><span class="siklus-num">${s+1}</span> Sesi / Siklus ${s+1}</div>
+      ${statusBadge}
+    </div>
+    <div class="session-card-body">
+      <div class="session-grid">
+        <div class="session-field">
+          <label>Jam Masuk Infus (mulai – selesai)</label>
+          <div class="session-time-row">
+            <input type="time" value="${jamMasukMulai}" oninput="setPD('${dateStr}','s${s}','jamMasukMulai',this.value);updateDurasi('${dateStr}',${s});markSessionDirty('${dateStr}',${s})">
+            <span class="jam-arrow">s.d.</span>
+            <input type="time" value="${jamMasukSelesai}" oninput="setPD('${dateStr}','s${s}','jamMasukSelesai',this.value);updateDurasi('${dateStr}',${s});markSessionDirty('${dateStr}',${s})">
+            ${durMasukHtml}
+          </div>
+        </div>
+        <div class="session-field">
+          <label>Jam Drain/Keluar (mulai – selesai)</label>
+          <div class="session-time-row">
+            <input type="time" value="${jamDrainMulai}" oninput="setPD('${dateStr}','s${s}','jamDrainMulai',this.value);updateDurasi('${dateStr}',${s});markSessionDirty('${dateStr}',${s})">
+            <span class="jam-arrow">s.d.</span>
+            <input type="time" value="${jamDrainSelesai}" oninput="setPD('${dateStr}','s${s}','jamDrainSelesai',this.value);updateDurasi('${dateStr}',${s});markSessionDirty('${dateStr}',${s})">
+            ${durDrainHtml}
+          </div>
+        </div>
+      </div>
+      <div class="session-grid">
+        <div class="session-field">
+          <label>Larutan</label>
+          <select onchange="setPD('${dateStr}','s${s}','larutan',this.value);markSessionDirty('${dateStr}',${s})">
+            <option value=""${!larutan?' selected':''}>-- Pilih --</option>
+            <option value="1.5%"${larutan==='1.5%'?' selected':''}>1.5% Glukosa</option>
+            <option value="2.5%"${larutan==='2.5%'?' selected':''}>2.5% Glukosa</option>
+            <option value="4.25%"${larutan==='4.25%'?' selected':''}>4.25% Glukosa</option>
+            <option value="icodextrin"${larutan==='icodextrin'?' selected':''}>Icodextrin</option>
+          </select>
+        </div>
+        <div class="session-field">
+          <label>Warna Effluen</label>
+          <select onchange="setPD('${dateStr}','s${s}','warna',this.value);updateWarnaClass(this);markSessionDirty('${dateStr}',${s})">${warnaOpts}</select>
+        </div>
+      </div>
+      <div class="session-grid">
+        <div class="session-field">
+          <label>Vol. Infus (mL)</label>
+          <input type="number" value="${infus}" placeholder="2000" min="0" max="3000" oninput="setPD('${dateStr}','s${s}','infus',this.value);calcUF('${dateStr}',${s});markSessionDirty('${dateStr}',${s})">
+        </div>
+        <div class="session-field">
+          <label>Vol. Drain (mL)</label>
+          <input type="number" value="${drain}" placeholder="2000" min="0" max="5000" oninput="setPD('${dateStr}','s${s}','drain',this.value);calcUF('${dateStr}',${s});markSessionDirty('${dateStr}',${s})">
+        </div>
+      </div>
+      <div class="session-uf-line">
+        <span style="font-size:12px;color:var(--gray-600);font-weight:600">UF Sesi Ini:</span>
+        <span id="uf_${dateStr}_${s}" class="${ufClass}">${ufStr}</span>
+        <span style="font-size:11px;color:var(--gray-400)">(mL Drain − mL Infus)</span>
+      </div>
+      <div class="session-grid session-grid-full" style="margin-top:10px">
+        <div class="session-field">
+          <label>Keterangan Sesi</label>
+          <input type="text" value="${keterangan}" placeholder="cth: drain lambat" oninput="setPD('${dateStr}','s${s}','keterangan',this.value);markSessionDirty('${dateStr}',${s})">
+        </div>
+      </div>
+    </div>
+    <div class="session-footer print-hide">
+      <span style="font-size:11px;color:var(--gray-400)" id="sessHint_${dateStr}_${s}">Isi data sesi ${s+1}, lalu simpan — sesi lain tidak akan terpengaruh.</span>
+      <button class="btn btn-primary btn-sm" onclick="saveSession('${dateStr}',${s})">💾 Simpan Sesi ${s+1}</button>
+    </div>
+  </div>`;
 }
 
 function applyHarianAccess(){
   const isPasien = currentUser.role==='pasien';
-  const cards=document.getElementById('dailyCards');
-  if(cards){
-    cards.querySelectorAll('input,select,button.exit-opt').forEach(el=>{ el.disabled = !isPasien; });
+  const wrap=document.getElementById('dayFormWrap');
+  if(wrap){
+    wrap.querySelectorAll('input,select,button.exit-opt,button.btn-primary,button.btn-secondary').forEach(el=>{ el.disabled = !isPasien; });
   }
-  const note=document.getElementById('weeklyNote');
-  if(note) note.readOnly = !isPasien;
   const banner=document.getElementById('harianMonitorBanner');
   if(banner) banner.style.display = isPasien?'none':'flex';
-  const saveBtn=document.getElementById('btnSaveHarian');
-  if(saveBtn) saveBtn.style.display = isPasien?'':'none';
 }
 
-let autoSaveTimer=null;
-function scheduleAutoSave(){
-  if(currentUser.role!=='pasien') return; // hanya pasien yang isi & auto-save; perawat/admin read-only
-  const ind=document.getElementById('autoSaveIndicator');
-  if(ind) ind.style.display='block';
-  clearTimeout(autoSaveTimer);
-  autoSaveTimer=setTimeout(()=>{ saveDailyData(true); }, 1500);
+function markSessionDirty(dateStr,s){
+  const card=document.getElementById('sesscard_'+dateStr+'_'+s);
+  const status=document.getElementById('sessStatus_'+dateStr+'_'+s);
+  if(card){ card.classList.remove('session-saved'); card.classList.add('session-dirty'); }
+  if(status){ status.textContent='Belum disimpan'; status.className='session-status status-dirty'; }
 }
 
 function setPD(dateStr, subKey, field, val){
-  const wk=getWeekKey(currentWeekOffset);
-  if(!pendingData[wk]) pendingData[wk]={};
-  if(!pendingData[wk][dateStr]) pendingData[wk][dateStr]={};
-  if(!pendingData[wk][dateStr][subKey]) pendingData[wk][dateStr][subKey]={};
-  pendingData[wk][dateStr][subKey][field]=val;
-  scheduleAutoSave();
+  if(!pendingData[dateStr]) pendingData[dateStr]={};
+  if(!pendingData[dateStr][subKey]) pendingData[dateStr][subKey]={};
+  pendingData[dateStr][subKey][field]=val;
 }
 function setPDDirect(dateStr,field,val){
-  const wk=getWeekKey(currentWeekOffset);
-  if(!pendingData[wk]) pendingData[wk]={};
-  if(!pendingData[wk][dateStr]) pendingData[wk][dateStr]={};
-  pendingData[wk][dateStr][field]=val;
-  scheduleAutoSave();
+  if(!pendingData[dateStr]) pendingData[dateStr]={};
+  pendingData[dateStr][field]=val;
 }
 function toggleExit(dateStr,opt,btn){
-  const wk=getWeekKey(currentWeekOffset);
-  if(!pendingData[wk]) pendingData[wk]={};
-  if(!pendingData[wk][dateStr]) pendingData[wk][dateStr]={};
-  const db=getDB();
-  const wkData=((db.dailyData[currentPatientId]||{})[wk])||{};
-  const dayData=wkData[dateStr]||{};
-  let arr=[...(pendingData[wk][dateStr].exit||dayData.exit||[])];
+  if(!pendingData[dateStr]) pendingData[dateStr]={};
+  const dayData=getDayDataFromDB(dateStr);
+  let arr=[...(pendingData[dateStr].exit||dayData.exit||[])];
   const idx=arr.indexOf(opt);
   if(idx>=0){ arr.splice(idx,1); }else{ arr.push(opt); }
-  pendingData[wk][dateStr].exit=arr;
+  pendingData[dateStr].exit=arr;
   const isDanger=['Keluar cairan','Keluar nanah','Bengkak'].includes(opt);
   if(arr.includes(opt)){
     btn.className=isDanger?'exit-opt selected-red':'exit-opt selected';
   }else{
     btn.className='exit-opt';
   }
-  scheduleAutoSave();
 }
 
 function calcUF(dateStr,s){
-  // Re-read from DOM to update the UF span in real-time
-  const card=document.getElementById('daycard_'+dateStr);
+  const card=document.getElementById('sesscard_'+dateStr+'_'+s);
   if(!card)return;
-  const rows=card.querySelectorAll('.siklus-table tbody tr:not(.siklus-note-row)');
-  const row=rows[s];
-  if(!row)return;
-  // Kolom: 1=Siklus, 2=Jam Masuk, 3=Jam Drain, 4=Larutan, 5=Infus, 6=Drain, 7=UF, 8=Warna, 9=Keterangan
-  const infusInput=row.querySelector('td:nth-child(5) input');
-  const drainInput=row.querySelector('td:nth-child(6) input');
+  const infusInput=card.querySelectorAll('input[type=number]')[0];
+  const drainInput=card.querySelectorAll('input[type=number]')[1];
   const ufSpan=document.getElementById('uf_'+dateStr+'_'+s);
   if(!infusInput||!drainInput||!ufSpan)return;
   const infus=parseInt(infusInput.value)||0;
@@ -1821,55 +1951,24 @@ function calcUF(dateStr,s){
   const uf=drain-infus;
   ufSpan.textContent=(uf>=0?'+':'')+uf;
   ufSpan.className=uf>=0?'uf-cell':'uf-cell uf-neg';
-  // Update total row
-  updateTotalRow(dateStr);
 }
 
 function updateDurasi(dateStr,s){
-  const card=document.getElementById('daycard_'+dateStr);
+  const card=document.getElementById('sesscard_'+dateStr+'_'+s);
   if(!card)return;
-  const rows=card.querySelectorAll('.siklus-table tbody tr:not(.siklus-note-row)');
-  const row=rows[s];
-  if(!row)return;
-  // Kolom 2 = Jam Masuk (2 input time), Kolom 3 = Jam Drain (2 input time)
-  const masukInputs=row.querySelectorAll('td:nth-child(2) input[type=time]');
-  const drainInputs=row.querySelectorAll('td:nth-child(3) input[type=time]');
+  const timeInputs=card.querySelectorAll('input[type=time]'); // [0]=masukMulai,[1]=masukSelesai,[2]=drainMulai,[3]=drainSelesai
   const durMasukSpan=document.getElementById('durMasuk_'+dateStr+'_'+s);
   const durDrainSpan=document.getElementById('durDrain_'+dateStr+'_'+s);
 
-  if(masukInputs.length===2&&durMasukSpan){
-    const d=hitungDurasi(masukInputs[0].value,masukInputs[1].value);
+  if(timeInputs.length>=2&&durMasukSpan){
+    const d=hitungDurasi(timeInputs[0].value,timeInputs[1].value);
     if(d){durMasukSpan.style.visibility='visible';durMasukSpan.textContent='⏱ '+d.label;durMasukSpan.classList.toggle('durasi-warn',d.menit<=0);}
     else{durMasukSpan.style.visibility='hidden';}
   }
-  if(drainInputs.length===2&&durDrainSpan){
-    const d=hitungDurasi(drainInputs[0].value,drainInputs[1].value);
+  if(timeInputs.length>=4&&durDrainSpan){
+    const d=hitungDurasi(timeInputs[2].value,timeInputs[3].value);
     if(d){durDrainSpan.style.visibility='visible';durDrainSpan.textContent='⏱ '+d.label;durDrainSpan.classList.toggle('durasi-warn',d.menit<=0);}
     else{durDrainSpan.style.visibility='hidden';}
-  }
-}
-
-function updateTotalRow(dateStr){
-  const card=document.getElementById('daycard_'+dateStr);
-  if(!card)return;
-  const rows=card.querySelectorAll('.siklus-table tbody tr:not(.siklus-note-row)');
-  let totalIn=0,totalOut=0,anyVal=false;
-  rows.forEach(row=>{
-    const infusEl=row.querySelector('td:nth-child(5) input');
-    const drainEl=row.querySelector('td:nth-child(6) input');
-    if(infusEl&&infusEl.value){totalIn+=parseInt(infusEl.value)||0;anyVal=true;}
-    if(drainEl&&drainEl.value){totalOut+=parseInt(drainEl.value)||0;anyVal=true;}
-  });
-  const totalUF=totalOut-totalIn;
-  const totalRow=card.querySelector('.siklus-note-row');
-  if(!totalRow)return;
-  // Baris total cuma punya 4 <td> nyata: [0]=label(colspan4), [1]=Infus, [2]=Drain, [3]=UF(colspan3)
-  const cells=totalRow.querySelectorAll('td');
-  if(cells.length>=4){
-    cells[1].innerHTML=`<span style="font-size:12px;font-weight:700;color:var(--amber)">${anyVal?totalIn:'—'} mL</span>`;
-    cells[2].innerHTML=`<span style="font-size:12px;font-weight:700;color:var(--teal2)">${anyVal?totalOut:'—'} mL</span>`;
-    const ufStr=anyVal?(totalUF>=0?'+'+totalUF:String(totalUF)):'—';
-    cells[3].innerHTML=`<span style="font-size:13px;font-weight:800;color:${totalUF>=0?'var(--teal2)':'var(--red)'}">${ufStr} mL Balance</span>`;
   }
 }
 
@@ -1886,109 +1985,192 @@ function updateWarnaClass(sel){
   }
 }
 
-function collectAllFromDOM(){
-  // Before saving, collect all current DOM values
-  const wk=getWeekKey(currentWeekOffset);
-  const dates=getWeekDates(wk);
-  if(!pendingData[wk]) pendingData[wk]={};
-  dates.forEach(dateStr=>{
-    const card=document.getElementById('daycard_'+dateStr);
-    if(!card)return;
-    if(!pendingData[wk][dateStr]) pendingData[wk][dateStr]={};
-
-    // Vitals
-    const vitals=[['bb_pre',0],['bb',1],['td',2],['nadi',3],['suhu',4]];
-    const vitInputs=card.querySelectorAll('.vital-input');
-    vitals.forEach(([k,i])=>{if(vitInputs[i]&&vitInputs[i].value)pendingData[wk][dateStr][k]=vitInputs[i].value;});
-
-    // Siklus rows
-    const siklRows=card.querySelectorAll('.siklus-table tbody tr:not(.siklus-note-row)');
-    siklRows.forEach((row,s)=>{
-      if(!pendingData[wk][dateStr]['s'+s]) pendingData[wk][dateStr]['s'+s]={};
-      const sk=pendingData[wk][dateStr]['s'+s];
-      const timeInputs=row.querySelectorAll('input[type=time]'); // [0]=masukMulai,[1]=masukSelesai,[2]=drainMulai,[3]=drainSelesai
-      const larSel=row.querySelector('select:first-of-type');
-      const numInputs=row.querySelectorAll('input[type=number]');
-      const warnaSel=row.querySelector('select:last-of-type');
-      const txtInput=row.querySelector('input[type=text]');
-      if(timeInputs[0]&&timeInputs[0].value) sk.jamMasukMulai=timeInputs[0].value;
-      if(timeInputs[1]&&timeInputs[1].value) sk.jamMasukSelesai=timeInputs[1].value;
-      if(timeInputs[2]&&timeInputs[2].value) sk.jamDrainMulai=timeInputs[2].value;
-      if(timeInputs[3]&&timeInputs[3].value) sk.jamDrainSelesai=timeInputs[3].value;
-      if(larSel&&larSel.value) sk.larutan=larSel.value;
-      if(numInputs[0]&&numInputs[0].value) sk.infus=numInputs[0].value;
-      if(numInputs[1]&&numInputs[1].value) sk.drain=numInputs[1].value;
-      if(warnaSel&&warnaSel.value) sk.warna=warnaSel.value;
-      if(txtInput&&txtInput.value) sk.keterangan=txtInput.value;
-    });
-
-    // Keluhan
-    const keluhanInput=card.querySelector('.exit-site-cell:last-child input');
-    if(keluhanInput&&keluhanInput.value) pendingData[wk][dateStr].keluhan=keluhanInput.value;
-  });
+function collectSessionFromDOM(dateStr,s){
+  const card=document.getElementById('sesscard_'+dateStr+'_'+s);
+  if(!card)return {};
+  const sk={};
+  const timeInputs=card.querySelectorAll('input[type=time]');
+  const selects=card.querySelectorAll('select');
+  const numInputs=card.querySelectorAll('input[type=number]');
+  const txtInput=card.querySelector('input[type=text]');
+  if(timeInputs[0]) sk.jamMasukMulai=timeInputs[0].value||'';
+  if(timeInputs[1]) sk.jamMasukSelesai=timeInputs[1].value||'';
+  if(timeInputs[2]) sk.jamDrainMulai=timeInputs[2].value||'';
+  if(timeInputs[3]) sk.jamDrainSelesai=timeInputs[3].value||'';
+  if(selects[0]) sk.larutan=selects[0].value||'';
+  if(selects[1]) sk.warna=selects[1].value||'';
+  if(numInputs[0]) sk.infus=numInputs[0].value||'';
+  if(numInputs[1]) sk.drain=numInputs[1].value||'';
+  if(txtInput) sk.keterangan=txtInput.value||'';
+  return sk;
 }
 
-async function saveDailyData(silent){
-  if(!currentPatientId){if(!silent)showToast('Pilih pasien terlebih dahulu');return;}
+function collectDayLevelFromDOM(dateStr){
+  const card=document.getElementById('daycard_'+dateStr);
+  const out={};
+  if(!card) return out;
+  const vitals=[['bb_pre',0],['bb',1],['td',2],['nadi',3],['suhu',4]];
+  const vitInputs=card.querySelectorAll('.vital-input');
+  vitals.forEach(([k,i])=>{ out[k]=vitInputs[i]?vitInputs[i].value||'':''; });
+  const keluhanInput=card.querySelector('.exit-site-cell:last-child input');
+  out.keluhan=keluhanInput?keluhanInput.value||'':'';
+  // exit site: ambil dari pendingData kalau ada perubahan, kalau tidak dari DB
+  const dbDay=getDayDataFromDB(dateStr);
+  out.exit=(pendingData[dateStr]&&pendingData[dateStr].exit)?pendingData[dateStr].exit:(dbDay.exit||[]);
+  return out;
+}
+
+async function saveSession(dateStr,s){
+  if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
   if(currentUser.role!=='pasien'){return;} // jaga-jaga: hanya pasien yang boleh menulis catatan harian
-  collectAllFromDOM();
-  const wk=getWeekKey(currentWeekOffset);
+
+  const sessionData=collectSessionFromDOM(dateStr,s);
+  const dayLevel=collectDayLevelFromDOM(dateStr);
+
+  const wk=getMondayOf(dateStr);
   const db=getDB();
   if(!db.dailyData[currentPatientId]) db.dailyData[currentPatientId]={};
-  const existing=(db.dailyData[currentPatientId][wk])||{};
-  const pending=pendingData[wk]||{};
-  // Deep merge
-  const merged={...existing};
-  Object.keys(pending).forEach(dateStr=>{
-    if(!merged[dateStr]) merged[dateStr]={};
-    const pDay=pending[dateStr];
-    Object.keys(pDay).forEach(k=>{
-      if(k.startsWith('s')&&typeof pDay[k]==='object'&&!Array.isArray(pDay[k])){
-        merged[dateStr][k]={...(merged[dateStr][k]||{}),...pDay[k]};
-      } else {
-        merged[dateStr][k]=pDay[k];
-      }
-    });
-  });
-  merged['__note__']=document.getElementById('weeklyNote').value;
-  db.dailyData[currentPatientId][wk]=merged;
-  pendingData={};
+  if(!db.dailyData[currentPatientId][wk]) db.dailyData[currentPatientId][wk]={};
+  const wkData=db.dailyData[currentPatientId][wk];
+  if(!wkData[dateStr]) wkData[dateStr]={};
+
+  // Merge: day-level fields (vitals, exit, keluhan) + this one session's fields.
+  // Sesi lain yang sudah tersimpan sebelumnya TIDAK disentuh sama sekali.
+  Object.keys(dayLevel).forEach(k=>{ wkData[dateStr][k]=dayLevel[k]; });
+  wkData[dateStr]['s'+s]=sessionData;
+
   try{
-    await apiPost('saveDailyData',{patientId:currentPatientId, weekKey:wk, data:merged});
-    const ind=document.getElementById('autoSaveIndicator');
-    if(ind) ind.style.display='none';
-    showToast(silent?'Tersimpan otomatis ✓':'Catatan harian berhasil disimpan ✓');
+    await apiPost('saveDailyData',{patientId:currentPatientId, weekKey:wk, data:wkData});
+    showToast(`Sesi ${s+1} (${formatDateShort(dateStr)}) berhasil disimpan ✓`);
+    if(pendingData[dateStr]){
+      delete pendingData[dateStr]['s'+s];
+    }
+    const card=document.getElementById('sesscard_'+dateStr+'_'+s);
+    const status=document.getElementById('sessStatus_'+dateStr+'_'+s);
+    if(card){ card.classList.remove('session-dirty'); card.classList.add('session-saved'); }
+    if(status){ status.textContent='✓ Tersimpan'; status.className='session-status status-saved'; }
+    loadWeeklyRecap();
   }catch(e){
     showToast('Gagal menyimpan ke server: '+e.message);
   }
 }
 
-function changeWeek(delta){
-  // Auto-save before switching (hanya untuk pasien — perawat/admin cuma memantau, read-only)
-  if(currentPatientId && currentUser.role==='pasien'){
-    collectAllFromDOM();
-    const wk=getWeekKey(currentWeekOffset);
-    const db=getDB();
-    if(!db.dailyData[currentPatientId]) db.dailyData[currentPatientId]={};
-    const existing=(db.dailyData[currentPatientId][wk])||{};
-    const pending=pendingData[wk]||{};
-    if(Object.keys(pending).length){
-      const merged={...existing};
-      Object.keys(pending).forEach(dk=>{
-        if(!merged[dk]) merged[dk]={};
-        Object.assign(merged[dk],pending[dk]);
-      });
-      merged['__note__']=document.getElementById('weeklyNote').value;
-      db.dailyData[currentPatientId][wk]=merged;
-      // Auto-save ke server di latar belakang (tidak menahan perpindahan minggu)
-      apiPost('saveDailyData',{patientId:currentPatientId, weekKey:wk, data:merged})
-        .catch(e=>showToast('Auto-save gagal: '+e.message));
-    }
+async function saveDayNoteOnly(dateStr){
+  if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
+  if(currentUser.role!=='pasien'){return;}
+  const noteEl=document.getElementById('dayNote_'+dateStr);
+  const wk=getMondayOf(dateStr);
+  const db=getDB();
+  if(!db.dailyData[currentPatientId]) db.dailyData[currentPatientId]={};
+  if(!db.dailyData[currentPatientId][wk]) db.dailyData[currentPatientId][wk]={};
+  const wkData=db.dailyData[currentPatientId][wk];
+  if(!wkData[dateStr]) wkData[dateStr]={};
+  wkData[dateStr]['__daynote__']=noteEl?noteEl.value:'';
+  try{
+    await apiPost('saveDailyData',{patientId:currentPatientId, weekKey:wk, data:wkData});
+    showToast('Catatan tambahan berhasil disimpan ✓');
+  }catch(e){
+    showToast('Gagal menyimpan ke server: '+e.message);
   }
-  pendingData={};
-  currentWeekOffset+=delta;
-  loadHarian();
 }
+
+// ============================================================
+//  REKAP 1 MINGGU (ROLLING 7 HARI DARI TANGGAL TERPILIH)
+// ============================================================
+function loadWeeklyRecap(){
+  if(!currentPatientId) return;
+  const startDate=currentHarianDate;
+  const endDate=addDays(startDate,6);
+  const dates=Array.from({length:7},(_,i)=>addDays(startDate,i));
+
+  const startLabel=formatDateShort(startDate);
+  const endLabel=formatDateShort(endDate);
+  document.getElementById('weeklyRecapRangeLabel').textContent=`Rentang: ${startLabel} — ${endLabel} (7 hari rolling, dihitung mulai dari tanggal yang dipilih)`;
+  const pwl=document.getElementById('printWeekLabel');
+  if(pwl) pwl.textContent=`Minggu: ${startLabel} — ${endLabel}`;
+  const ppl=document.getElementById('printPatientLabel');
+  const db=getDB();
+  const pat=db.patients.find(x=>x.id===currentPatientId);
+  if(ppl&&pat) ppl.textContent=`Pasien: ${pat.nama} (${pat.rm})`;
+
+  // Header tabel dinamis sesuai N_SIKLUS (kolom tetap sama seperti rekap bulanan)
+  const siklHeadTop=Array.from({length:N_SIKLUS},(_,i)=>`<th colspan="4">Siklus ${i+1}</th>`).join('');
+  const siklHeadSub=Array.from({length:N_SIKLUS},()=>`<th>Jam</th><th>In</th><th>Out</th><th>UF</th>`).join('');
+  document.getElementById('weeklyRecapTableHead').innerHTML=`
+    <tr>
+      <th rowspan="2" style="min-width:80px">Tanggal</th>
+      <th rowspan="2">BB (kg)</th>
+      <th rowspan="2">TD (mmHg)</th>
+      <th rowspan="2">Nadi</th>
+      <th rowspan="2">Suhu °C</th>
+      ${siklHeadTop}
+      <th rowspan="2">Total UF (mL)</th>
+      <th rowspan="2">Exit Site</th>
+      <th rowspan="2">Keluhan</th>
+    </tr>
+    <tr>${siklHeadSub}</tr>`;
+
+  let totalInW=0,totalOutW=0,rowsHtml='',daysWithData=0,totalUFW=0;
+  dates.forEach(dateStr=>{
+    const dayData=getDayDataFromDB(dateStr);
+    const hasData=Object.keys(dayData).length>0;
+    if(hasData) daysWithData++;
+    let dayIn=0,dayOut=0;
+    let siklCells='';
+    for(let s=0;s<N_SIKLUS;s++){
+      const sk=dayData['s'+s]||{};
+      const jamRingkas=sk.jamMasukMulai?sk.jamMasukMulai+(sk.jamDrainSelesai?'–'+sk.jamDrainSelesai:''):'';
+      const infus=sk.infus||'';
+      const drain=sk.drain||'';
+      const uf=infus&&drain?(parseInt(drain)-parseInt(infus)):null;
+      const ufStr=uf===null?'—':(uf>=0?'+'+uf:String(uf));
+      if(infus){dayIn+=parseInt(infus)||0;totalInW+=parseInt(infus)||0;}
+      if(drain){dayOut+=parseInt(drain)||0;totalOutW+=parseInt(drain)||0;}
+      siklCells+=`<td style="font-size:10px">${jamRingkas||'—'}</td><td>${infus||'—'}</td><td>${drain||'—'}</td><td style="${uf!==null&&uf<0?'color:var(--red);font-weight:700':''}">${ufStr}</td>`;
+    }
+    const dayUF=dayOut-dayIn;
+    if(hasData) totalUFW+=dayUF;
+    const exitArr=dayData.exit||[];
+    const hasWarning=exitArr.some(x=>['Keluar cairan','Keluar nanah'].includes(x));
+    const warna=dayData['s0']?.warna||'';
+    const warnaAlert=warna==='keruh'||warna==='berdarah';
+    const dObj=new Date(dateStr+'T00:00:00');
+    const dayShortLabel=`${DAYS[(dObj.getDay()+6)%7].slice(0,3)}, ${dObj.getDate()} ${MONTHS[dObj.getMonth()].slice(0,3)}`;
+    rowsHtml+=`
+      <tr style="${!hasData?'opacity:0.45':''}${warnaAlert?'background:#FEF2F2':''}">
+        <td class="date-col">${dayShortLabel}</td>
+        <td>${dayData.bb||'—'}</td>
+        <td>${dayData.td||'—'}</td>
+        <td>${dayData.nadi||'—'}</td>
+        <td>${dayData.suhu||'—'}</td>
+        ${siklCells}
+        <td style="font-weight:700;color:${dayIn||dayOut?(dayUF>=0?'var(--teal2)':'var(--red)'):'var(--gray-400)'}">
+          ${hasData?(dayUF>=0?'+':'')+dayUF+' mL':'—'}
+        </td>
+        <td style="font-size:11px;color:${hasWarning?'var(--red)':'var(--gray-600)'}">
+          ${exitArr.length?exitArr.join(', '):hasData?'Bersih':'—'}
+        </td>
+        <td style="font-size:11px;color:var(--gray-600)">${dayData.keluhan||'—'}</td>
+      </tr>`;
+  });
+  document.getElementById('weeklyRecapBody').innerHTML=rowsHtml;
+  const totalUFStr=totalUFW>=0?'+'+totalUFW:String(totalUFW);
+  document.getElementById('weeklyRecapStats').innerHTML=`
+    <div class="stat-card"><div class="stat-num">${daysWithData}/7</div><div class="stat-label">Hari Terisi</div></div>
+    <div class="stat-card"><div class="stat-num" style="font-size:18px">${totalInW.toLocaleString()}</div><div class="stat-label">Total Vol. Infus (mL)</div></div>
+    <div class="stat-card"><div class="stat-num" style="font-size:18px">${totalOutW.toLocaleString()}</div><div class="stat-label">Total Vol. Drain (mL)</div></div>
+    <div class="stat-card"><div class="stat-num" style="font-size:18px;color:${totalUFW>=0?'var(--teal2)':'var(--red)'}">${totalUFStr}</div><div class="stat-label">Total UF Minggu Ini (mL)</div></div>`;
+}
+
+function exportWeeklyRecapPDF(){
+  document.body.classList.add('exporting-pdf');
+  setTimeout(()=>{
+    window.print();
+    setTimeout(()=>{ document.body.classList.remove('exporting-pdf'); }, 300);
+  }, 50);
+}
+window.addEventListener('afterprint',()=>{ document.body.classList.remove('exporting-pdf'); });
+
 
 // ============================================================
 //  REKAP BULANAN
@@ -2345,6 +2527,24 @@ function closeModal(id){document.getElementById(id).classList.remove('open');}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
 function formatDate(str){if(!str)return'—';const d=new Date(str+'T00:00:00');return d.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});}
 function formatDateShort(str){if(!str)return'';const d=new Date(str+'T00:00:00');return d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});}
+
+// ============================================================
+//  TOPBAR — MENU "LAINNYA" (⋮) UNTUK LAYAR KECIL/HP
+// ============================================================
+function toggleTopbarMore(){
+  const menu=document.getElementById('topbarMoreMenu');
+  if(!menu) return;
+  menu.classList.toggle('open');
+}
+function closeTopbarMore(){
+  const menu=document.getElementById('topbarMoreMenu');
+  if(menu) menu.classList.remove('open');
+}
+document.addEventListener('click',(e)=>{
+  const wrap=document.querySelector('.topbar-more-wrap');
+  if(!wrap) return;
+  if(!wrap.contains(e.target)) closeTopbarMore();
+});
 
 document.querySelectorAll('.modal-bg').forEach(bg=>{
   bg.addEventListener('click',e=>{
