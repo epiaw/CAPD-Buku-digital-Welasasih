@@ -1177,8 +1177,8 @@ function loadDataPasien(){
     const el=document.getElementById(eid);
     if(el) el.value=p[pk]||'';
   });
-  document.getElementById('pRM').readOnly=true;
-  const editable=currentUser.role!=='pasien';
+  document.getElementById('pRM').readOnly=true; // No. RM tetap terkunci, hanya bisa diatur lewat menu Kelola Pasien
+  const editable=true; // Admin, Perawat CAPD, dan Pasien semuanya boleh input/edit data diri
   ['pNama','pJK','pTTL','pPend','pKerja','pKawin','pPendamping','pAlamat','pTelp','pTglTenk','pTglCAPD','pJenisTenk','pExitSite','pAkses','pProgram'].forEach(id=>{
     const el=document.getElementById(id);
     if(!el)return;
