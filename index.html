@@ -1118,17 +1118,31 @@ function selectPatient(pid){
 // ============================================================
 //  CONTACTS
 // ============================================================
+function toWaNumber(phone){
+  let digits=(phone||'').replace(/[^0-9]/g,'');
+  if(digits.startsWith('0')) digits='62'+digits.slice(1);
+  else if(!digits.startsWith('62')) digits='62'+digits;
+  return digits;
+}
 function renderContactGrid(){
   const db=getDB();
   const grid=document.getElementById('contactGrid');
   if(!grid)return;
   const colors=['#0891B2','#16A34A','#7C3AED','#DC2626'];
-  grid.innerHTML=db.contacts.map((c,i)=>`
+  grid.innerHTML=db.contacts.map((c,i)=>{
+    const telDigits=(c.phone||'').replace(/[^0-9+]/g,'');
+    const waNumber=toWaNumber(c.phone);
+    return `
     <div class="contact-card">
       <div class="contact-role">${c.role}</div>
       <div class="contact-name">${c.name}</div>
       <div class="contact-phone" style="color:${colors[i%colors.length]}">📞 ${c.phone}</div>
-    </div>`).join('');
+      <div style="display:flex;gap:6px;margin-top:9px">
+        <a href="tel:${telDigits}" style="flex:1;text-align:center;background:var(--gray-100);color:var(--gray-700);border-radius:8px;padding:8px 6px;font-size:12px;font-weight:600;text-decoration:none">📞 Telepon</a>
+        <a href="https://wa.me/${waNumber}" target="_blank" rel="noopener" style="flex:1;text-align:center;background:#25D366;color:#fff;border-radius:8px;padding:8px 6px;font-size:12px;font-weight:600;text-decoration:none">💬 WhatsApp</a>
+      </div>
+    </div>`;
+  }).join('');
 }
 function openContactModal(){
   const db=getDB();
