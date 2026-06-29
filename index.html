@@ -709,6 +709,7 @@ body.exporting-pdf{background:white}
               <button class="btn btn-secondary btn-sm" onclick="jumpHarianDate(-1)">← Hari Sebelumnya</button>
               <button class="btn btn-secondary btn-sm" onclick="jumpHarianDate(1)">Hari Berikutnya →</button>
               <button class="btn btn-ghost btn-sm" onclick="jumpHarianToday()">Hari Ini</button>
+              <button class="btn btn-ghost btn-sm" onclick="jumpToLastFilled()" title="Loncat ke tanggal terakhir yang ada datanya">📌 Terakhir Terisi</button>
             </div>
           </div>
           <div id="harianDateSummary" style="margin-top:10px;font-size:12px;color:var(--gray-500)"></div>
@@ -1109,8 +1110,24 @@ boot();
 function startApp(){
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('app').style.display='flex';
-  currentHarianDate=todayLocalStr(); // reset ke hari ini setiap login baru
   pendingData={};
+  // Untuk pasien: loncat ke tanggal terakhir yang ada datanya; fallback ke hari ini
+  if(currentUser.role==='pasien' && currentPatientId){
+    const db=getDB();
+    const patData=db.dailyData[currentPatientId]||{};
+    let lastFilledDate=null;
+    Object.keys(patData).forEach(wk=>{
+      const wkData=patData[wk]||{};
+      Object.keys(wkData).forEach(dateStr=>{
+        if(dateStr.match(/^\d{4}-\d{2}-\d{2}$/)&&Object.keys(wkData[dateStr]).length>0){
+          if(!lastFilledDate||dateStr>lastFilledDate) lastFilledDate=dateStr;
+        }
+      });
+    });
+    currentHarianDate=lastFilledDate||todayLocalStr();
+  } else {
+    currentHarianDate=todayLocalStr();
+  }
   const av=currentUser.nama.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
   document.getElementById('topbarAv').textContent=av;
   document.getElementById('topbarName').textContent=currentUser.nama;
@@ -1697,6 +1714,28 @@ function jumpHarianToday(){
   currentHarianDate=todayLocalStr();
   pendingData={};
   loadHarian();
+}
+function jumpToLastFilled(){
+  if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
+  const db=getDB();
+  const patData=db.dailyData[currentPatientId]||{};
+  let lastFilledDate=null;
+  Object.keys(patData).forEach(wk=>{
+    const wkData=patData[wk]||{};
+    Object.keys(wkData).forEach(dateStr=>{
+      if(dateStr.match(/^\d{4}-\d{2}-\d{2}$/)&&Object.keys(wkData[dateStr]).length>0){
+        if(!lastFilledDate||dateStr>lastFilledDate) lastFilledDate=dateStr;
+      }
+    });
+  });
+  if(lastFilledDate){
+    currentHarianDate=lastFilledDate;
+    pendingData={};
+    loadHarian();
+    showToast('Menampilkan tanggal terakhir terisi: '+formatDateShort(lastFilledDate));
+  } else {
+    showToast('Belum ada data yang tersimpan');
+  }
 }
 
 function loadHarian(){
@@ -2332,6 +2371,21 @@ function viewPatientAsNurse(pid){
   currentPatientId=pid;
   document.getElementById('patientSelector').value=pid;
   document.getElementById('mobilePatientSelector').value=pid;
+  // Cari tanggal terakhir yang ada datanya untuk pasien ini
+  const db=getDB();
+  const patData=db.dailyData[pid]||{};
+  let lastFilledDate=null;
+  Object.keys(patData).forEach(wk=>{
+    const wkData=patData[wk]||{};
+    Object.keys(wkData).forEach(dateStr=>{
+      if(dateStr.match(/^\d{4}-\d{2}-\d{2}$/)&&Object.keys(wkData[dateStr]).length>0){
+        if(!lastFilledDate||dateStr>lastFilledDate) lastFilledDate=dateStr;
+      }
+    });
+  });
+  if(lastFilledDate) currentHarianDate=lastFilledDate;
+  else currentHarianDate=todayLocalStr();
+  pendingData={};
   showPage('harian');
 }
 
