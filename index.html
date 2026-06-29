@@ -623,6 +623,9 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
             <div class="week-label" id="weekLabel">-</div>
             <button onclick="changeWeek(1)">Minggu Depan →</button>
           </div>
+          <div id="harianMonitorBanner" class="print-hide" style="display:none;align-items:center;gap:8px;background:#EFF6FF;border:1px solid #BFDBFE;color:#1E40AF;border-radius:var(--radius);padding:10px 14px;font-size:12px;font-weight:600;margin-bottom:12px">
+            👁️ Mode Pantau — catatan harian hanya bisa diisi/diubah oleh pasien sendiri. Gunakan ini untuk memantau & evaluasi; tulis hasil evaluasi di tab Catatan Petugas.
+          </div>
           <div class="print-header">
             <h2>Catatan Harian CAPD — RSUD Welas Asih</h2>
             <p id="printWeekLabel"></p>
@@ -631,12 +634,13 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
           <div id="dailyCards"></div>
           <div style="margin-top:16px">
             <div style="font-size:12px;font-weight:600;color:var(--gray-600);margin-bottom:6px">Catatan Tambahan Minggu Ini (untuk perawat)</div>
-            <textarea id="weeklyNote" rows="3" style="width:100%;border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:10px 14px;font-size:13px;font-family:inherit;outline:none;resize:vertical" placeholder="Tuliskan gejala tidak biasa, pertanyaan untuk perawat, atau catatan penting minggu ini..."></textarea>
+            <textarea id="weeklyNote" rows="3" style="width:100%;border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:10px 14px;font-size:13px;font-family:inherit;outline:none;resize:vertical" placeholder="Tuliskan gejala tidak biasa, pertanyaan untuk perawat, atau catatan penting minggu ini..." oninput="scheduleAutoSave()"></textarea>
           </div>
           <div class="btn-row print-hide">
-            <button class="btn btn-primary" onclick="saveDailyData()">💾 Simpan Minggu Ini</button>
+            <button class="btn btn-primary" id="btnSaveHarian" onclick="saveDailyData()">💾 Simpan Minggu Ini</button>
             <button class="btn btn-secondary" onclick="window.print()">🖨 Cetak / PDF</button>
           </div>
+          <div id="autoSaveIndicator" class="print-hide" style="font-size:11px;color:var(--gray-400);margin-top:6px;display:none">⏳ Menyimpan otomatis...</div>
         </div>
       </div>
 
@@ -1738,6 +1742,30 @@ function loadHarian(){
 
   document.getElementById('dailyCards').innerHTML=html;
   document.getElementById('weeklyNote').value=wkData['__note__']||'';
+  applyHarianAccess();
+}
+
+function applyHarianAccess(){
+  const isPasien = currentUser.role==='pasien';
+  const cards=document.getElementById('dailyCards');
+  if(cards){
+    cards.querySelectorAll('input,select,button.exit-opt').forEach(el=>{ el.disabled = !isPasien; });
+  }
+  const note=document.getElementById('weeklyNote');
+  if(note) note.readOnly = !isPasien;
+  const banner=document.getElementById('harianMonitorBanner');
+  if(banner) banner.style.display = isPasien?'none':'flex';
+  const saveBtn=document.getElementById('btnSaveHarian');
+  if(saveBtn) saveBtn.style.display = isPasien?'':'none';
+}
+
+let autoSaveTimer=null;
+function scheduleAutoSave(){
+  if(currentUser.role!=='pasien') return; // hanya pasien yang isi & auto-save; perawat/admin read-only
+  const ind=document.getElementById('autoSaveIndicator');
+  if(ind) ind.style.display='block';
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer=setTimeout(()=>{ saveDailyData(true); }, 1500);
 }
 
 function setPD(dateStr, subKey, field, val){
@@ -1746,12 +1774,14 @@ function setPD(dateStr, subKey, field, val){
   if(!pendingData[wk][dateStr]) pendingData[wk][dateStr]={};
   if(!pendingData[wk][dateStr][subKey]) pendingData[wk][dateStr][subKey]={};
   pendingData[wk][dateStr][subKey][field]=val;
+  scheduleAutoSave();
 }
 function setPDDirect(dateStr,field,val){
   const wk=getWeekKey(currentWeekOffset);
   if(!pendingData[wk]) pendingData[wk]={};
   if(!pendingData[wk][dateStr]) pendingData[wk][dateStr]={};
   pendingData[wk][dateStr][field]=val;
+  scheduleAutoSave();
 }
 function toggleExit(dateStr,opt,btn){
   const wk=getWeekKey(currentWeekOffset);
@@ -1770,6 +1800,7 @@ function toggleExit(dateStr,opt,btn){
   }else{
     btn.className='exit-opt';
   }
+  scheduleAutoSave();
 }
 
 function calcUF(dateStr,s){
@@ -1897,8 +1928,9 @@ function collectAllFromDOM(){
   });
 }
 
-async function saveDailyData(){
-  if(!currentPatientId){showToast('Pilih pasien terlebih dahulu');return;}
+async function saveDailyData(silent){
+  if(!currentPatientId){if(!silent)showToast('Pilih pasien terlebih dahulu');return;}
+  if(currentUser.role!=='pasien'){return;} // jaga-jaga: hanya pasien yang boleh menulis catatan harian
   collectAllFromDOM();
   const wk=getWeekKey(currentWeekOffset);
   const db=getDB();
@@ -1923,15 +1955,17 @@ async function saveDailyData(){
   pendingData={};
   try{
     await apiPost('saveDailyData',{patientId:currentPatientId, weekKey:wk, data:merged});
-    showToast('Catatan harian berhasil disimpan ✓');
+    const ind=document.getElementById('autoSaveIndicator');
+    if(ind) ind.style.display='none';
+    showToast(silent?'Tersimpan otomatis ✓':'Catatan harian berhasil disimpan ✓');
   }catch(e){
     showToast('Gagal menyimpan ke server: '+e.message);
   }
 }
 
 function changeWeek(delta){
-  // Auto-save before switching
-  if(currentPatientId){
+  // Auto-save before switching (hanya untuk pasien — perawat/admin cuma memantau, read-only)
+  if(currentPatientId && currentUser.role==='pasien'){
     collectAllFromDOM();
     const wk=getWeekKey(currentWeekOffset);
     const db=getDB();
