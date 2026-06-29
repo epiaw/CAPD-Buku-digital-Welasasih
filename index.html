@@ -1109,6 +1109,8 @@ boot();
 function startApp(){
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('app').style.display='flex';
+  currentHarianDate=todayLocalStr(); // reset ke hari ini setiap login baru
+  pendingData={};
   const av=currentUser.nama.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
   document.getElementById('topbarAv').textContent=av;
   document.getElementById('topbarName').textContent=currentUser.nama;
@@ -1188,7 +1190,7 @@ function showPage(pageId){
   if(pageId==='datapasien') loadDataPasien();
   else if(pageId==='riwayat') loadRiwayat();
   else if(pageId==='catatan') loadNotes();
-  else if(pageId==='harian'){ currentHarianDate=todayLocalStr(); pendingData={}; loadHarian(); }
+  else if(pageId==='harian') loadHarian();
   else if(pageId==='rekap') loadRekap();
   else if(pageId==='perawat-pantau') loadNurseView();
   else if(pageId==='admin-pasien') loadAdminPatients();
@@ -2156,7 +2158,7 @@ function loadWeeklyRecap(){
         <td>${dayData.nadi||'—'}</td>
         <td>${dayData.suhu||'—'}</td>
         ${siklCells}
-        <td style="font-weight:700;color:${dayIn||dayOut?(dayUF>=0?'var(--teal2)':'var(--red)'):'var(--gray-400)'}">
+        <td style="font-weight:700;color:${hasData?(dayUF>=0?'var(--teal2)':'var(--red)'):'var(--gray-400)'}">
           ${hasData?(dayUF>=0?'+':'')+dayUF+' mL':'—'}
         </td>
         <td style="font-size:11px;color:${hasWarning?'var(--red)':'var(--gray-600)'}">
@@ -2267,7 +2269,7 @@ function loadRekap(){
         <td>${dayData.nadi||'—'}</td>
         <td>${dayData.suhu||'—'}</td>
         ${siklCells}
-        <td style="font-weight:700;color:${dayIn||dayOut?(dayUF>=0?'var(--teal2)':'var(--red)'):'var(--gray-400)'}">
+        <td style="font-weight:700;color:${hasData?(dayUF>=0?'var(--teal2)':'var(--red)'):'var(--gray-400)'}">
           ${hasData?(dayUF>=0?'+':'')+dayUF+' mL':'—'}
         </td>
         <td style="font-size:11px;color:${hasWarning?'var(--red)':'var(--gray-600)'}">
