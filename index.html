@@ -361,11 +361,18 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
       <div style="font-size:11px;color:var(--gray-400);margin-top:3px">Formulir Digital · Baxter/Vantive</div>
     </div>
     <div style="font-size:14px;font-weight:600;color:var(--gray-700);margin-bottom:16px">Masuk ke Akun</div>
-    <div class="form-field"><label>Username</label>
-      <input id="loginUser" type="text" list="loginUserList" placeholder="Ketik atau pilih nama..." autocomplete="off">
-      <datalist id="loginUserList"></datalist>
+    <div class="form-field" style="position:relative">
+      <label>Username</label>
+      <input id="loginUser" type="text" placeholder="Ketik nama atau username..." autocomplete="off">
+      <div id="loginUserDropdown" style="display:none;position:absolute;left:0;right:0;top:100%;background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);box-shadow:var(--shadow-md);max-height:220px;overflow-y:auto;z-index:50;margin-top:2px"></div>
     </div>
-    <div class="form-field"><label>Password</label><input id="loginPass" type="password" placeholder="Masukkan password..."></div>
+    <div class="form-field">
+      <label>Password</label>
+      <div style="position:relative">
+        <input id="loginPass" type="password" placeholder="Masukkan password..." style="padding-right:64px">
+        <button type="button" onclick="togglePw('loginPass',this)" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;padding:4px 6px">Lihat</button>
+      </div>
+    </div>
     <div class="form-field"><label>Masuk Sebagai</label>
       <select id="loginRole"></select>
     </div>
@@ -390,6 +397,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
       <div class="topbar-user-name" id="topbarName">-</div>
       <div class="topbar-role-badge" id="topbarRoleBadge">-</div>
     </div>
+    <button class="btn-logout" style="background:rgba(255,255,255,0.1);margin-right:6px" onclick="openModal('modalMyPassword')" title="Ganti password akun Anda">🔑 Password</button>
     <button class="btn-logout" style="background:rgba(255,255,255,0.1);margin-right:6px" onclick="refreshFromServer()" id="btnRefresh" title="Tarik data terbaru dari server">⟳ Refresh</button>
     <button class="btn-logout" onclick="doLogout()">✕ Keluar</button>
   </div>
@@ -698,7 +706,9 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
     </div>
     <div class="form-row">
       <div class="form-group"><label>Username Login *</label><input id="newPUser" type="text" placeholder="username pasien"></div>
-      <div class="form-group"><label>Password *</label><input id="newPPass" type="password" placeholder="password awal"></div>
+      <div class="form-group"><label>Password *</label>
+        <div style="position:relative"><input id="newPPass" type="password" placeholder="password awal (bebas, tidak harus kombinasi)" style="padding-right:64px"><button type="button" onclick="togglePw('newPPass',this)" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;padding:4px 6px">Lihat</button></div>
+      </div>
     </div>
     <div class="form-group"><label>Tanggal Mulai CAPD</label><input id="newPTglCAPD" type="date"></div>
     <div class="btn-row"><button class="btn btn-primary" onclick="saveNewPatient()">Daftarkan Pasien</button><button class="btn btn-secondary" onclick="closeModal('modalAddPatient')">Batal</button></div>
@@ -712,7 +722,9 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
     <div class="form-group"><label>Nama Lengkap *</label><input id="newUNama" type="text"></div>
     <div class="form-row">
       <div class="form-group"><label>Username *</label><input id="newUUser" type="text"></div>
-      <div class="form-group"><label>Password *</label><input id="newUPass" type="password"></div>
+      <div class="form-group"><label>Password *</label>
+        <div style="position:relative"><input id="newUPass" type="password" placeholder="bebas, tidak harus kombinasi" style="padding-right:64px"><button type="button" onclick="togglePw('newUPass',this)" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;padding:4px 6px">Lihat</button></div>
+      </div>
     </div>
     <div class="form-group"><label>Peran (boleh pilih lebih dari satu)</label>
       <div style="display:flex;gap:18px;flex-wrap:wrap;padding:8px 0">
@@ -725,6 +737,23 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#EFF3F
       </div>
     </div>
     <div class="btn-row"><button class="btn btn-primary" onclick="saveNewUser()">Tambah Pengguna</button><button class="btn btn-secondary" onclick="closeModal('modalAddUser')">Batal</button></div>
+  </div>
+</div>
+
+<!-- MODAL: GANTI PASSWORD SAYA -->
+<div class="modal-bg" id="modalMyPassword">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Ganti Password Saya</div><button class="modal-close" onclick="closeModal('modalMyPassword')">×</button></div>
+    <div class="form-group"><label>Password Lama *</label>
+      <div style="position:relative"><input id="mpwOld" type="password" style="padding-right:64px"><button type="button" onclick="togglePw('mpwOld',this)" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;padding:4px 6px">Lihat</button></div>
+    </div>
+    <div class="form-group"><label>Password Baru *</label>
+      <div style="position:relative"><input id="mpwNew" type="password" placeholder="bebas, tidak harus kombinasi huruf/angka" style="padding-right:64px"><button type="button" onclick="togglePw('mpwNew',this)" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;padding:4px 6px">Lihat</button></div>
+    </div>
+    <div class="form-group"><label>Ulangi Password Baru *</label>
+      <div style="position:relative"><input id="mpwConfirm" type="password" style="padding-right:64px"><button type="button" onclick="togglePw('mpwConfirm',this)" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;padding:4px 6px">Lihat</button></div>
+    </div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="saveMyPassword()">Simpan Password Baru</button><button class="btn btn-secondary" onclick="closeModal('modalMyPassword')">Batal</button></div>
   </div>
 </div>
 
@@ -891,10 +920,33 @@ function getUserRoles(u){
   return (u.roles&&u.roles.length)?u.roles:[u.role];
 }
 
+let LOGIN_USERS_CACHE = [];
 function populateLoginUserList(){
   const db=getDB();
-  const list=document.getElementById('loginUserList');
-  list.innerHTML=db.users.filter(u=>u.active).map(u=>`<option value="${u.username}">${u.nama}</option>`).join('');
+  LOGIN_USERS_CACHE = db.users.filter(u=>u.active);
+}
+function renderLoginUserDropdown(){
+  const q = document.getElementById('loginUser').value.trim().toLowerCase();
+  const dd = document.getElementById('loginUserDropdown');
+  const matches = q ? LOGIN_USERS_CACHE.filter(u=>u.username.toLowerCase().includes(q)||u.nama.toLowerCase().includes(q)) : LOGIN_USERS_CACHE;
+  if(!matches.length){ dd.style.display='none'; dd.innerHTML=''; return; }
+  dd.innerHTML = matches.map(u=>`<div onclick="selectLoginUser('${u.username.replace(/'/g,"\\'")}')" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--gray-100);font-size:13px">
+      <div style="font-weight:600;color:var(--gray-700)">${u.nama}</div>
+      <div style="font-size:11px;color:var(--gray-400)">@${u.username}</div>
+    </div>`).join('');
+  dd.style.display='block';
+}
+function selectLoginUser(username){
+  document.getElementById('loginUser').value = username;
+  document.getElementById('loginUserDropdown').style.display='none';
+  updateLoginRoleOptions();
+  document.getElementById('loginPass').focus();
+}
+function hideLoginUserDropdown(){ setTimeout(()=>{ const dd=document.getElementById('loginUserDropdown'); if(dd) dd.style.display='none'; }, 180); }
+function togglePw(id, btn){
+  const el = document.getElementById(id);
+  if(el.type==='password'){ el.type='text'; btn.textContent='Sembunyikan'; }
+  else { el.type='password'; btn.textContent='Lihat'; }
 }
 
 function updateLoginRoleOptions(){
@@ -936,9 +988,10 @@ function doLogout(){
   updateLoginRoleOptions();
   loadDBFromServer().catch(()=>{}); // sinkron ulang di latar belakang
 }
-document.getElementById('loginUser').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
-document.getElementById('loginUser').addEventListener('input',updateLoginRoleOptions);
-document.getElementById('loginUser').addEventListener('change',updateLoginRoleOptions);
+document.getElementById('loginUser').addEventListener('keydown',e=>{if(e.key==='Enter'){document.getElementById('loginUserDropdown').style.display='none';doLogin();}});
+document.getElementById('loginUser').addEventListener('input',()=>{renderLoginUserDropdown();updateLoginRoleOptions();});
+document.getElementById('loginUser').addEventListener('focus',renderLoginUserDropdown);
+document.getElementById('loginUser').addEventListener('blur',hideLoginUserDropdown);
 document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 boot();
 
@@ -2052,7 +2105,10 @@ function loadAdminPatients(){
       <td style="font-size:12px;color:var(--gray-500)">${user?user.username:'—'}</td>
       <td style="font-size:12px">${p.tglCAPD?formatDate(p.tglCAPD):'—'}</td>
       <td><span class="badge badge-green">Aktif</span></td>
-      <td><button class="action-btn" onclick="viewPatientAsNurse('${p.id}')">Lihat →</button></td>
+      <td>
+        <button class="action-btn" onclick="viewPatientAsNurse('${p.id}')">Lihat →</button>
+        <button class="action-btn" style="color:var(--red);margin-left:8px" onclick="deletePatient('${p.id}')">Hapus</button>
+      </td>
     </tr>`;
   }).join('');
 }
@@ -2086,26 +2142,49 @@ async function saveNewPatient(){
     showToast('Gagal menyimpan ke server: '+e.message);
   }
 }
+async function deletePatient(pid){
+  const db=getDB();
+  const p=db.patients.find(x=>x.id===pid);
+  if(!p) return;
+  if(!confirm(`Hapus pasien "${p.nama}" (${p.rm})?\n\nSemua riwayat, catatan petugas, riwayat medis, rencana, dan catatan harian pasien ini akan ikut terhapus PERMANEN dari server. Tindakan ini tidak bisa dibatalkan.`)) return;
+  db.patients = db.patients.filter(x=>x.id!==pid);
+  db.users = db.users.filter(x=>x.patientId!==pid);
+  delete db.riwayat[pid]; delete db.notes[pid]; delete db.medHistory[pid]; delete db.medPlans[pid]; delete db.dailyData[pid];
+  if(currentPatientId===pid){ currentPatientId=null; }
+  buildPatientSelector();
+  loadAdminPatients();
+  populateLoginUserList();
+  try{
+    await apiPost('deletePatient',{patientId:pid});
+    showToast(`Pasien ${p.nama} berhasil dihapus`);
+  }catch(e){
+    showToast('Gagal menghapus di server: '+e.message);
+    refreshFromServer();
+  }
+}
 function loadAdminUsers(){
   const db=getDB();
   const roleLabel={admin:'Admin',perawat:'Perawat',pasien:'Pasien'};
   const roleBadge={admin:'badge-red',perawat:'badge-teal',pasien:'badge-gray'};
   document.getElementById('adminUserBody').innerHTML=db.users.map((u,i)=>{
     const rolesBadges=getUserRoles(u).map(r=>`<span class="badge ${roleBadge[r]}" style="margin-right:4px">${roleLabel[r]}</span>`).join('');
+    const isSelf = u.id===currentUser.id;
     return `
     <tr>
       <td>${i+1}</td>
       <td style="font-weight:600;font-family:monospace">${u.username}</td>
-      <td>${u.nama}</td>
+      <td>${u.nama}${isSelf?' <span style="font-size:11px;color:var(--gray-400)">(Anda)</span>':''}</td>
       <td>${rolesBadges}</td>
       <td><span class="badge ${u.active?'badge-green':'badge-gray'}">${u.active?'Aktif':'Nonaktif'}</span></td>
       <td>
-        <button class="action-btn" onclick="toggleUserActive('${u.id}')">${u.active?'Nonaktifkan':'Aktifkan'}</button>
-        ${u.id!==currentUser.id?`<button class="action-btn" style="color:var(--red);margin-left:10px" onclick="resetPassword('${u.id}')">Reset PW</button>`:''}
+        <button class="action-btn" onclick="toggleUserActive('${u.id}')" ${isSelf?'disabled title="Tidak bisa menonaktifkan akun sendiri"':''}>${u.active?'Nonaktifkan':'Aktifkan'}</button>
+        <button class="action-btn" style="margin-left:8px" onclick="resetPassword('${u.id}')">${isSelf?'Ganti Password Saya':'Reset PW'}</button>
+        <button class="action-btn" style="color:var(--red);margin-left:8px" onclick="deleteUser('${u.id}')" ${isSelf?'disabled title="Tidak bisa menghapus akun sendiri"':''}>Hapus</button>
       </td>
     </tr>`;}).join('');
 }
 async function toggleUserActive(uid){
+  if(uid===currentUser.id){showToast('Tidak bisa menonaktifkan akun Anda sendiri');return;}
   const db=getDB();const u=db.users.find(x=>x.id===uid);if(!u)return;
   u.active=!u.active; loadAdminUsers();
   try{
@@ -2115,16 +2194,43 @@ async function toggleUserActive(uid){
     showToast('Gagal update ke server: '+e.message);
   }
 }
+async function deleteUser(uid){
+  if(uid===currentUser.id){showToast('Tidak bisa menghapus akun Anda sendiri');return;}
+  const db=getDB();
+  const u=db.users.find(x=>x.id===uid);
+  if(!u) return;
+  const isLastAdmin = getUserRoles(u).includes('admin') && db.users.filter(x=>x.active&&getUserRoles(x).includes('admin')).length<=1;
+  if(isLastAdmin){showToast('Tidak bisa menghapus satu-satunya akun admin yang aktif');return;}
+  let msg = `Hapus pengguna "${u.nama}" (${u.username})? Tindakan ini tidak bisa dibatalkan.`;
+  if(u.patientId){
+    const p=db.patients.find(x=>x.id===u.patientId);
+    msg += `\n\nCatatan: ini hanya menghapus akun login. Data pasien "${p?p.nama:''}" TIDAK ikut terhapus — kalau memang ingin hapus pasiennya juga, gunakan menu Kelola Pasien.`;
+  }
+  if(!confirm(msg)) return;
+  db.users = db.users.filter(x=>x.id!==uid);
+  loadAdminUsers();
+  populateLoginUserList();
+  try{
+    await apiPost('deleteUser',{id:uid});
+    showToast('Pengguna berhasil dihapus');
+  }catch(e){
+    showToast('Gagal menghapus di server: '+e.message);
+    refreshFromServer();
+  }
+}
 async function resetPassword(uid){
-  const np=prompt('Password baru:');if(!np)return;
   const db=getDB();const u=db.users.find(x=>x.id===uid);if(!u)return;
+  const np=prompt(u.id===currentUser.id?'Password baru untuk akun Anda:':`Password baru untuk ${u.nama}:`);
+  if(!np)return;
   const old=u.password;
   u.password=np;
+  if(u.id===currentUser.id) currentUser.password=np;
   try{
     await apiPost('updateUser',{id:uid, fields:{password:np}});
-    showToast('Password berhasil direset ✓');
+    showToast('Password berhasil diganti ✓');
   }catch(e){
     u.password=old;
+    if(u.id===currentUser.id) currentUser.password=old;
     showToast('Gagal update ke server: '+e.message);
   }
 }
@@ -2162,7 +2268,31 @@ async function saveNewUser(){
 // ============================================================
 //  UTILS
 // ============================================================
-function openModal(id){document.getElementById(id).classList.add('open');}
+function openModal(id){
+  if(id==='modalMyPassword'){ ['mpwOld','mpwNew','mpwConfirm'].forEach(i=>document.getElementById(i).value=''); }
+  document.getElementById(id).classList.add('open');
+}
+async function saveMyPassword(){
+  const oldPw=document.getElementById('mpwOld').value;
+  const newPw=document.getElementById('mpwNew').value;
+  const confirmPw=document.getElementById('mpwConfirm').value;
+  const db=getDB();
+  const u=db.users.find(x=>x.id===currentUser.id);
+  if(!u){showToast('Sesi tidak valid, silakan login ulang');return;}
+  if(oldPw!==u.password){showToast('Password lama salah');return;}
+  if(!newPw){showToast('Password baru belum diisi');return;}
+  if(newPw!==confirmPw){showToast('Konfirmasi password baru tidak cocok');return;}
+  const old=u.password;
+  u.password=newPw; currentUser.password=newPw;
+  try{
+    await apiPost('updateUser',{id:u.id, fields:{password:newPw}});
+    closeModal('modalMyPassword');
+    showToast('Password berhasil diganti ✓');
+  }catch(e){
+    u.password=old; currentUser.password=old;
+    showToast('Gagal menyimpan ke server: '+e.message);
+  }
+}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
 function formatDate(str){if(!str)return'—';const d=new Date(str+'T00:00:00');return d.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});}
