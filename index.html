@@ -1339,6 +1339,12 @@ async function saveDataPasien(){
   try{
     await apiPost('updatePatient',{patient:db.patients[idx]});
     showToast('Data pasien berhasil disimpan ✓');
+    // PERBAIKAN: refresh tampilan yang menampilkan nama pasien (dropdown pemilih pasien,
+    // dashboard pemantauan perawat, daftar pasien admin) supaya nama baru langsung terlihat
+    // tanpa perlu refresh halaman / login ulang.
+    buildPatientSelector();
+    if(typeof loadNurseView==='function' && document.getElementById('page-perawat-pantau')) loadNurseView();
+    if(typeof loadAdminPatients==='function' && document.getElementById('page-admin-pasien')) loadAdminPatients();
   }catch(e){
     showToast('Gagal menyimpan ke server: '+e.message);
   }
